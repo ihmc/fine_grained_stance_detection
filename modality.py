@@ -38,7 +38,8 @@ def handleEmail():
         unigrams = [(morphRoot(tup[0].lower()), tup[1]) for tup in pos_tags]
         bigrams = list(zip(unigrams, unigrams[1:-1]))
 
-        modals = (unigrams & modalityLookup.keys()) | (bigrams & modalityLookup.keys())
+        modal_words = (unigrams & modalityLookup.keys()) | (bigrams & modalityLookup.keys())
+        modals = [(modal, modalityLookup[modal]) for modal in modal_words]
 
         sentence_modalities.append({"sentence": sentence, "modals": list(modals), "pos": list(pos_tags)})
 
