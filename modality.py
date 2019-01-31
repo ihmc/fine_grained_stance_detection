@@ -41,9 +41,11 @@ def handleEmail():
         pos_tags = nltk.pos_tag(words)
         unigrams = [(morphRoot(tup[0].lower()), tup[1]) for tup in pos_tags]
         bigrams = list(zip(unigrams, unigrams[1:-1]))
-        trigrams = list(zip(unigrams, unigrams[1:-1], unigrams[1:-2]))
+        trigrams = list(zip(unigrams, unigrams[1:-1], unigrams[2:-1]))
+        print(trigrams)
 
         modal_words = (unigrams & modalityLookup.keys()) | (bigrams & modalityLookup.keys()) | (trigrams &  modalityLookup.keys())
+        print(modal_words)
         modals = [(modal, modalityLookup[modal]) for modal in modal_words]
 
         sentence_modalities.append({"sentence": sentence, "modals": list(modals), "pos": list(pos_tags)})
