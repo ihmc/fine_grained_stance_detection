@@ -23,9 +23,6 @@ with open('./20190130-Dorr-Modality-Baseline-Lexicon.csv') as modalityCSV:
                     modalityLookup[((word, pos), (otherWord, owPOS))] = modality
             else:
                 modalityLookup[(word, pos)] = modality
-            
-            
-            # TODO: trigram modality
 
 app = Flask(__name__)
 
