@@ -17,10 +17,12 @@ with open('./20190130-Dorr-Modality-Baseline-Lexicon.csv') as modalityCSV:
     for word, pos, otherWord, owPOS, nextWord, nwPOS, modality, example in csvReader:
         for pos in pos.split("|"):
             if otherWord:
-                if nextWord:
-                    modalityLookup[((word, pos), (otherWord, owPOS), (nextWord, nwPOS))] = modality
-                else:
-                    modalityLookup[((word, pos), (otherWord, owPOS))] = modality
+                for owPos in owPOS.split("|"):
+                    if nextWord:
+                        for nwPos in nwPOS.split("|"):
+                            modalityLookup[((word, pos), (otherWord, owPos), (nextWord, nwPos))] = modality
+                    else:
+                        modalityLookup[((word, pos), (otherWord, owPos))] = modality
             else:
                 modalityLookup[(word, pos)] = modality
 
@@ -42,10 +44,8 @@ def handleEmail():
         unigrams = [(morphRoot(tup[0].lower()), tup[1]) for tup in pos_tags]
         bigrams = list(zip(unigrams, unigrams[1:-1]))
         trigrams = list(zip(unigrams, unigrams[1:-1], unigrams[2:-1]))
-        print(trigrams)
 
         modal_words = (unigrams & modalityLookup.keys()) | (bigrams & modalityLookup.keys()) | (trigrams &  modalityLookup.keys())
-        print(modal_words)
         modals = [(modal, modalityLookup[modal]) for modal in modal_words]
 
         sentence_modalities.append({"sentence": sentence, "modals": list(modals), "pos": list(pos_tags)})
