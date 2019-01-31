@@ -1,8 +1,5 @@
 from flask import Flask
 from flask import request
-from pattern.en import parse, Sentence, parse
-from pattern.en import modality
-from pattern.en import mood
 
 import nltk
 from nltk.stem import WordNetLemmatizer
