@@ -40,7 +40,7 @@ def handleEmail():
 
         modals = (unigrams & modalityLookup.keys()) | (bigrams & modalityLookup.keys())
 
-        sentence_modalities.append((sentence, list(modals)))
+        sentence_modalities.append({"sentence": sentence, "modals": list(modals), "pos": list(pos_tags)})
 
 
     return json.dumps(sentence_modalities)
