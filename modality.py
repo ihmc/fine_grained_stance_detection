@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import request
+import json
 
 import nltk
 from nltk.stem import WordNetLemmatizer
@@ -8,18 +9,17 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 import csv
 
-modalityDict = {}
-posDict = {}
-modalityOutputDict = []
+modalityLookup = {}
+sentence_modalities = []
 
 with open('./20190130-Dorr-Modality-Baseline-Lexicon.csv') as modalityCSV:
     csvReader = csv.reader(modalityCSV)
     for word, pos, otherWord, owPOS, nextWord, nwPOS, modality, example in csvReader:
-        posDict[word] = pos
-        modalityDict[word] = modality
+        for pos in pos.split("|"):
+            modalityLookup[(word, pos)] = modality
+            modalityLookup[((word, pos), (otherWord, owPOS))] = modality
+            # TODO: trigram modality
 
-print(posDict)
-print(modalityDict)
 app = Flask(__name__)
 
 @app.route("/")
@@ -28,42 +28,22 @@ def hello():
 
 @app.route("/email", methods = ['POST','GET'])
 def handleEmail():
-    json = request.get_json();
+    payload = request.get_json();
 
-    wordsPerSentence = []
-    lemmatizedSentences = [] 
-    taggedSentences = []
-    sentences = nltk.sent_tokenize(json['text'])
-
+    sentences = nltk.sent_tokenize(payload['text'])
+    sentence_modalities = []
     for sentence in sentences:
-        wordsPerSentence.append(nltk.word_tokenize(sentence))
-    print(wordsPerSentence)
+        words = nltk.word_tokenize(sentence)
+        pos_tags = nltk.pos_tag(words)
+        unigrams = [(morphRoot(tup[0].lower()), tup[1]) for tup in pos_tags]
+        bigrams = list(zip(unigrams, unigrams[1:-1]))
 
-    for sentence in wordsPerSentence:
-        taggedSentences.append(nltk.pos_tag(sentence))
-    print(taggedSentences);
+        modals = (unigrams & modalityLookup.keys()) | (bigrams & modalityLookup.keys())
 
-    for sentenceWords in taggedSentences:
-        lemmatizedTuples = []
-        for word in sentenceWords:
-            lowercaseWord = word[0].lower()
-            lemmatizedTuples.append((morphRoot(lowercaseWord), word[1]))
-        lemmatizedSentences.append(lemmatizedTuples)
+        sentence_modalities.append((sentence, list(modals)))
 
-    print(lemmatizedSentences, "lemmatized sentences")
 
-    
-
-    for lemmatizedWords in lemmatizedSentences:
-        for lemmatizedWord in lemmatizedWords:
-            partsOfSpeech = posDict.get(lemmatizedWord[0], 'nil').split("|")
-            print(partsOfSpeech, "Parts of speech")
-            if lemmatizedWord[1] not in partsOfSpeech:
-                modalityOutputDict.append((lemmatizedWord[0], 'nil'))
-            else:
-                modalityOutputDict.append((lemmatizedWord[0], modalityDict[lemmatizedWord[0]]))
-    print(modalityOutputDict)
-    return 'Emails yay'; 
+    return json.dumps(sentence_modalities)
 
 def morphRoot(word):
     wlem = WordNetLemmatizer()
