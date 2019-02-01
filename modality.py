@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request
 from flask_basicauth import BasicAuth
 
+
 import json
 
 import nltk
@@ -35,6 +36,7 @@ app.config['BASIC_AUTH_PASSWORD'] = 'modality'
 
 basic_auth = BasicAuth(app)
 
+print("My name is:\t%s" % __name__)
 
 @app.route("/")
 @basic_auth.required

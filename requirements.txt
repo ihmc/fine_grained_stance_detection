@@ -1,2 +1,4 @@
 flask
 nltk
+Flask-BasicAuth
+gunicorn
