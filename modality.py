@@ -20,15 +20,14 @@ with open('./20190130-Dorr-Modality-Baseline-Lexicon.csv') as modalityCSV:
     for word, pos, otherWord, owPOS, nextWord, nwPOS, modality, example in csvReader:
         for pos in pos.split("|"):
             if otherWord:
-                if nextWord:
-                    modalityLookup[((word, pos), (otherWord, owPOS), (nextWord, nwPOS))] = modality
-                else:
-                    modalityLookup[((word, pos), (otherWord, owPOS))] = modality
+                for owPos in owPOS.split("|"):
+                    if nextWord:
+                        for nwPos in nwPOS.split("|"):
+                            modalityLookup[((word, pos), (otherWord, owPos), (nextWord, nwPos))] = modality
+                    else:
+                        modalityLookup[((word, pos), (otherWord, owPos))] = modality
             else:
                 modalityLookup[(word, pos)] = modality
-            
-            
-            # TODO: trigram modality
 
 app = Flask(__name__)
 app.config['BASIC_AUTH_USERNAME'] = 'panacea'
@@ -55,7 +54,7 @@ def handleEmail():
         pos_tags = nltk.pos_tag(words)
         unigrams = [(morphRoot(tup[0].lower()), tup[1]) for tup in pos_tags]
         bigrams = list(zip(unigrams, unigrams[1:-1]))
-        trigrams = list(zip(unigrams, unigrams[1:-1], unigrams[1:-2]))
+        trigrams = list(zip(unigrams, unigrams[1:-1], unigrams[2:-1]))
 
         modal_words = (unigrams & modalityLookup.keys()) | (bigrams & modalityLookup.keys()) | (trigrams &  modalityLookup.keys())
         modals = [(modal, modalityLookup[modal]) for modal in modal_words]
