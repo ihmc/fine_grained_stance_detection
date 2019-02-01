@@ -1,5 +1,7 @@
 from flask import Flask
 from flask import request
+from flask_basicauth import BasicAuth
+
 import json
 
 import nltk
@@ -28,12 +30,19 @@ with open('./20190130-Dorr-Modality-Baseline-Lexicon.csv') as modalityCSV:
             # TODO: trigram modality
 
 app = Flask(__name__)
+app.config['BASIC_AUTH_USERNAME'] = 'panacea'
+app.config['BASIC_AUTH_PASSWORD'] = 'modality'
+
+basic_auth = BasicAuth(app)
+
 
 @app.route("/")
+@basic_auth.required
 def hello():
     return "Hello World"
 
 @app.route("/email", methods = ['POST','GET'])
+@basic_auth.required
 def handleEmail():
     payload = request.get_json();
 
