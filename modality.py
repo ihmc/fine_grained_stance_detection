@@ -79,7 +79,7 @@ def getModality(text):
         for index, element in enumerate(tri_match_list):
             if(len(bi_match_list) > 0):
                 if(element[0] == bi_match_list[index]):
-                    del bi_match_index[index]
+                    del bi_match_list[index]
 
         for index, element in enumerate(bi_match_list):
             if(len(uni_match_list) > 0):
