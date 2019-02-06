@@ -28,6 +28,7 @@ beseech,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Want
 can,MD,,,,,Able
 capable,JJ,of,IN,,,Able&
 certain,JJ,,,,,FirmBelief
+command,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Require
 come,VB|VBP|VBZ|VBD|VBN|VBG,through,IN,with,IN,Succeed
 conclude,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Belief
 concoct,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Intend
@@ -134,7 +135,7 @@ prevail,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Succeed
 probably,RB,,,,,Belief
 promote,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Want
 propose,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Intend
-pull,VB|VBP|VBZ|VBD|VBN|VBG,off,RB,,,Succeed
+pull,VB|VBP|VBZ|VBD|VBN|VBG,off,RP,,,Succeed
 questionable,JJ,,,,,NotBelief
 reach,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Succeed
 ready,JJ,,,,,Able
@@ -151,8 +152,7 @@ scheme,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Intend
 seek,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Effort
 short,JJ,of,IN,,,NotSucceed
 should,MD,,,,,Require
-sign,VB|VBP|VBZ|VBD|VBN|VBG,off,RB,,,Permit
-sign,VB|VBP|VBZ|VBD|VBN|VBG,on,RB,,,Permit
+sign,VB|VBP|VBZ|VBD|VBN|VBG,off,RP,on,IN,Permit
 signify,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Intend
 solicit,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Want
 strive,VB|VBP|VBZ|VBD|VBN|VBG,,,,,Effort

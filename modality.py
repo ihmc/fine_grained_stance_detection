@@ -20,7 +20,7 @@ sentence_modalities = []
 input_directory = '/text/'
 output_directory = '/output/'
 
-with open('./20190204-Dorr-Modality-Lexicon.v1.csv') as modalityCSV:
+with open('./20190205-Dorr-Modality-Lexicon.v2.csv') as modalityCSV:
     csvReader = csv.reader(modalityCSV)
     for word, pos, otherWord, owPOS, nextWord, nwPOS, modality in csvReader:
         for pos in pos.split("|"):
@@ -67,10 +67,34 @@ def getModality(text):
         bigrams = list(zip(unigrams, unigrams[1:-1]))
         trigrams = list(zip(unigrams, unigrams[1:-1], unigrams[2:-1]))
 
-        modal_words = (unigrams & modality_lookup.keys()) | (bigrams & modality_lookup.keys()) | (trigrams &  modality_lookup.keys())
+        unigram_matches = unigrams & modality_lookup.keys()
+        bigram_matches = bigrams & modality_lookup.keys()
+        trigram_matches = trigrams & modality_lookup.keys()
+
+        uni_match_list = list(unigram_matches)
+        bi_match_list  = list(bigram_matches)
+        tri_match_list = list(trigram_matches)
+
+        
+        for index, element in enumerate(tri_match_list):
+            if(len(bi_match_list) > 0):
+                if(element[0] == bi_match_list[index]):
+                    del bi_match_index[index]
+
+        for index, element in enumerate(bi_match_list):
+            if(len(uni_match_list) > 0):
+                if(element[0] == uni_match_list[index]):
+                    del uni_match_list[index]
+
+        unigram_matches = set(uni_match_list)
+        bigram_matches = set(bi_match_list)
+        trigram_matches = set(tri_match_list)
+
+        modal_words = unigram_matches | bigram_matches | trigram_matches
         modals = [(modal, modality_lookup[modal]) for modal in modal_words]
 
         sentence_modalities.append({"sentence": sentence, "modals": list(modals), "pos": list(pos_tags)})
+
 
     return sentence_modalities
 
