@@ -85,11 +85,11 @@ def getModality(text):
         modals = []
         for index, element in enumerate(trigrams):
             if element in trigram_matches:
-                modals.append((element, index))
+                modals.append((element, modality_lookup[element], index))
             elif bigrams[index] in bigram_matches:
-                modals.append((bigrams[index], index))
+                modals.append((bigrams[index], modality_lookup[bigrams[index]], index))
             elif unigrams[index] in unigram_matches:
-                modals.append((unigrams[index], index))
+                modals.append((unigrams[index], modality_lookup[unigrams[index]], index))
 
 
         sentence_modalities.append({"sentence": sentence, "modals": modals, "pos": pos_tags})
