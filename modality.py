@@ -92,7 +92,7 @@ def getModality(text):
                 modals.append((unigrams[index], index))
 
 
-        sentence_modalities.append({"sentence": sentence, "modals": modals, "pos": list(pos_tags)})
+        sentence_modalities.append({"sentence": sentence, "modals": modals, "pos": pos_tags})
 
 
     return sentence_modalities
