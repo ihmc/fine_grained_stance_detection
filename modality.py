@@ -75,6 +75,9 @@ def getModality(text):
         words = nltk.word_tokenize(sentence)
         pos_tags = nltk.pos_tag(words)
         unigrams = [(morphRoot(tup[0].lower()), tup[1]) for tup in pos_tags]
+        unigrams.append((None, None))
+        unigrams.append((None, None))
+        unigrams.append((None, None))
         bigrams = list(zip(unigrams, unigrams[1:-1]))
         trigrams = list(zip(unigrams, unigrams[1:-1], unigrams[2:-1]))
 
