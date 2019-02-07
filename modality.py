@@ -82,29 +82,17 @@ def getModality(text):
         bigram_matches = bigrams & modality_lookup.keys()
         trigram_matches = trigrams & modality_lookup.keys()
 
-        uni_match_list = list(unigram_matches)
-        bi_match_list  = list(bigram_matches)
-        tri_match_list = list(trigram_matches)
+        modals = []
+        for index, element in enumerate(trigrams):
+            if element in trigram_matches:
+                modals.append((element, index))
+            elif bigrams[index] in bigram_matches:
+                modals.append((bigrams[index], index))
+            elif unigrams[index] in unigram_matches:
+                modals.append((unigrams[index], index))
 
-        
-        for index, element in enumerate(tri_match_list):
-            if(len(bi_match_list) > 0):
-                if(element[0] == bi_match_list[index]):
-                    del bi_match_list[index]
 
-        for index, element in enumerate(bi_match_list):
-            if(len(uni_match_list) > 0):
-                if(element[0] == uni_match_list[index]):
-                    del uni_match_list[index]
-
-        unigram_matches = set(uni_match_list)
-        bigram_matches = set(bi_match_list)
-        trigram_matches = set(tri_match_list)
-
-        modal_words = unigram_matches | bigram_matches | trigram_matches
-        modals = [(modal, modality_lookup[modal]) for modal in modal_words]
-
-        sentence_modalities.append({"sentence": sentence, "modals": list(modals), "pos": list(pos_tags)})
+        sentence_modalities.append({"sentence": sentence, "modals": modals, "pos": list(pos_tags)})
 
 
     return sentence_modalities
