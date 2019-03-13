@@ -2,3 +2,4 @@ flask
 nltk
 Flask-BasicAuth
 gunicorn
+requests

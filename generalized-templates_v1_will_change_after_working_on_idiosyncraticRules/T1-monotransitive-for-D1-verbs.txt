@@ -1,0 +1,4 @@
+/^VB/=trigger !< /^Trig/  [$.. (NP [ < /^NN/=target | < PRP=target ] !$.. NP) | $.. (S < (NP=target $,, NP))]
+
+insert (TargLabel) >1 target
+insert (TrigLabel) >1 trigger
