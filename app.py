@@ -25,9 +25,26 @@ def hello():
 @basic_auth.required
 def handleEmail():
 	payload = request.get_json();
+	text = payload['text'];
+	replace_with_empty = ['(3980)', '(398A)', '(398B)', '(398C)', '(398D)', '(398E)', '(398I)','(398M)', '(398N)', '(3918)']
 
+	if not text:
+		return json.dumps({"status_code": 400, "error": "text attribute cannot be empty"}) 
+	
+	# Attempt to strip some typically encoded characters from the text
+	for char in replace_with_empty:
+		if char in text:
+			text = text.replace(char, '')
 
-	sentence_modalities = modality.getModality(payload['text'])
+	textBytes = text.encode('UTF-8')
+	text = textBytes.decode('UTF-8', 'strict')
+	text = text.replace('=20', ' ')
+	text = text.replace('=', '')
+	text = text.replace('\r', '')
+	text = text.replace('\n', '')
+		
+	print(text)
+	sentence_modalities = modality.getModality(text)
 
 	return json.dumps(sentence_modalities)
 

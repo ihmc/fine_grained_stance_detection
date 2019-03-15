@@ -126,6 +126,8 @@ def morphRoot(word):
 def extractTriggerWordAndPos(trigger_string):
 	trigger_string = trigger_string.replace('\\n', '');
 	match = re.search('\(([A-Z]*) ([a-z]+?)\)', trigger_string)
+	if not match:
+		return ('', '')
 	trigger_pos = match.group(1)
 	trigger_word = match.group(2)
 	
@@ -142,12 +144,16 @@ def parseSentence(sentence):
 	tregex = '/tregex'
 	url = coreNLP_server + tregex
 	parse = []	
-	
+	print("\n\n\nBeginning of sentence print",sentence, '\n\n\n\nEnd of sentence print')
 	for rule in rules:
 		parse_with_rules = {}
 		trigger_string = ''
 		trigger_modality = ''
 		response = requests.post(url, data=sentence, params={"pattern": rule['rule']})
+
+		if(response.status_code != 200):
+			continue
+
 		if(len(response.json()['sentences'][0]) > 0):
 			res_sentences = response.json()['sentences'][0]
 
