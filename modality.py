@@ -16,6 +16,127 @@ from nltk.corpus import wordnet as wn
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
+
+sashanks_classes = {
+  "finance_money": [
+    "11.1 Send Verbs",
+    "13.1.a.i Give - No Exchange - Sort of Atelic",
+    "13.1.a.ii Give - No Exchange",
+    "13.2 Contribute Verbs",
+    "13.3 Verbs of Future Having",
+    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
+    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
+    "13.5.1.b.ii Get - Exchange",
+    "13.5.2.a Obtain - No Exchange (CAUSE)",
+    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
+	"32.1 Want Verbs"
+  ],
+  "finance_info": [
+    "11.1 Send Verbs",
+    "13.3 Verbs of Future Having",
+    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
+    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
+    "13.5.1.b.ii Get - Exchange",
+    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
+    "37.2.a Tell Verbs",
+    "37.2.b Tell Verbs / -of/about",
+    "37.2.d Tell Verbs / -that/to",
+	"32.1 Want Verbs"
+  ],
+  "personal": [
+    "11.1 Send Verbs",
+    "13.3 Verbs of Future Having",
+    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
+    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
+    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
+    "37.2.a Tell Verbs",
+    "37.2.b Tell Verbs / -of/about",
+    "37.2.d Tell Verbs / -that/to",
+	"32.1 Want Verbs"
+  ],
+  "business": [
+    "13.3 Verbs of Future Having"
+  ],
+  "credentials": [
+    "11.1 Send Verbs",
+    "13.1.a.ii Give - No Exchange",
+    "13.3 Verbs of Future Having",
+    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
+    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
+    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
+    "37.2.a Tell Verbs",
+    "37.2.b Tell Verbs / -of/about",
+    "37.2.d Tell Verbs / -that/to",
+	"32.1 Want Verbs"
+  ],
+  "privileged_information": [
+    "11.1 Send Verbs",
+    "13.1.a.ii Give - No Exchange",
+    "13.3 Verbs of Future Having",
+    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
+    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
+    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
+    "37.2.a Tell Verbs",
+    "37.2.b Tell Verbs / -of/about",
+    "37.2.d Tell Verbs / -that/to",
+	"32.1 Want Verbs"
+  ],
+  "ideology": [],
+  "scam_lottery": [
+    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)"
+  ],
+  "scam_gift": [
+    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)"
+  ],
+  "scam_job": []
+}
+
+tomeks_classes = {
+  "GET": [
+    "13.5.1.a Get - No Exchange",
+    "13.5.1.b.ii Get - Exchange",
+    "13.5.2.a Obtain - No Exchange (CAUSE)",
+    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
+    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)",
+    "32.1 Want Verbs"
+  ],
+  "GIVE": [
+    "11.1 Send Verbs",
+    "13.1.a.i Give - No Exchange - Sort of Atelic",
+    "13.1.a.ii Give - No Exchange",
+    "13.2 Contribute Verbs",
+    "13.3 Verbs of Future Having",
+    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
+    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
+	"32.1 Want Verbs"
+  ],
+  "APPLY": [],
+  "PERFORM": [
+    "9.1 Put Verbs",
+    "10.1 Remove Verbs",
+    "10.2.b Banish Verbs / -to",
+    "10.5 Verbs of Possessional Deprivation : Steal Verbs",
+    "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
+    "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
+    "11.3 Bring and Take Verbs",
+    "13.5.2.d Obtain - Exchange",
+    "37.1.e Verbs of Transfer of a Message / -that/to",
+    "37.2.a Tell Verbs",
+    "37.2.b Tell Verbs / -of/about",
+    "37.2.d Tell Verbs / -that/to",
+    "37.4.a Verbs of Instrument of Communication",
+    "42.1.a Murder Verbs - Kill",
+    "42.1.b Murder Verbs - Kill / -with",
+    "42.1.c Murder Verbs - General",
+    "44.a Destroy Verbs / -with",
+    "44.b Destroy Verbs / Instrument Subject",
+    "54.4 Price Verbs"
+  ],
+  "OTHER": []
+}
+
+
+
 modality_lookup = {}
 sentence_modalities = []
 word_specific_rules = []
@@ -78,17 +199,17 @@ catvar_dict = {}
 with open('.' + catvar_file) as catvar:
 	for entry in catvar:
 		entry_pieces = entry.split('#')
-		if '_V' in entry_pieces[0]:
-			if len(entry_pieces) > 1:
-				# Must create a key for each piece and it's value the first piece
-				for entry_piece in entry_pieces:
-					key_piece_no_POS = entry_piece.split('_')[0]
-					value_piece_no_POS = entry_pieces[0].split('_')[0]
-					catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
-			else:
-				# If the entry only has one piece then the key and value are the same 
-				piece_no_POS = entry_pieces[0].split('_')[0]
-				catvar_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
+		#if '_V' in entry_pieces[0]:
+		if len(entry_pieces) > 1:
+			# Must create a key for each piece and it's value the first piece
+			for entry_piece in entry_pieces:
+				key_piece_no_POS = entry_piece.split('_')[0]
+				value_piece_no_POS = entry_pieces[0].split('_')[0]
+				catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
+		else:
+			# If the entry only has one piece then the key and value are the same 
+			piece_no_POS = entry_pieces[0].split('_')[0]
+			catvar_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
 
 #print(catvar_dict, 'catvar dicctionary')
 print('catvar dictionary create')
@@ -246,25 +367,29 @@ def extractTrigsAndTargs(tree):
 	# Extract the trigger and target from the tree, remove "Trig" and "Targ" so the part of speech 
 	# can be kept with the word, and extract the modality
 	for index, (entire_match, modality, trig) in enumerate(trig_match):
+		'''
 		trig_string = ' '.join(entire_match.split())
 		trig_string = re.sub('Trig\w+', '', trig_string)
 		targ_string = ' '.join(targ_match[index][0].split())
 		targ_string = re.sub('Targ\w+', '', targ_string)
+		'''
 		modality = modality.replace('Trig', '')
 		ask = targ_match[index][2]
 		trig_word = trig
-		trigs_and_targs.append((trig_string, targ_string, modality, ask, trig_word))
+		trigs_and_targs.append((trig, targ_match[index][2], modality, ask, trig_word))
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask, t_classes, s_classes, rule, rule_name):
 	parse_dict = {}
 	parse_dict['trigger'] = trigger
 	parse_dict['target'] = target
 	parse_dict['trigger_modality'] = modality
 	parse_dict['ask'] = ask
-	parse_dict['rule'] = rule
-	parse_dict['rule_name'] = rule_name
+	parse_dict['T_ask_type'] = t_classes
+	parse_dict['S_ask_type'] = s_classes
+	#parse_dict['rule'] = rule
+	#parse_dict['rule_name'] = rule_name
 	return parse_dict
 	
 
@@ -305,11 +430,30 @@ def parseSentence(sentence):
 			for trig_and_targ in trigs_and_targs:
 				# TODO store the portions of the tuple in meaningful names
 				#trig_word_base = morphRoot(trig_and_targs[[4])
+				verb_types = []
+				potential_classes = []
+				#trig_word_base = morphRoot(trig_and_targs[[4])
+				print(trig_and_targ[4])
 				catvar_object = catvar_dict.get(trig_and_targ[4])
 				if catvar_object != None:
 					catvar_word = catvar_object['catvar_value']
 					print(catvar_word, 'THis is the catvar word lookup')
-				parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], 'preprocessed rules', 'preprocess rules'))
+					for verb_type, words in lcs_dict.items():
+						if catvar_word in words:
+							print(verb_type, 'this is the verb type found from catvar')
+							verb_types.append(verb_type)
+					print(verb_types)
+					
+					for vb_type in verb_types:
+							for sashank_class, types in sashanks_classes.items():
+								if vb_type in types:
+									s_classes.append(sashank_class)
+
+							for tomek_class, types in tomeks_classes.items():
+								if vb_type in types:
+									t_classes.append(tomek_class)
+
+				parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], potential_classes, 'preprocessed rules', 'preprocess rules'))
 
 			return parse
 	
@@ -321,45 +465,15 @@ def parseSentence(sentence):
 			result = subprocess.run(['java', '-mx100m', '-cp', project_path + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + lexical_item_rule_directory + rule['rule_name'] + '.txt'], stdout = subprocess.PIPE, text=True)
 
 			if 'Trig' + rule['modality'] in result.stdout:
-
-				'''
-				
-				tree_no_new_lines = result.stdout.replace('\n', '')
-				#print(tree_no_new_lines)
-
-				
-				#trig_regex = '\([A-Z]* *Trig' + rule['modality'] + ' *[A-Z]* *([a-z]*)\)'
-				trig_regex = '\([A-Z]* *Trig\w+ *[A-Z]* *([a-z]*)\)'
-				#print(trig_regex)
-				trig_match = re.search(trig_regex, tree_no_new_lines)
-				if trig_match:
-					#print('trig regex match')
-					trigger_string = ' '.join(trig_match.group(0).split())
-					#trigger_string = re.sub('Trig' + rule['modality'], '', trigger_string)
-					trigger_string = re.sub('Trig\w+', '', trigger_string)
-					#print(trigger_string)
-					#print('\n\n')
-					#trigger_string = re.sub(' *TrigLabel *', '', trig_match.group(0))
-
-				# Extract the target from the tree accounting for the possibility of multiple 
-				#words as the targert
-				targ_regex = '\([A-Z]* *Targ' + rule['modality'] + ' *\(*[A-Z]* *[A-Z]* *[a-z]*\)'
-				#print(targ_regex)
-				targ_match = re.search(targ_regex, tree_no_new_lines)
-				if targ_match:
-					#print('targ regex match')
-					target_string = targ_match.group(0)
-					target_string = ' '.join(target_string.split())
-					target_string = re.sub('Targ' + rule['modality'], '', target_string)
-					#print(target_string)
-
-				#parse_with_rules['tree'] = tree
-				'''	
 				trigs_and_targs = extractTrigsAndTargs(result.stdout)
 				if trigs_and_targs == None:
 					return None
 				for trig_and_targ in trigs_and_targs: 
+					verb_types = []
+					t_classes = []
+					s_classes = []
 					#trig_word_base = morphRoot(trig_and_targs[[4])
+					print(trig_and_targ[4])
 					catvar_object = catvar_dict.get(trig_and_targ[4])
 					if catvar_object != None:
 						catvar_word = catvar_object['catvar_value']
@@ -367,7 +481,19 @@ def parseSentence(sentence):
 						for verb_type, words in lcs_dict.items():
 							if catvar_word in words:
 								print(verb_type, 'this is the verb type found from catvar')
+								verb_types.append(verb_type)
+						print(verb_types)
+						
+						for vb_type in verb_types:
+							for sashank_class, types in sashanks_classes.items():
+								if vb_type in types:
+									s_classes.append(sashank_class)
+
+							for tomek_class, types in tomeks_classes.items():
+								if vb_type in types:
+									t_classes.append(tomek_class)
 								
-					parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], rule['rule'], rule['rule_name']))
+								
+					parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], t_classes, s_classes, rule['rule'], rule['rule_name']))
 
 				return parse
