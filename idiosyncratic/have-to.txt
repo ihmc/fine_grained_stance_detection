@@ -1,0 +1,21 @@
+VB=trigger [ < have | < has | < having | < had ] !< TrigRequire $. (S < TO < (VB=target !< AUX))
+
+insert (TrigRequire) >1 trigger
+insert (TargRequire) >1 target
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

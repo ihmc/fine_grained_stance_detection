@@ -1,0 +1,5 @@
+MD=trigger !< /^Trig/ < must $.. (VP < VB=target) !$.. (VP < (VB < have)) 
+
+insert (TrigRequire) >1 trigger
+insert (TargRequire) >1 target
+

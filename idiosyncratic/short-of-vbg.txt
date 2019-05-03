@@ -1,0 +1,5 @@
+(ADJP < (JJ=trigger !< /^Trig/ < short $.. (PP < (IN < of) < (S < (VP=target < (VB < G))))) ) 
+
+insert (TrigNotSucceed) >1 trigger
+insert (TargNotSucceed) >1 target
+

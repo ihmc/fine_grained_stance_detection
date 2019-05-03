@@ -3,6 +3,7 @@ import nltk
 import csv
 import os
 import re
+import subprocess
 
 # This library allows python to make requests out.
 # NOTE: There is a difference between this and the built in request variable  
@@ -17,6 +18,19 @@ nltk.download('averaged_perceptron_tagger')
 
 modality_lookup = {}
 sentence_modalities = []
+word_specific_rules = []
+
+
+# Url for server hosting coreNLP
+coreNLP_server = 'http://panacea:nlp_preprocessing@simon.arcc.albany.edu:44444'
+
+tsurgeon_class = 'edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon'
+
+project_path = os.path.abspath(os.path.dirname(__file__))
+
+# Path for files needed for catvar processing
+catvar_file = '/catvar.txt'
+lcs_file = '/LCS-Bare-Verb-Classes-Final.txt'
 
 # Url for server hosting coreNLP
 coreNLP_server = 'http://panacea:nlp_preprocessing@simon.arcc.albany.edu:44444'
@@ -29,25 +43,114 @@ input_directory = '/text/'
 output_directory = '/output/'
 rule_directory = '/generalized-templates_v1_will_change_after_working_on_idiosyncraticRules/'
 
-# Reading a provided CSV as a lexicon and parsing out each word and it's modality
-# A sequence of 2 or 3 words can exist as well so those are checked for first
-with open('./20190205-Dorr-Modality-Lexicon.v2.csv') as modalityCSV:
-	csvReader = csv.reader(modalityCSV)
-	for word, pos, otherWord, owPOS, nextWord, nwPOS, modality in csvReader:
-		for pos in pos.split("|"):
-			if otherWord:
-				for owPos in owPOS.split("|"):
-					if nextWord:
-						for nwPos in nwPOS.split("|"):
-							modality_lookup[((word, pos), (otherWord, owPos), (nextWord, nwPos))] = modality
-					else:
-						modality_lookup[((word, pos), (otherWord, owPos))] = modality
+# Rule directories
+# TODO This list will be thinned out as rule sets are chosen for superiority
+generalized_rule_directory = '/generalized-templates_v1_will_change_after_working_on_idiosyncraticRules/'
+generalized_rule_v2_directory = '/generalized-templates_v2/'
+generalized_v3_directory = '/generalized-templates_v3/'
+lexical_item_rule_directory = '/lexical-item-rules/'
+preprocess_rule_directory = '/idiosyncratic/'
+
+# Paths for the tsurgeon java tool
+tregex_directory = '/stanford-tregex-2018-10-16/'
+tsurgeon_script = tregex_directory + 'tsurgeon.sh'
+
+lcs_dict = {}
+with open('.' + lcs_file) as lcs:
+	backup_regex = '\(\s\s:NUMBER \"(.+)\"\s\s:NAME \"(.+)\"\s\s:WORD \((.*)\) \)'
+	unit_regex = ':NUMBER \"(.+)\"\s*:NAME \"(.+)\"\s*:WORDS \((.*)\)' 
+	lines = lcs.readlines() 
+	file_as_string = ''
+	for line in lines:
+		file_as_string += line
+
+	matches = re.findall(unit_regex, file_as_string, re.MULTILINE)
+	#print(matches)
+	for match in matches:
+		lcs_key = match[0] + ' ' + match[1]
+		word_list = match[2].split()
+		lcs_dict[lcs_key] = word_list	
+
+#print(lcs_dict)
+print('LCS dictionary created')
+
+catvar_dict = {}
+with open('.' + catvar_file) as catvar:
+	for entry in catvar:
+		entry_pieces = entry.split('#')
+		if '_V' in entry_pieces[0]:
+			if len(entry_pieces) > 1:
+				# Must create a key for each piece and it's value the first piece
+				for entry_piece in entry_pieces:
+					key_piece_no_POS = entry_piece.split('_')[0]
+					value_piece_no_POS = entry_pieces[0].split('_')[0]
+					catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
 			else:
-				modality_lookup[(word, pos)] = modality
+				# If the entry only has one piece then the key and value are the same 
+				piece_no_POS = entry_pieces[0].split('_')[0]
+				catvar_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
+
+#print(catvar_dict, 'catvar dicctionary')
+print('catvar dictionary create')
+						
+
+preprocess_rules_in_order = []
+with open('.' + preprocess_rule_directory + 'ORDER.txt', 'r') as rule_order:
+	for rule in rule_order:
+		rule = rule.strip('\n')
+		preprocess_rules_in_order.append(rule)
+
+print('Preprocess rules loaded')
+
+# Reading a provided CSV as a lexicon and parsing out each word and it's modality
+# as well as a list of rules that should apply for each lexical item
+# A sequence of 2 or 3 words can exist as well so those are checked for first
+lexical_items = []
+with open('./ModalityLexiconSubcatTags.csv') as modalityCSV:
+	csv_reader = csv.reader(modalityCSV)
+	for word, pos, modality, rules in csv_reader:
+		lexical_items.append(word)
+		for rule in rules.split("|"):
+			if rule:
+				word_specific_rules.append((word, rule.strip(' '), modality))
+		for pos in pos.split("|"):
+			modality_lookup[(word, pos)] = modality
+
 print("Lexicon loaded")
 
-project_path = os.path.abspath(os.path.dirname(__file__))
-rule_path = project_path + rule_directory
+if not os.path.exists('.' + lexical_item_rule_directory):
+	print('Lexical item rule directory does not exist, creating now');
+	os.mkdir('.' + lexical_item_rule_directory)
+
+
+# Rule here refers to a tuple containing the rule as well as its corresponding lexical item, and modality (lexical item, rule name, modality)
+lexical_specific_rules = []
+for rule in word_specific_rules:
+	if rule[1] + '.txt' not in preprocess_rules_in_order:
+		with open('.' + generalized_v3_directory + rule[1] + '.txt') as rule_file:
+			filled_in_rule = rule_file.read().replace('**', rule[0])
+			rule_name = rule[0] + '-' + rule[2] + '-' + rule[1]
+
+			filled_in_rule = filled_in_rule.replace('TargLabel', 'Targ' + rule[2])
+			filled_in_rule = filled_in_rule.replace('TrigLabel', 'Trig' + rule[2])
+
+		# A new file name is built from the combination of the lexical item and the rule
+		lexical_specific_rule_file = '.' + lexical_item_rule_directory + rule_name + '.txt'
+		#print(lexical_specific_rule_file)
+		rule_dict = {}
+		rule_dict['rule'] = filled_in_rule
+		rule_dict['rule_name'] = rule_name
+		rule_dict['modality'] = rule[2]
+		rule_dict['lexical_item'] = rule[0]
+		lexical_specific_rules.append(rule_dict)
+		with open(lexical_specific_rule_file, 'w+') as lexical_rule:
+			lexical_rule.write(filled_in_rule)
+			
+#print(lexical_specific_rules)
+
+
+'''
+rule_path = project_path + generalized_rule_directory
 rules = []
 for filename in os.listdir(rule_path):
 	with open(rule_path + filename, 'r') as rule_file:
@@ -59,8 +162,8 @@ for filename in os.listdir(rule_path):
 		
 		rules.append(ruleDict)
 
-print("Rules Loaded")
-
+print("Generalized Rules Loaded")
+'''
 
 def getModality(text):
 
@@ -70,35 +173,6 @@ def getModality(text):
 
 	for sentence in sentences:
 		constituency_parse = parseSentence(sentence)
-		# Split each sentence into words
-		words = nltk.word_tokenize(sentence)
-		# Builds a tuple for each word in the sentence with its corresponding part of speech
-		pos_tags = nltk.pos_tag(words)
-		# Build keys for the input text that has sets of single, double, and triple word sequences.
-		# The word needs to be lowercased and transformed down to it's root form
-		unigrams = [(morphRoot(tup[0].lower()), tup[1]) for tup in pos_tags]
-		unigrams.append((None, None))
-		unigrams.append((None, None))
-		unigrams.append((None, None))
-		bigrams = list(zip(unigrams, unigrams[1:-1]))
-		trigrams = list(zip(unigrams, unigrams[1:-1], unigrams[2:-1]))
-
-		# Match the input word keys with the keys that were read in from the CSV(lexicon)
-		unigram_matches = unigrams & modality_lookup.keys()
-		bigram_matches = bigrams & modality_lookup.keys()
-		trigram_matches = trigrams & modality_lookup.keys()
-
-		# Handles matching on the longest word sequence and not duplicates of chunks from
-		# a longest word sequence.
-		modals = []
-		for index, element in enumerate(trigrams):
-			if element in trigram_matches:
-				modals.append((element, modality_lookup[element], index))
-			elif bigrams[index] in bigram_matches:
-				modals.append((bigrams[index], modality_lookup[bigrams[index]], index))
-			elif unigrams[index] in unigram_matches:
-				modals.append((unigrams[index], modality_lookup[unigrams[index]], index))
-
 		sentence_modalities.append({"sentence": sentence, "matches": constituency_parse})
 
 
@@ -125,9 +199,7 @@ def morphRoot(word):
 
 def extractTriggerWordAndPos(trigger_string):
 	trigger_string = trigger_string.replace('\\n', '');
-	match = re.search('\(([A-Z]*) ([a-z]+?)\)', trigger_string)
-	if not match:
-		return ('', '')
+	match = re.search('\(([A-Z]*) *([a-z]+?)\)', trigger_string)
 	trigger_pos = match.group(1)
 	trigger_word = match.group(2)
 	
@@ -138,44 +210,164 @@ def getTriggerModality(word_and_pos):
 	
 	if trigger_tuple in modality_lookup:
 		return modality_lookup[trigger_tuple]
+  
+def preprocessSentence(tree):
+	with open('./tree.txt', 'w+') as tree_file:
+		tree_file.write(tree)
+		for rule in preprocess_rules_in_order:
+			# Have to return to the beginning of the file so that the new tree overwrites the previous one.
+			tree_file.seek(0)
+
+			# This command is taken out of the tsurgeon.sh file in the coreNLP tregex tool.
+			# The cp option is added so the class will run without the being in the same directory 
+			result = subprocess.run(['java', '-mx100m', '-cp', project_path + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + preprocess_rule_directory + rule], stdout = subprocess.PIPE, text=True)
+
+			tree_file.write(result.stdout)
+
+	return result.stdout
+
+def extractTrigsAndTargs(tree):
+	trigs_and_targs = []
+	
+	# Remove new lines so the regex is easier to handle
+	tree_no_new_lines = tree.replace('\n', '')
+	trig_regex = '(\([A-Z]* *(Trig\w+) *[A-Z]* *([a-z]*)\))'
+	targ_regex = '(\([A-Z]* *(Targ\w+) *\(*[A-Z]* *[A-Z]* *([a-z]*)\))'
+	trig_match = re.findall(trig_regex, tree_no_new_lines)
+	targ_match = re.findall(targ_regex, tree_no_new_lines)
+
+	if not trig_match:
+		print('Trigger did not match, investigate tree and regex')
+		return None
+	if not targ_match:
+		print('Target did not match, investigate tree and regex')
+		return None
+
+	# Extract the trigger and target from the tree, remove "Trig" and "Targ" so the part of speech 
+	# can be kept with the word, and extract the modality
+	for index, (entire_match, modality, trig) in enumerate(trig_match):
+		trig_string = ' '.join(entire_match.split())
+		trig_string = re.sub('Trig\w+', '', trig_string)
+		targ_string = ' '.join(targ_match[index][0].split())
+		targ_string = re.sub('Targ\w+', '', targ_string)
+		modality = modality.replace('Trig', '')
+		ask = targ_match[index][2]
+		trig_word = trig
+		trigs_and_targs.append((trig_string, targ_string, modality, ask, trig_word))
+
+	return trigs_and_targs	
+
+def buildParseDict(trigger, target, modality, ask, rule, rule_name):
+	parse_dict = {}
+	parse_dict['trigger'] = trigger
+	parse_dict['target'] = target
+	parse_dict['trigger_modality'] = modality
+	parse_dict['ask'] = ask
+	parse_dict['rule'] = rule
+	parse_dict['rule_name'] = rule_name
+	return parse_dict
+	
 
 def parseSentence(sentence):
 	annotators = '/?annotators=tokenize,pos,parse&tokenize.english=true'
 	tregex = '/tregex'
-	url = coreNLP_server + tregex
+	url = coreNLP_server + annotators
 	parse = []	
-	print("\n\n\nBeginning of sentence print",sentence, '\n\n\n\nEnd of sentence print')
-	for rule in rules:
-		parse_with_rules = {}
-		trigger_string = ''
-		trigger_modality = ''
-		response = requests.post(url, data=sentence, params={"pattern": rule['rule']})
+	trigger_string = ''
+	target_string = ''
+	trigger_modality = ''
 
-		if(response.status_code != 200):
-			continue
+	response = requests.post(url, data=sentence)	
+	parse_tree = response.json()['sentences'][0]['parse']
+	#print(parse_tree, "base tree")
+	
+	preprocessed_tree = preprocessSentence(parse_tree)
 
-		if(len(response.json()['sentences'][0]) > 0):
-			res_sentences = response.json()['sentences'][0]
+	# Get all words for the sentence and morph them to their root word.
+	# Then check each word in the sentence to see if it is in the lexicon and
+	# build a list of all the generalized rules that should be tried on the sentence tree
+	words = nltk.word_tokenize(sentence)
+	words = [(morphRoot(word.lower())) for word in words]
+	subsets_per_word = []
+	for word in words:
+		if word in lexical_items:
+			subset = list(filter(lambda rule: rule['lexical_item'] == word, lexical_specific_rules))
+			if subset:
+				subsets_per_word.append(subset)
 
-			for node in res_sentences['0']['namedNodes']:
-				if 'trigger' in node:
-					node['trigger'] = node['trigger'].strip('\n')
-					trigger_string = node['trigger']	
+	# If there are not words from the sentence found in the lexicon then we need to check the 
+	# preprocessed tree from and triggers
+	if len(subsets_per_word) == 0:
+		if "Trig" in preprocessed_tree:
+			trigs_and_targs = extractTrigsAndTargs(preprocessed_tree)
+			if trigs_and_targs == None:
+				return None
+			for trig_and_targ in trigs_and_targs:
+				# TODO store the portions of the tuple in meaningful names
+				#trig_word_base = morphRoot(trig_and_targs[[4])
+				catvar_object = catvar_dict.get(trig_and_targ[4])
+				if catvar_object != None:
+					catvar_word = catvar_object['catvar_value']
+					print(catvar_word, 'THis is the catvar word lookup')
+				parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], 'preprocessed rules', 'preprocess rules'))
+
+			return parse
+	
+	for rule_subset in subsets_per_word:
+		for rule in rule_subset:
+			
+
+			print(rule['rule_name'])
+			result = subprocess.run(['java', '-mx100m', '-cp', project_path + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + lexical_item_rule_directory + rule['rule_name'] + '.txt'], stdout = subprocess.PIPE, text=True)
+
+			if 'Trig' + rule['modality'] in result.stdout:
+
+				'''
 				
-				if 'target' in node:
-					node['target'] = node['target'].strip('\n')
-			
-			if(trigger_string != ''):
-				trigger_modality = getTriggerModality(extractTriggerWordAndPos(trigger_string))
+				tree_no_new_lines = result.stdout.replace('\n', '')
+				#print(tree_no_new_lines)
 
-			parse_with_rules['match'] = res_sentences["0"]['match']
-			parse_with_rules['namedNodes'] = res_sentences["0"]['namedNodes']
-			parse_with_rules['trigger_modality'] = trigger_modality
-			parse_with_rules['rule'] = rule['rule']
-			parse_with_rules['rule_name'] = rule['rule_name']
-			
-			parse.append(parse_with_rules)
-			
-	return parse;
+				
+				#trig_regex = '\([A-Z]* *Trig' + rule['modality'] + ' *[A-Z]* *([a-z]*)\)'
+				trig_regex = '\([A-Z]* *Trig\w+ *[A-Z]* *([a-z]*)\)'
+				#print(trig_regex)
+				trig_match = re.search(trig_regex, tree_no_new_lines)
+				if trig_match:
+					#print('trig regex match')
+					trigger_string = ' '.join(trig_match.group(0).split())
+					#trigger_string = re.sub('Trig' + rule['modality'], '', trigger_string)
+					trigger_string = re.sub('Trig\w+', '', trigger_string)
+					#print(trigger_string)
+					#print('\n\n')
+					#trigger_string = re.sub(' *TrigLabel *', '', trig_match.group(0))
 
+				# Extract the target from the tree accounting for the possibility of multiple 
+				#words as the targert
+				targ_regex = '\([A-Z]* *Targ' + rule['modality'] + ' *\(*[A-Z]* *[A-Z]* *[a-z]*\)'
+				#print(targ_regex)
+				targ_match = re.search(targ_regex, tree_no_new_lines)
+				if targ_match:
+					#print('targ regex match')
+					target_string = targ_match.group(0)
+					target_string = ' '.join(target_string.split())
+					target_string = re.sub('Targ' + rule['modality'], '', target_string)
+					#print(target_string)
 
+				#parse_with_rules['tree'] = tree
+				'''	
+				trigs_and_targs = extractTrigsAndTargs(result.stdout)
+				if trigs_and_targs == None:
+					return None
+				for trig_and_targ in trigs_and_targs: 
+					#trig_word_base = morphRoot(trig_and_targs[[4])
+					catvar_object = catvar_dict.get(trig_and_targ[4])
+					if catvar_object != None:
+						catvar_word = catvar_object['catvar_value']
+						print(catvar_word, 'THis is the catvar word lookup')
+						for verb_type, words in lcs_dict.items():
+							if catvar_word in words:
+								print(verb_type, 'this is the verb type found from catvar')
+								
+					parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], rule['rule'], rule['rule_name']))
+
+				return parse

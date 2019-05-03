@@ -1,0 +1,4 @@
+VP < (VP < (VB=trigger !< /^Trig/ < VoicePassive < ** !$.. S) $,, (VB [ < is | < am | < are | < was | < were | < be | < being | < been | < get | < gets | < got | < gotten | < getting ]) ) $,, (NP [ < /^NN/=target | < PRP=target ]) 
+
+insert (TargLabel) >1 target
+insert (TrigLabel) >1 trigger
