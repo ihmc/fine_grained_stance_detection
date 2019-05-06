@@ -340,13 +340,16 @@ def preprocessSentence(tree):
 			tree_file.seek(0)
 
 			# This command is taken out of the tsurgeon.sh file in the coreNLP tregex tool.
-			# The cp option is added so the class will run without the being in the same directory 
+			# The cp option is added so the class will run without being in the same directory 
 			result = subprocess.run(['java', '-mx100m', '-cp', project_path + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + preprocess_rule_directory + rule], stdout = subprocess.PIPE, text=True)
 
 			tree_file.write(result.stdout)
 
 	return result.stdout
 
+
+# This function runs regex on a parse tree in order to extract potential trigger and target
+# labels that may have been placed on the tree.
 def extractTrigsAndTargs(tree):
 	trigs_and_targs = []
 	
@@ -354,6 +357,11 @@ def extractTrigsAndTargs(tree):
 	tree_no_new_lines = tree.replace('\n', '')
 	trig_regex = '(\([A-Z]* *(Trig\w+) *[A-Z]* *([a-z]*)\))'
 	targ_regex = '(\([A-Z]* *(Targ\w+) *\(*[A-Z]* *[A-Z]* *([a-z]*)\))'
+
+	# The result of a findall is an array of tuples, where each part of the tuple
+	# is a group from the regex, denoted by non escaped parentheses.
+	# If a larger group encompasses smaller groups I believe the larger group is first
+	# in the tuple
 	trig_match = re.findall(trig_regex, tree_no_new_lines)
 	targ_match = re.findall(targ_regex, tree_no_new_lines)
 
@@ -367,6 +375,9 @@ def extractTrigsAndTargs(tree):
 	# Extract the trigger and target from the tree, remove "Trig" and "Targ" so the part of speech 
 	# can be kept with the word, and extract the modality
 	for index, (entire_match, modality, trig) in enumerate(trig_match):
+		# TODO keeping this for now as it parses out the trigger and target
+		# with their corresponding part of speech
+		# May not be needed later on.
 		'''
 		trig_string = ' '.join(entire_match.split())
 		trig_string = re.sub('Trig\w+', '', trig_string)
@@ -388,10 +399,41 @@ def buildParseDict(trigger, target, modality, ask, t_classes, s_classes, rule, r
 	parse_dict['ask'] = ask
 	parse_dict['T_ask_type'] = t_classes
 	parse_dict['S_ask_type'] = s_classes
+	
+	# Commented for now but useful if debugging which rules are being used
 	#parse_dict['rule'] = rule
 	#parse_dict['rule_name'] = rule_name
 	return parse_dict
 	
+# Ask types or classes have been provided by Tomek and Sashank, hence s_classes and t_classes
+# This function maps the target word(ask) to a catvar word (the base of a word) which is 
+# mapped to LCS (lexical conceptual structures) and eventually those are mapped to the ask types
+def getAskTypes(ask):
+	verb_types = []
+	s_classes = []
+	t_classes = []
+	catvar_object = catvar_dict.get(ask)
+	
+
+	if catvar_object != None:
+		catvar_word = catvar_object['catvar_value']
+		print(catvar_word, 'This is the catvar word lookup')
+		for verb_type, words in lcs_dict.items():
+			if catvar_word in words:
+				print(verb_type, 'this is the verb type found from catvar')
+				verb_types.append(verb_type)
+		print(verb_types)
+		
+		for vb_type in verb_types:
+				for sashank_class, types in sashanks_classes.items():
+					if vb_type in types:
+						s_classes.append(sashank_class)
+
+				for tomek_class, types in tomeks_classes.items():
+					if vb_type in types:
+						t_classes.append(tomek_class)
+
+	return (s_classes, t_classes)
 
 def parseSentence(sentence):
 	annotators = '/?annotators=tokenize,pos,parse&tokenize.english=true'
@@ -407,6 +449,7 @@ def parseSentence(sentence):
 	#print(parse_tree, "base tree")
 	
 	preprocessed_tree = preprocessSentence(parse_tree)
+	print(preprocessed_tree)
 
 	# Get all words for the sentence and morph them to their root word.
 	# Then check each word in the sentence to see if it is in the lexicon and
@@ -429,71 +472,34 @@ def parseSentence(sentence):
 				return None
 			for trig_and_targ in trigs_and_targs:
 				# TODO store the portions of the tuple in meaningful names
-				#trig_word_base = morphRoot(trig_and_targs[[4])
-				verb_types = []
-				potential_classes = []
-				#trig_word_base = morphRoot(trig_and_targs[[4])
 				print(trig_and_targ[4])
-				catvar_object = catvar_dict.get(trig_and_targ[4])
-				if catvar_object != None:
-					catvar_word = catvar_object['catvar_value']
-					print(catvar_word, 'THis is the catvar word lookup')
-					for verb_type, words in lcs_dict.items():
-						if catvar_word in words:
-							print(verb_type, 'this is the verb type found from catvar')
-							verb_types.append(verb_type)
-					print(verb_types)
-					
-					for vb_type in verb_types:
-							for sashank_class, types in sashanks_classes.items():
-								if vb_type in types:
-									s_classes.append(sashank_class)
-
-							for tomek_class, types in tomeks_classes.items():
-								if vb_type in types:
-									t_classes.append(tomek_class)
-
+				(s_classes, t_classes) = getAskTypes(trig_and_targ[4])
 				parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], potential_classes, 'preprocessed rules', 'preprocess rules'))
 
 			return parse
-	
+	# Here we loop through each set of generalized rules that were gathered above and 
+	# try all of them for each word of the sentence that was found in the lexicon until 
+	# one of the generalized rules produces a match via tsurgeon	
 	for rule_subset in subsets_per_word:
 		for rule in rule_subset:
-			
-
 			print(rule['rule_name'])
+			# Tsurgeon is a part of the stanford corenlp tool set. It must be rune on a file as it will not 
+			# aceept just a string. NOTE There may be a way to do just a string that I have not discovered yet.
+			# Tsurgeon will edit the parse tree and add trigger and target labels according to the rules that match.
 			result = subprocess.run(['java', '-mx100m', '-cp', project_path + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + lexical_item_rule_directory + rule['rule_name'] + '.txt'], stdout = subprocess.PIPE, text=True)
 
+			# TODO make this more accurate. Currently it is unlikely but still possible that a preprocess rule
+			# could have added a Trig with the same modality as a generalized rule. And if the generalized rule 
+			# does not match then the Trig from the preprocessed will fire the extracting of triggers when it 
+			# should attempt more generalized rules
 			if 'Trig' + rule['modality'] in result.stdout:
 				trigs_and_targs = extractTrigsAndTargs(result.stdout)
 				if trigs_and_targs == None:
 					return None
 				for trig_and_targ in trigs_and_targs: 
-					verb_types = []
-					t_classes = []
-					s_classes = []
-					#trig_word_base = morphRoot(trig_and_targs[[4])
 					print(trig_and_targ[4])
-					catvar_object = catvar_dict.get(trig_and_targ[4])
-					if catvar_object != None:
-						catvar_word = catvar_object['catvar_value']
-						print(catvar_word, 'THis is the catvar word lookup')
-						for verb_type, words in lcs_dict.items():
-							if catvar_word in words:
-								print(verb_type, 'this is the verb type found from catvar')
-								verb_types.append(verb_type)
-						print(verb_types)
-						
-						for vb_type in verb_types:
-							for sashank_class, types in sashanks_classes.items():
-								if vb_type in types:
-									s_classes.append(sashank_class)
-
-							for tomek_class, types in tomeks_classes.items():
-								if vb_type in types:
-									t_classes.append(tomek_class)
-								
-								
+					(s_classes, t_classes) = getAskTypes(trig_and_targ[4])
+					catvar_object = catvases.append(tomek_class)
 					parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], t_classes, s_classes, rule['rule'], rule['rule_name']))
 
 				return parse
