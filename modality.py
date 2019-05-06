@@ -499,7 +499,6 @@ def parseSentence(sentence):
 				for trig_and_targ in trigs_and_targs: 
 					print(trig_and_targ[4])
 					(s_classes, t_classes) = getAskTypes(trig_and_targ[4])
-					catvar_object = catvases.append(tomek_class)
 					parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], t_classes, s_classes, rule['rule'], rule['rule_name']))
 
 				return parse
