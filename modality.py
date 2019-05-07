@@ -391,7 +391,7 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask, t_classes, s_classes, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask, t_classes, s_classes, base_word, rule, rule_name):
 	parse_dict = {}
 	parse_dict['trigger'] = trigger
 	parse_dict['target'] = target
@@ -399,6 +399,7 @@ def buildParseDict(trigger, target, modality, ask, t_classes, s_classes, rule, r
 	parse_dict['ask'] = ask
 	parse_dict['T_ask_type'] = t_classes
 	parse_dict['S_ask_type'] = s_classes
+	parse_dict['base_word'] = base_word
 	
 	# Commented for now but useful if debugging which rules are being used
 	#parse_dict['rule'] = rule
@@ -436,7 +437,7 @@ def getAskTypes(ask):
 	return (s_classes, t_classes)
 
 def parseSentence(sentence):
-	annotators = '/?annotators=tokenize,pos,parse&tokenize.english=true'
+	annotators = '/?annotators=tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
 	url = coreNLP_server + annotators
 	parse = []	
@@ -446,10 +447,14 @@ def parseSentence(sentence):
 
 	response = requests.post(url, data=sentence)	
 	parse_tree = response.json()['sentences'][0]['parse']
-	#print(parse_tree, "base tree")
-	
+	dependencies = response.json()['sentences'][0]['basicDependencies']
+	tokens = response.json()['sentences'][0]['tokens']
+	for dependency in dependencies:
+		if dependency['dep'] == 'ROOT':
+			base_word = dependency['dependentGloss']
+	print(base_word)
+	print(dependencies)
 	preprocessed_tree = preprocessSentence(parse_tree)
-	print(preprocessed_tree)
 
 	# Get all words for the sentence and morph them to their root word.
 	# Then check each word in the sentence to see if it is in the lexicon and
@@ -473,8 +478,8 @@ def parseSentence(sentence):
 			for trig_and_targ in trigs_and_targs:
 				# TODO store the portions of the tuple in meaningful names
 				print(trig_and_targ[4])
-				(s_classes, t_classes) = getAskTypes(trig_and_targ[4])
-				parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], potential_classes, 'preprocessed rules', 'preprocess rules'))
+				(s_classes, t_classes) = getAskTypes(base_word)
+				parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], potential_classes, base_word, 'preprocessed rules', 'preprocess rules'))
 
 			return parse
 	# Here we loop through each set of generalized rules that were gathered above and 
@@ -498,7 +503,7 @@ def parseSentence(sentence):
 					return None
 				for trig_and_targ in trigs_and_targs: 
 					print(trig_and_targ[4])
-					(s_classes, t_classes) = getAskTypes(trig_and_targ[4])
-					parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], t_classes, s_classes, rule['rule'], rule['rule_name']))
+					(s_classes, t_classes) = getAskTypes(base_word)
+					parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], t_classes, s_classes, base_word, rule['rule'], rule['rule_name']))
 
 				return parse
