@@ -560,8 +560,7 @@ def getAskTypes(ask):
 			for tomek_ask_type, types in tomeks_ask_types.items():
 				if vb_type in types and tomek_ask_type not in t_ask_types:
 					t_ask_types.append(tomek_ask_type)
-		if not t_ask_types:
-			t_ask_types.append('OTHER')
+		
 
 	return (s_ask_types, t_ask_types)
 
@@ -683,10 +682,10 @@ def parseSrl(sentence):
 	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
 	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_base_word)
 
-	print(additional_s_ask_types, '\n\n')
-	print(additional_lem_s_ask_types)
 	addtional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
+	if not t_ask_types:
+		t_ask_types.append('OTHER')
 
 	parse.append(buildParseDict('', '', '', '', s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
 
@@ -697,6 +696,9 @@ def parseSrl(sentence):
 
 		conj_additional_s_ask_types = appendListNoDuplicates(conj_additional_lem_s_ask_types, conj_additional_s_ask_types)
 		conj_t_ask_types = appendListNoDuplicates(conj_lem_t_ask_types, conj_t_ask_types)
+			
+		if not conj_t_ask_types:
+			conj_t_ask_types.append('OTHER')
 
 		parse.append(buildParseDict('', '', '', '', s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))	
 
