@@ -550,17 +550,18 @@ def getAskTypes(ask):
 
 		for verb_type, words in lcs_dict.items():
 			if catvar_word in words:
-				print(verb_type, 'this is the verb type found from catvar')
 				verb_types.append(verb_type)
 		
 		for vb_type in verb_types:
 			for sashank_ask_type, types in sashanks_ask_types.items():
-				if vb_type in types:
+				if vb_type in types and sashank_ask_type not in s_ask_types:
 					s_ask_types.append(sashank_ask_type)
 
 			for tomek_ask_type, types in tomeks_ask_types.items():
-				if vb_type in types:
+				if vb_type in types and tomek_ask_type not in t_ask_types:
 					t_ask_types.append(tomek_ask_type)
+		if not t_ask_types:
+			t_ask_types.append('OTHER')
 
 	return (s_ask_types, t_ask_types)
 
@@ -682,6 +683,8 @@ def parseSrl(sentence):
 	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
 	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_base_word)
 
+	print(additional_s_ask_types, '\n\n')
+	print(additional_lem_s_ask_types)
 	addtional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
 
