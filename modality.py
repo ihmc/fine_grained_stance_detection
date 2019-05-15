@@ -16,8 +16,123 @@ from nltk.corpus import wordnet as wn
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
+sashank_categories_sensitive = {
+	"finance_money": [
+		"money",
+		"cash",
+		"fund",
+		"check",
+		"bit coin",
+		"bitcoin"
+	],
+	"finance_info": [
+		"bank",
+		"account",
+		"transaction",
+		"payment",
+		"credit card",
+		"insurance",
+		"transaction",
+		"tax",
+		"claims",
+		"irs",
+		"link"
+	],
+	"personal": [
+		"email",
+		"e-mail",
+		"ssn",
+		"social security",
+		"birthday",
+		"country",
+		"citizenship",
+		"originally from",
+		"family",
+		"phone",
+		"home address",
+		"office address",
+		"phone number",
+		"offer",
+		"contact info",
+		"contact information",
+		"CV",
+		"link",
+		"information",
+		"available",
+		"invite",
+		"invitation",
+		"schedule",
+		"call",
+		"message"
+	],
+	"business": [
+		"proposal",
+		"meeting",
+		"meet",
+		"proposition",
+		"offer",
+		"available",
+		"invite",
+		"invitation",
+		"call",
+		"fax"
+	],
+	"credentials": [
+		"credentials",
+		"password",
+		"account",
+		"slack id",
+		"email id",
+		"id",
+		"user id",
+		"login"
+	],
+	"privileged_information": [
+		"report",
+		"document",
+		"attachment",
+		"link",
+		"intellectual property",
+		"brochure",
+		"code",
+		"form",
+		"file",
+		"software",
+		"project",
+		"dropbox"
+	],
+	"ideology": [
+		"human rights",
+		"jesus",
+		"campaign",
+		"health",
+		"refugee",
+		"humanitarian",
+		"climate change",
+		"cancer"
+	],
+	"scam_lottery": [
+		"lottery",
+		"lucky draw",
+		"winner",
+		"prize"
+	],
+	"scam_gift": [
+		"gift",
+		"present",
+		"gift card",
+		"gifts card"
+	],
+	"scam_job": [
+		"job",
+		"hiring",
+		"work experience",
+		"interview",
+		"candidate"
+	]
+}
 
-sashanks_classes = {
+sashanks_ask_types = {
   "finance_money": [
     "11.1 Send Verbs",
     "13.1.a.i Give - No Exchange - Sort of Atelic",
@@ -91,7 +206,7 @@ sashanks_classes = {
   "scam_job": []
 }
 
-tomeks_classes = {
+tomeks_ask_types = {
   "GET": [
     "13.5.1.a Get - No Exchange",
     "13.5.1.b.ii Get - Exchange",
@@ -293,11 +408,24 @@ def getModality(text):
 	sentence_modalities = []
 
 	for sentence in sentences:
-		constituency_parse = parseSentence(sentence)
+		constituency_parse = parseModality(sentence)
 		sentence_modalities.append({"sentence": sentence, "matches": constituency_parse})
 
 
 	return sentence_modalities
+
+def getSrl(text):
+
+	# Split input text into sentences
+	sentences = nltk.sent_tokenize(text)
+	sentence_srls = []
+
+	for sentence in sentences:
+		constituency_parse = parseSrl(sentence)
+		sentence_srls.append({"sentence": sentence, "matches": constituency_parse})
+
+
+	return sentence_srls
 
 
 def readLocalFiles():
@@ -391,14 +519,16 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask, t_classes, s_classes, base_word, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask, s_ask_types, t_ask_types, additional_S_ask_type,  base_word, rule, rule_name):
 	parse_dict = {}
-	parse_dict['trigger'] = trigger
-	parse_dict['target'] = target
-	parse_dict['trigger_modality'] = modality
+	if modality:
+		parse_dict['trigger'] = trigger
+		parse_dict['target'] = target
+		parse_dict['trigger_modality'] = modality
 	parse_dict['ask'] = ask
-	parse_dict['T_ask_type'] = t_classes
-	parse_dict['S_ask_type'] = s_classes
+	parse_dict['S_ask_type'] = s_ask_types
+	parse_dict['additional_S_ask_type'] = additional_S_ask_type
+	parse_dict['T_ask_type'] = t_ask_types
 	parse_dict['base_word'] = base_word
 	
 	# Commented for now but useful if debugging which rules are being used
@@ -406,63 +536,73 @@ def buildParseDict(trigger, target, modality, ask, t_classes, s_classes, base_wo
 	#parse_dict['rule_name'] = rule_name
 	return parse_dict
 	
-# Ask types or classes have been provided by Tomek and Sashank, hence s_classes and t_classes
+# Ask types or classes have been provided by Tomek and Sashank, hence s_ask_types and t_ask_types
 # This function maps the target word(ask) to a catvar word (the base of a word) which is 
 # mapped to LCS (lexical conceptual structures) and eventually those are mapped to the ask types
 def getAskTypes(ask):
 	verb_types = []
-	s_classes = []
-	t_classes = []
+	s_ask_types = []
+	t_ask_types = []
 	catvar_object = catvar_dict.get(ask)
-	
 
 	if catvar_object != None:
 		catvar_word = catvar_object['catvar_value']
-		print(catvar_word, 'This is the catvar word lookup')
+
 		for verb_type, words in lcs_dict.items():
 			if catvar_word in words:
 				print(verb_type, 'this is the verb type found from catvar')
 				verb_types.append(verb_type)
-		print(verb_types)
 		
 		for vb_type in verb_types:
-				for sashank_class, types in sashanks_classes.items():
-					if vb_type in types:
-						s_classes.append(sashank_class)
+			for sashank_ask_type, types in sashanks_ask_types.items():
+				if vb_type in types:
+					s_ask_types.append(sashank_ask_type)
 
-				for tomek_class, types in tomeks_classes.items():
-					if vb_type in types:
-						t_classes.append(tomek_class)
+			for tomek_ask_type, types in tomeks_ask_types.items():
+				if vb_type in types:
+					t_ask_types.append(tomek_ask_type)
 
-	return (s_classes, t_classes)
+	return (s_ask_types, t_ask_types)
 
-def parseSentence(sentence):
+# This functions checks to see if the items in a list already exist 
+# in the original list and if not then add them.
+def appendListNoDuplicates(list_to_append, original_list):
+	for item in list_to_append:
+		if item not in original_list:
+			original_list.append(item)
+
+	return original_list
+
+def getNLPParse(sentence):
 	annotators = '/?annotators=tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
 	url = coreNLP_server + annotators
-	parse = []	
+
+	return requests.post(url, data=sentence)
+
+def getLemmaWords(sentence):
+	words = nltk.word_tokenize(sentence)
+	return [(morphRoot(word.lower())) for word in words]
+
+def parseModality(sentence):
+	parse = []
 	trigger_string = ''
 	target_string = ''
 	trigger_modality = ''
-
-	response = requests.post(url, data=sentence)	
+	response = getNLPParse(sentence)
 	parse_tree = response.json()['sentences'][0]['parse']
-	dependencies = response.json()['sentences'][0]['basicDependencies']
-	tokens = response.json()['sentences'][0]['tokens']
-	for dependency in dependencies:
-		if dependency['dep'] == 'ROOT':
-			base_word = dependency['dependentGloss']
-	print(base_word)
-	print(dependencies)
 	preprocessed_tree = preprocessSentence(parse_tree)
 
 	# Get all words for the sentence and morph them to their root word.
 	# Then check each word in the sentence to see if it is in the lexicon and
 	# build a list of all the generalized rules that should be tried on the sentence tree
-	words = nltk.word_tokenize(sentence)
-	words = [(morphRoot(word.lower())) for word in words]
 	subsets_per_word = []
+	s_ask_types = []
+	words = getLemmaWords(sentence)
 	for word in words:
+		for ask_type, keywords in sashank_categories_sensitive.items():
+			if word in keywords and ask_type not in s_ask_types:
+				s_ask_types.append(ask_type)	
 		if word in lexical_items:
 			subset = list(filter(lambda rule: rule['lexical_item'] == word, lexical_specific_rules))
 			if subset:
@@ -473,13 +613,15 @@ def parseSentence(sentence):
 	if len(subsets_per_word) == 0:
 		if "Trig" in preprocessed_tree:
 			trigs_and_targs = extractTrigsAndTargs(preprocessed_tree)
+			print(trigs_and_targs)
 			if trigs_and_targs == None:
 				return None
 			for trig_and_targ in trigs_and_targs:
 				# TODO store the portions of the tuple in meaningful names
+				(trigger, target, modality, ask, trig_word) = trig_and_targ
 				print(trig_and_targ[4])
-				(s_classes, t_classes) = getAskTypes(base_word)
-				parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], potential_classes, base_word, 'preprocessed rules', 'preprocess rules'))
+				(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
+				parse.append(buildParseDict(trigger, target, modality, ask, s_ask_types, t_ask_types, additional_s_ask_types, target, 'preprocessed rules', 'preprocess rules'))
 
 			return parse
 	# Here we loop through each set of generalized rules that were gathered above and 
@@ -502,8 +644,58 @@ def parseSentence(sentence):
 				if trigs_and_targs == None:
 					return None
 				for trig_and_targ in trigs_and_targs: 
+					(trigger, target, modality, ask, trig_word) = trig_and_targ
+					print(trigger, target, modality, ask, trig_word)
 					print(trig_and_targ[4])
-					(s_classes, t_classes) = getAskTypes(base_word)
-					parse.append(buildParseDict(trig_and_targ[0], trig_and_targ[1], trig_and_targ[2], trig_and_targ[3], t_classes, s_classes, base_word, rule['rule'], rule['rule_name']))
+					(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
+					parse.append(buildParseDict(trigger, target, modality, ask, s_ask_types, t_ask_types, additional_s_ask_types, target, rule['rule'], rule['rule_name']))
 
 				return parse
+
+def parseSrl(sentence):
+	parse = []
+	base_word = ''
+	conj_base_word = ''
+	additional_s_ask_types = []
+	s_ask_types = []
+	t_ask_types = []
+	conj_t_ask_types = []
+	conj_additional_s_ask_types = []
+	words = getLemmaWords(sentence)
+	response = getNLPParse(sentence)
+	dependencies = response.json()['sentences'][0]['basicDependencies']
+	tokens = response.json()['sentences'][0]['tokens']
+
+	for word in words:
+		for ask_type, keywords in sashank_categories_sensitive.items():
+			if word in keywords and ask_type not in s_ask_types:
+				s_ask_types.append(ask_type)
+	
+	for dependency in dependencies:
+		if dependency['dep'] == 'ROOT':
+			base_word = dependency['dependentGloss']
+		if dependency['dep'] == 'conj':
+			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+				conj_base_word = dependency['dependentGloss']
+			
+	lem_base_word = morphRoot(base_word)
+	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
+	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_base_word)
+
+	addtional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
+	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
+
+	parse.append(buildParseDict('', '', '', '', s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
+
+	if conj_base_word:
+		conj_lem_base_word = morphRoot(conj_base_word)
+		(conj_additional_s_ask_types, conj_t_ask_types) = getAskTypes(conj_base_word)
+		(conj_additional_lem_s_ask_types, conj_lem_t_ask_types) = getAskTypes(conj_lem_base_word)
+
+		conj_additional_s_ask_types = appendListNoDuplicates(conj_additional_lem_s_ask_types, conj_additional_s_ask_types)
+		conj_t_ask_types = appendListNoDuplicates(conj_lem_t_ask_types, conj_t_ask_types)
+
+		parse.append(buildParseDict('', '', '', '', s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))	
+
+	return parse
+

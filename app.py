@@ -21,13 +21,23 @@ print("My name is:\t%s" % __name__)
 def hello():
 	return "Hello World"
 
-@app.route("/email", methods = ['POST','GET'])
+@app.route("/modality/email", methods = ['POST','GET'])
 @basic_auth.required
-def handleEmail():
+def handleModality():
 	payload = request.get_json();
 
 
 	sentence_modalities = modality.getModality(payload['text'])
+
+	return json.dumps(sentence_modalities)
+
+@app.route("/srl/email", methods = ['POST','GET'])
+@basic_auth.required
+def handleSrl():
+	payload = request.get_json();
+
+
+	sentence_modalities = modality.getSrl(payload['text'])
 
 	return json.dumps(sentence_modalities)
 
