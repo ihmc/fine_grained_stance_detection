@@ -310,22 +310,36 @@ with open('.' + lcs_file) as lcs:
 #print(lcs_dict)
 print('LCS dictionary created')
 
+test_list = []
 catvar_dict = {}
 with open('.' + catvar_file) as catvar:
 	for entry in catvar:
-		entry_pieces = entry.split('#')
-		#if '_V' in entry_pieces[0]:
-		if len(entry_pieces) > 1:
-			# Must create a key for each piece and it's value the first piece
-			for entry_piece in entry_pieces:
-				key_piece_no_POS = entry_piece.split('_')[0]
-				value_piece_no_POS = entry_pieces[0].split('_')[0]
-				catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
-		else:
-			# If the entry only has one piece then the key and value are the same 
-			piece_no_POS = entry_pieces[0].split('_')[0]
-			catvar_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
+		if '_V' in entry:
+			entry_pieces = entry.split('#')
+			if len(entry_pieces) > 1:
+				# Must create a key for each piece and it's value the first piece
+				for entry_piece in entry_pieces:
+					key_piece_no_POS = entry_piece.split('_')[0]
+					value_piece_no_POS = entry_pieces[0].split('_')[0]
+					catvar_key_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
+			else:
+				# If the entry only has one piece then the key and value are the same 
+				piece_no_POS = entry_pieces[0].split('_')[0]
+				catvar_key_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
+		#v_entries = []
+		'''
+		if '_V' not in entry_pieces[0]:
+		for index, entry_piece in enumerate(entry_pieces):
+			beg_test_word = entry_pieces[0].split('_')[0]
+			test_word = entry_piece.split('_')[0]
+			if '_V' in entry_piece: #and beg_test_word != test_word:
+				v_entries.append((entry_piece, index))
+		if len(v_entries) > 1:#and len(v_entries) < 2:
+			test_list.append(v_entries)
+		'''
 
+print(test_list)
+print('\n\n', len(test_list))
 #print(catvar_dict, 'catvar dicctionary')
 print('catvar dictionary create')
 						
@@ -409,7 +423,9 @@ def getModality(text):
 
 	for sentence in sentences:
 		constituency_parse = parseModality(sentence)
-		sentence_modalities.append({"sentence": sentence, "matches": constituency_parse})
+		semantic_roles = requests.post('https://panacea:srl@localhost:8033/srl', json={"sentence": sentence}, verify=False)
+		
+		sentence_modalities.append({"sentence": sentence, "matches": constituency_parse, "semantic_roles": semantic_roles})
 
 
 	return sentence_modalities
@@ -422,7 +438,10 @@ def getSrl(text):
 
 	for sentence in sentences:
 		constituency_parse = parseSrl(sentence)
-		sentence_srls.append({"sentence": sentence, "matches": constituency_parse})
+		response = requests.post('https://panacea:srl@localhost:8033/srl', json={"sentence": sentence}, verify=False)
+		semantic_roles = response.json()
+		print(semantic_roles, "semantic roles")
+		sentence_srls.append({"sentence": sentence, "matches": constituency_parse, "sematantic_roles": semantic_roles['semantic_roles']})
 
 
 	return sentence_srls
@@ -519,13 +538,16 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask, s_ask_types, t_ask_types, additional_S_ask_type,  base_word, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, s_ask_types, t_ask_types, additional_S_ask_type,  base_word, rule, rule_name):
 	parse_dict = {}
 	if modality:
 		parse_dict['trigger'] = trigger
 		parse_dict['target'] = target
 		parse_dict['trigger_modality'] = modality
+	parse_dict['ask_who'] = ask_who
 	parse_dict['ask'] = ask
+	parse_dict['ask_recipient'] = ask_recipient
+	parse_dict['ask_when'] = ask_when
 	parse_dict['S_ask_type'] = s_ask_types
 	parse_dict['additional_S_ask_type'] = additional_S_ask_type
 	parse_dict['T_ask_type'] = t_ask_types
@@ -583,6 +605,9 @@ def getNLPParse(sentence):
 def getLemmaWords(sentence):
 	words = nltk.word_tokenize(sentence)
 	return [(morphRoot(word.lower())) for word in words]
+
+def extractAskFromSrl(semantic_roles, base_word):
+	return	
 
 def parseModality(sentence):
 	parse = []
@@ -656,6 +681,10 @@ def parseSrl(sentence):
 	parse = []
 	base_word = ''
 	conj_base_word = ''
+	ask_who = ''
+	ask = ''
+	ask_recipient = ''
+	ask_when = ''
 	additional_s_ask_types = []
 	s_ask_types = []
 	t_ask_types = []
@@ -664,7 +693,12 @@ def parseSrl(sentence):
 	words = getLemmaWords(sentence)
 	response = getNLPParse(sentence)
 	dependencies = response.json()['sentences'][0]['basicDependencies']
+	#print(response.json())
 	tokens = response.json()['sentences'][0]['tokens']
+	response = requests.post('https://panacea:srl@localhost:8033/srl', json={"sentence": sentence}, verify=False)
+	srl_json = response.json()
+	semantic_roles = srl_json['semantic_roles']
+	print(semantic_roles.keys(), "keys \n\n\n")
 
 	for word in words:
 		for ask_type, keywords in sashank_categories_sensitive.items():
@@ -678,6 +712,20 @@ def parseSrl(sentence):
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				conj_base_word = dependency['dependentGloss']
 			
+	if base_word in semantic_roles.keys():
+		print(semantic_roles[base_word], "Get roles through base word if it exist")
+		base_word_roles = semantic_roles[base_word]
+		if 'A0' in base_word_roles.keys():
+			ask_who = base_word_roles['A0']
+		if 'A1' in base_word_roles.keys():
+			ask = base_word_roles['A1']
+		if 'A2' in base_word_roles.keys():
+			ask_recipient = base_word_roles['A2']
+		if 'AM-TMP' in base_word_roles.keys():
+			ask_when = base_word_roles['AM-TMP']
+
+
+	print(ask_who, ask, ask_recipient, ask_when, "All extracted ask information \n\n")
 	lem_base_word = morphRoot(base_word)
 	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
 	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_base_word)
@@ -687,7 +735,7 @@ def parseSrl(sentence):
 	if not t_ask_types:
 		t_ask_types.append('OTHER')
 
-	parse.append(buildParseDict('', '', '', '', s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
+	parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
 
 	if conj_base_word:
 		conj_lem_base_word = morphRoot(conj_base_word)
@@ -700,7 +748,7 @@ def parseSrl(sentence):
 		if not conj_t_ask_types:
 			conj_t_ask_types.append('OTHER')
 
-		parse.append(buildParseDict('', '', '', '', s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))	
+		parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))	
 
 	return parse
 
