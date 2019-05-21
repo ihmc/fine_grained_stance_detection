@@ -1,3 +1,7 @@
+from allennlp.predictors.predictor import Predictor
+predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar.gz")
+
+
 import json
 import nltk
 import csv
@@ -314,6 +318,20 @@ test_list = []
 catvar_dict = {}
 with open('.' + catvar_file) as catvar:
 	for entry in catvar:
+		'''
+		v_entries = []
+		#if '_V' not in entry_pieces[0]:
+		entry_pieces = entry.split('#')
+		count = 0
+		for index, entry_piece in enumerate(entry_pieces):
+			beg_test_word = entry_pieces[0].split('_')[0]
+			test_word = entry_piece.split('_')[0]
+			if '_V' in entry_piece: #and beg_test_word != test_word:
+				count += 1
+				v_entries.append((entry_piece, index))
+		if count > 1:#and len(v_entries) < 2:
+			test_list.append(entry)
+		'''
 		if '_V' in entry:
 			entry_pieces = entry.split('#')
 			if len(entry_pieces) > 1:
@@ -321,22 +339,13 @@ with open('.' + catvar_file) as catvar:
 				for entry_piece in entry_pieces:
 					key_piece_no_POS = entry_piece.split('_')[0]
 					value_piece_no_POS = entry_pieces[0].split('_')[0]
-					catvar_key_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
+					catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
 			else:
 				# If the entry only has one piece then the key and value are the same 
 				piece_no_POS = entry_pieces[0].split('_')[0]
-				catvar_key_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
-		#v_entries = []
-		'''
-		if '_V' not in entry_pieces[0]:
-		for index, entry_piece in enumerate(entry_pieces):
-			beg_test_word = entry_pieces[0].split('_')[0]
-			test_word = entry_piece.split('_')[0]
-			if '_V' in entry_piece: #and beg_test_word != test_word:
-				v_entries.append((entry_piece, index))
-		if len(v_entries) > 1:#and len(v_entries) < 2:
-			test_list.append(v_entries)
-		'''
+				catvar_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
+		
+		
 
 print(test_list)
 print('\n\n', len(test_list))
@@ -438,14 +447,10 @@ def getSrl(text):
 
 	for sentence in sentences:
 		constituency_parse = parseSrl(sentence)
-		response = requests.post('https://panacea:srl@localhost:8033/srl', json={"sentence": sentence}, verify=False)
-		semantic_roles = response.json()
-		print(semantic_roles, "semantic roles")
-		sentence_srls.append({"sentence": sentence, "matches": constituency_parse, "sematantic_roles": semantic_roles['semantic_roles']})
+		sentence_srls.append({"sentence": sentence, "matches": constituency_parse})
 
 
 	return sentence_srls
-
 
 def readLocalFiles():
 	path = os.path.abspath(os.path.dirname(__file__))
@@ -606,8 +611,33 @@ def getLemmaWords(sentence):
 	words = nltk.word_tokenize(sentence)
 	return [(morphRoot(word.lower())) for word in words]
 
-def extractAskFromSrl(semantic_roles, base_word):
-	return	
+def extractAskFromSrl(sentence, base_word):
+	ask_who = []
+	ask = []
+	ask_recipient = []
+	ask_when = []
+	srl = predictor.predict(sentence=sentence)
+	verbs = srl['verbs']
+	words = srl['words']
+
+	for verb in verbs:
+		if verb['verb'] == base_word:
+			selected_verb = verb['verb']
+			tags_for_verb = verb['tags']
+
+	for index, tag in enumerate(tags_for_verb):
+		tag_label = tag.split('-')[1:2][0] if tag.split('-')[1:2] else ''
+
+		if tag_label == 'ARG0':
+			ask_who.append(words[index])
+		elif tag_label == 'ARG1':
+			ask.append(words[index])
+		elif tag_label == 'ARG2':
+			ask_recipient.append(words[index])
+		elif 'ARGM-TMP' in tag:
+			ask_when.append(words[index])
+
+	return (" ".join(ask_who), " ".join(ask), " ".join(ask_recipient), " ".join(ask_when))	
 
 def parseModality(sentence):
 	parse = []
@@ -695,10 +725,10 @@ def parseSrl(sentence):
 	dependencies = response.json()['sentences'][0]['basicDependencies']
 	#print(response.json())
 	tokens = response.json()['sentences'][0]['tokens']
-	response = requests.post('https://panacea:srl@localhost:8033/srl', json={"sentence": sentence}, verify=False)
-	srl_json = response.json()
-	semantic_roles = srl_json['semantic_roles']
-	print(semantic_roles.keys(), "keys \n\n\n")
+	#response = requests.post('https://panacea:srl@localhost:8033/srl', json={"sentence": sentence}, verify=False)
+	#srl_json = response.json()
+	#semantic_roles = srl_json['semantic_roles']
+	#print(semantic_roles.keys(), "keys \n\n\n")
 
 	for word in words:
 		for ask_type, keywords in sashank_categories_sensitive.items():
@@ -712,6 +742,7 @@ def parseSrl(sentence):
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				conj_base_word = dependency['dependentGloss']
 			
+	'''
 	if base_word in semantic_roles.keys():
 		print(semantic_roles[base_word], "Get roles through base word if it exist")
 		base_word_roles = semantic_roles[base_word]
@@ -723,9 +754,9 @@ def parseSrl(sentence):
 			ask_recipient = base_word_roles['A2']
 		if 'AM-TMP' in base_word_roles.keys():
 			ask_when = base_word_roles['AM-TMP']
+	'''
 
-
-	print(ask_who, ask, ask_recipient, ask_when, "All extracted ask information \n\n")
+	(ask_who, ask, ask_recipient, ask_when) = extractAskFromSrl(sentence, base_word)
 	lem_base_word = morphRoot(base_word)
 	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
 	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_base_word)
@@ -738,6 +769,8 @@ def parseSrl(sentence):
 	parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
 
 	if conj_base_word:
+		print("Hey hey hey i am a conj base word. I happened.")
+		(ask_who, ask, ask_recipient, ask_when) = extractAskFromSrl(sentence, conj_base_word)
 		conj_lem_base_word = morphRoot(conj_base_word)
 		(conj_additional_s_ask_types, conj_t_ask_types) = getAskTypes(conj_base_word)
 		(conj_additional_lem_s_ask_types, conj_lem_t_ask_types) = getAskTypes(conj_lem_base_word)
