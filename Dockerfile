@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.7-slim
+FROM python:3.7-stretch
 
 # Set the working directory to /app
 WORKDIR /app
@@ -11,11 +11,11 @@ COPY . /app
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
 # Make port 80 available to the world outside this container
-EXPOSE 4000
+EXPOSE 5000
 
 
 # Define environment variable
-ENV NAME Modality
+ENV NAME Ask_Detection
 
 # Run app.py when the container launches
 #RUN python -m nltk.downloader punkt

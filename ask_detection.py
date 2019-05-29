@@ -1,7 +1,6 @@
 from allennlp.predictors.predictor import Predictor
 predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar.gz")
 
-
 import json
 import nltk
 import csv
@@ -20,240 +19,7 @@ from nltk.corpus import wordnet as wn
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
-sashank_categories_sensitive = {
-	"finance_money": [
-		"money",
-		"cash",
-		"fund",
-		"check",
-		"bit coin",
-		"bitcoin"
-	],
-	"finance_info": [
-		"bank",
-		"account",
-		"transaction",
-		"payment",
-		"credit card",
-		"insurance",
-		"transaction",
-		"tax",
-		"claims",
-		"irs",
-		"link"
-	],
-	"personal": [
-		"email",
-		"e-mail",
-		"ssn",
-		"social security",
-		"birthday",
-		"country",
-		"citizenship",
-		"originally from",
-		"family",
-		"phone",
-		"home address",
-		"office address",
-		"phone number",
-		"offer",
-		"contact info",
-		"contact information",
-		"CV",
-		"link",
-		"information",
-		"available",
-		"invite",
-		"invitation",
-		"schedule",
-		"call",
-		"message"
-	],
-	"business": [
-		"proposal",
-		"meeting",
-		"meet",
-		"proposition",
-		"offer",
-		"available",
-		"invite",
-		"invitation",
-		"call",
-		"fax"
-	],
-	"credentials": [
-		"credentials",
-		"password",
-		"account",
-		"slack id",
-		"email id",
-		"id",
-		"user id",
-		"login"
-	],
-	"privileged_information": [
-		"report",
-		"document",
-		"attachment",
-		"link",
-		"intellectual property",
-		"brochure",
-		"code",
-		"form",
-		"file",
-		"software",
-		"project",
-		"dropbox"
-	],
-	"ideology": [
-		"human rights",
-		"jesus",
-		"campaign",
-		"health",
-		"refugee",
-		"humanitarian",
-		"climate change",
-		"cancer"
-	],
-	"scam_lottery": [
-		"lottery",
-		"lucky draw",
-		"winner",
-		"prize"
-	],
-	"scam_gift": [
-		"gift",
-		"present",
-		"gift card",
-		"gifts card"
-	],
-	"scam_job": [
-		"job",
-		"hiring",
-		"work experience",
-		"interview",
-		"candidate"
-	]
-}
-
-sashanks_ask_types = {
-  "finance_money": [
-    "11.1 Send Verbs",
-    "13.1.a.i Give - No Exchange - Sort of Atelic",
-    "13.1.a.ii Give - No Exchange",
-    "13.2 Contribute Verbs",
-    "13.3 Verbs of Future Having",
-    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
-    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
-    "13.5.1.b.ii Get - Exchange",
-    "13.5.2.a Obtain - No Exchange (CAUSE)",
-    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
-	"32.1 Want Verbs"
-  ],
-  "finance_info": [
-    "11.1 Send Verbs",
-    "13.3 Verbs of Future Having",
-    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
-    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
-    "13.5.1.b.ii Get - Exchange",
-    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
-    "37.2.a Tell Verbs",
-    "37.2.b Tell Verbs / -of/about",
-    "37.2.d Tell Verbs / -that/to",
-	"32.1 Want Verbs"
-  ],
-  "personal": [
-    "11.1 Send Verbs",
-    "13.3 Verbs of Future Having",
-    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
-    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
-    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
-    "37.2.a Tell Verbs",
-    "37.2.b Tell Verbs / -of/about",
-    "37.2.d Tell Verbs / -that/to",
-	"32.1 Want Verbs"
-  ],
-  "business": [
-    "13.3 Verbs of Future Having"
-  ],
-  "credentials": [
-    "11.1 Send Verbs",
-    "13.1.a.ii Give - No Exchange",
-    "13.3 Verbs of Future Having",
-    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
-    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
-    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
-    "37.2.a Tell Verbs",
-    "37.2.b Tell Verbs / -of/about",
-    "37.2.d Tell Verbs / -that/to",
-	"32.1 Want Verbs"
-  ],
-  "privileged_information": [
-    "11.1 Send Verbs",
-    "13.1.a.ii Give - No Exchange",
-    "13.3 Verbs of Future Having",
-    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
-    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
-    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
-    "37.2.a Tell Verbs",
-    "37.2.b Tell Verbs / -of/about",
-    "37.2.d Tell Verbs / -that/to",
-	"32.1 Want Verbs"
-  ],
-  "ideology": [],
-  "scam_lottery": [
-    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)"
-  ],
-  "scam_gift": [
-    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)"
-  ],
-  "scam_job": []
-}
-
-tomeks_ask_types = {
-  "GET": [
-    "13.5.1.a Get - No Exchange",
-    "13.5.1.b.ii Get - Exchange",
-    "13.5.2.a Obtain - No Exchange (CAUSE)",
-    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
-    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)",
-    "32.1 Want Verbs"
-  ],
-  "GIVE": [
-    "11.1 Send Verbs",
-    "13.1.a.i Give - No Exchange - Sort of Atelic",
-    "13.1.a.ii Give - No Exchange",
-    "13.2 Contribute Verbs",
-    "13.3 Verbs of Future Having",
-    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
-    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
-	"32.1 Want Verbs"
-  ],
-  "APPLY": [],
-  "PERFORM": [
-    "9.1 Put Verbs",
-    "10.1 Remove Verbs",
-    "10.2.b Banish Verbs / -to",
-    "10.5 Verbs of Possessional Deprivation : Steal Verbs",
-    "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
-    "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
-    "11.3 Bring and Take Verbs",
-    "13.5.2.d Obtain - Exchange",
-    "37.1.e Verbs of Transfer of a Message / -that/to",
-    "37.2.a Tell Verbs",
-    "37.2.b Tell Verbs / -of/about",
-    "37.2.d Tell Verbs / -that/to",
-    "37.4.a Verbs of Instrument of Communication",
-    "42.1.a Murder Verbs - Kill",
-    "42.1.b Murder Verbs - Kill / -with",
-    "42.1.c Murder Verbs - General",
-    "44.a Destroy Verbs / -with",
-    "44.b Destroy Verbs / Instrument Subject",
-    "54.4 Price Verbs"
-  ],
-  "OTHER": []
-}
-
+from ask_mappings import sashank_categories_sensitive, sashanks_ask_types, tomeks_ask_types
 
 
 modality_lookup = {}
@@ -345,10 +111,6 @@ with open('.' + catvar_file) as catvar:
 				piece_no_POS = entry_pieces[0].split('_')[0]
 				catvar_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
 		
-		
-
-print(test_list)
-print('\n\n', len(test_list))
 #print(catvar_dict, 'catvar dicctionary')
 print('catvar dictionary create')
 						
@@ -407,23 +169,6 @@ for rule in word_specific_rules:
 			
 #print(lexical_specific_rules)
 
-
-'''
-rule_path = project_path + generalized_rule_directory
-rules = []
-for filename in os.listdir(rule_path):
-	with open(rule_path + filename, 'r') as rule_file:
-		ruleDict = {}
-		rule = rule_file.readline()
-
-		ruleDict['rule'] = rule.strip('\n')
-		ruleDict['rule_name'] = filename.strip('.txt')
-		
-		rules.append(ruleDict)
-
-print("Generalized Rules Loaded")
-'''
-
 def getModality(text):
 
 	# Split input text into sentences
@@ -432,9 +177,8 @@ def getModality(text):
 
 	for sentence in sentences:
 		constituency_parse = parseModality(sentence)
-		semantic_roles = requests.post('https://panacea:srl@localhost:8033/srl', json={"sentence": sentence}, verify=False)
 		
-		sentence_modalities.append({"sentence": sentence, "matches": constituency_parse, "semantic_roles": semantic_roles})
+		sentence_modalities.append({"sentence": sentence, "matches": constituency_parse})
 
 
 	return sentence_modalities
@@ -468,7 +212,7 @@ def readLocalFiles():
 
 def morphRoot(word):
 	wlem = WordNetLemmatizer()
-	return wlem.lemmatize(word,wn.VERB)
+	return wlem.lemmatize(word.lower(),wn.VERB)
 
 def extractTriggerWordAndPos(trigger_string):
 	trigger_string = trigger_string.replace('\\n', '');
@@ -543,20 +287,23 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, s_ask_types, t_ask_types, additional_S_ask_type,  base_word, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, t_ask_types, additional_S_ask_type,  base_word, rule, rule_name):
 	parse_dict = {}
 	if modality:
 		parse_dict['trigger'] = trigger
 		parse_dict['target'] = target
 		parse_dict['trigger_modality'] = modality
+	parse_dict['base_word'] = base_word
 	parse_dict['ask_who'] = ask_who
 	parse_dict['ask'] = ask
 	parse_dict['ask_recipient'] = ask_recipient
 	parse_dict['ask_when'] = ask_when
+	parse_dict['ask_action'] = ask_action
+	parse_dict['confidence'] = confidence
+	parse_dict['T_ask_type'] = t_ask_types
 	parse_dict['S_ask_type'] = s_ask_types
 	parse_dict['additional_S_ask_type'] = additional_S_ask_type
-	parse_dict['T_ask_type'] = t_ask_types
-	parse_dict['base_word'] = base_word
+	#parse_dict['semantic_roles'] = descriptions
 	
 	# Commented for now but useful if debugging which rules are being used
 	#parse_dict['rule'] = rule
@@ -605,39 +352,80 @@ def getNLPParse(sentence):
 	tregex = '/tregex'
 	url = coreNLP_server + annotators
 
-	return requests.post(url, data=sentence)
+	return requests.post(url, data=sentence.encode(encoding='UTF-8',errors='ignore'))
 
 def getLemmaWords(sentence):
 	words = nltk.word_tokenize(sentence)
 	return [(morphRoot(word.lower())) for word in words]
 
-def extractAskFromSrl(sentence, base_word):
-	ask_who = []
-	ask = []
-	ask_recipient = []
-	ask_when = []
+def extractAskFromSrl(sentence, base_word, t_ask_types):
+	ask_who = ''
+	ask = ''
+	ask_recipient = ''
+	ask_when = ''
+	confidence = ''
+	selected_verb = ''
+	tags_for_verb = ''
+	arg0 = []
+	arg1 = []
+	arg2 = []
+	arg_tmp = []
 	srl = predictor.predict(sentence=sentence)
 	verbs = srl['verbs']
 	words = srl['words']
+	descriptions = []
 
 	for verb in verbs:
 		if verb['verb'] == base_word:
 			selected_verb = verb['verb']
 			tags_for_verb = verb['tags']
+		descriptions.append(verb['description'])	
 
-	for index, tag in enumerate(tags_for_verb):
-		tag_label = tag.split('-')[1:2][0] if tag.split('-')[1:2] else ''
+	if tags_for_verb:
+		for index, tag in enumerate(tags_for_verb):
+			tag_label = tag.split('-')[1:2][0] if tag.split('-')[1:2] else ''
 
-		if tag_label == 'ARG0':
-			ask_who.append(words[index])
-		elif tag_label == 'ARG1':
-			ask.append(words[index])
-		elif tag_label == 'ARG2':
-			ask_recipient.append(words[index])
-		elif 'ARGM-TMP' in tag:
-			ask_when.append(words[index])
+			if tag_label == 'ARG0':
+				arg0.append(words[index])
+			elif tag_label == 'ARG1':
+				arg1.append(words[index])
+			elif tag_label == 'ARG2':
+				arg2.append(words[index])
+			elif 'ARGM-TMP' in tag:
+				arg_tmp.append(words[index])
 
-	return (" ".join(ask_who), " ".join(ask), " ".join(ask_recipient), " ".join(ask_when))	
+	if 'GIVE' in t_ask_types:
+		if arg0 and arg1 and arg2:
+			ask_who = ' '.join(arg0)
+			ask = ' '.join(arg1)
+			ask_recipient = ' '.join(arg2)
+			ask_when = ' '.join(arg_tmp)
+			confidence = 'high'
+		else:
+			ask_who = ' '.join(arg0)
+			ask = ' '.join(arg1)
+			ask_when = ' '.join(arg_tmp)
+			confidence = 'low'
+	else:
+		if arg0 and arg1 and arg2:
+			ask_who = ' '.join(arg2)
+			ask = ' '.join(arg1)
+			ask_recipient = ' '.join(arg0)
+			ask_when = ' '.join(arg_tmp)
+			confidence = 'low'
+		elif 'GET' in t_ask_types:
+			ask = ' '.join(arg1)
+			ask_recipient = ' '.join(arg0)
+			ask_when = ' '.join(arg_tmp)
+			confidence = 'high'
+		else:
+			ask_who = ' '.join(arg0)
+			ask = ' '.join(arg1)
+			ask_when = ' '.join(arg_tmp)
+			confidence = 'low'
+			
+
+	return (ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions)	
 
 def parseModality(sentence):
 	parse = []
@@ -668,15 +456,13 @@ def parseModality(sentence):
 	if len(subsets_per_word) == 0:
 		if "Trig" in preprocessed_tree:
 			trigs_and_targs = extractTrigsAndTargs(preprocessed_tree)
-			print(trigs_and_targs)
 			if trigs_and_targs == None:
 				return None
 			for trig_and_targ in trigs_and_targs:
 				# TODO store the portions of the tuple in meaningful names
 				(trigger, target, modality, ask, trig_word) = trig_and_targ
-				print(trig_and_targ[4])
 				(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
-				parse.append(buildParseDict(trigger, target, modality, ask, s_ask_types, t_ask_types, additional_s_ask_types, target, 'preprocessed rules', 'preprocess rules'))
+				parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '',  '',  s_ask_types, t_ask_types, additional_s_ask_types, target, 'preprocessed rules', 'preprocess rules'))
 
 			return parse
 	# Here we loop through each set of generalized rules that were gathered above and 
@@ -684,7 +470,6 @@ def parseModality(sentence):
 	# one of the generalized rules produces a match via tsurgeon	
 	for rule_subset in subsets_per_word:
 		for rule in rule_subset:
-			print(rule['rule_name'])
 			# Tsurgeon is a part of the stanford corenlp tool set. It must be rune on a file as it will not 
 			# aceept just a string. NOTE There may be a way to do just a string that I have not discovered yet.
 			# Tsurgeon will edit the parse tree and add trigger and target labels according to the rules that match.
@@ -700,10 +485,8 @@ def parseModality(sentence):
 					return None
 				for trig_and_targ in trigs_and_targs: 
 					(trigger, target, modality, ask, trig_word) = trig_and_targ
-					print(trigger, target, modality, ask, trig_word)
-					print(trig_and_targ[4])
 					(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
-					parse.append(buildParseDict(trigger, target, modality, ask, s_ask_types, t_ask_types, additional_s_ask_types, target, rule['rule'], rule['rule_name']))
+					parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '', '', s_ask_types, t_ask_types, additional_s_ask_types, target, rule['rule'], rule['rule_name']))
 
 				return parse
 
@@ -725,10 +508,6 @@ def parseSrl(sentence):
 	dependencies = response.json()['sentences'][0]['basicDependencies']
 	#print(response.json())
 	tokens = response.json()['sentences'][0]['tokens']
-	#response = requests.post('https://panacea:srl@localhost:8033/srl', json={"sentence": sentence}, verify=False)
-	#srl_json = response.json()
-	#semantic_roles = srl_json['semantic_roles']
-	#print(semantic_roles.keys(), "keys \n\n\n")
 
 	for word in words:
 		for ask_type, keywords in sashank_categories_sensitive.items():
@@ -741,47 +520,36 @@ def parseSrl(sentence):
 		if dependency['dep'] == 'conj':
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				conj_base_word = dependency['dependentGloss']
-			
-	'''
-	if base_word in semantic_roles.keys():
-		print(semantic_roles[base_word], "Get roles through base word if it exist")
-		base_word_roles = semantic_roles[base_word]
-		if 'A0' in base_word_roles.keys():
-			ask_who = base_word_roles['A0']
-		if 'A1' in base_word_roles.keys():
-			ask = base_word_roles['A1']
-		if 'A2' in base_word_roles.keys():
-			ask_recipient = base_word_roles['A2']
-		if 'AM-TMP' in base_word_roles.keys():
-			ask_when = base_word_roles['AM-TMP']
-	'''
 
-	(ask_who, ask, ask_recipient, ask_when) = extractAskFromSrl(sentence, base_word)
 	lem_base_word = morphRoot(base_word)
 	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
 	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_base_word)
 
 	addtional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
+
 	if not t_ask_types:
 		t_ask_types.append('OTHER')
 
-	parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions) = extractAskFromSrl(sentence, base_word, t_ask_types)
+
+	parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
 
 	if conj_base_word:
-		print("Hey hey hey i am a conj base word. I happened.")
-		(ask_who, ask, ask_recipient, ask_when) = extractAskFromSrl(sentence, conj_base_word)
+		
 		conj_lem_base_word = morphRoot(conj_base_word)
 		(conj_additional_s_ask_types, conj_t_ask_types) = getAskTypes(conj_base_word)
 		(conj_additional_lem_s_ask_types, conj_lem_t_ask_types) = getAskTypes(conj_lem_base_word)
 
 		conj_additional_s_ask_types = appendListNoDuplicates(conj_additional_lem_s_ask_types, conj_additional_s_ask_types)
 		conj_t_ask_types = appendListNoDuplicates(conj_lem_t_ask_types, conj_t_ask_types)
-			
+
 		if not conj_t_ask_types:
 			conj_t_ask_types.append('OTHER')
 
-		parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))	
+		(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions) = extractAskFromSrl(sentence, conj_base_word, conj_t_ask_types)
+
+		parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))	
 
 	return parse
 
