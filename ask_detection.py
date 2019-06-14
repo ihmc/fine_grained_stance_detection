@@ -20,6 +20,7 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
 from ask_mappings import sashank_categories_sensitive, sashanks_ask_types, tomeks_ask_types
+from catvar_v_alternates import v_alternates
 
 
 modality_lookup = {}
@@ -81,6 +82,10 @@ with open('.' + lcs_file) as lcs:
 print('LCS dictionary created')
 
 test_list = []
+# catvar_alternates_dict is a dictionary where each key has an array of verbal words from the catvar file
+# that exist on a line with more than 1 verbal form. This is to cover cases when a small spelling change is present
+# in catvar or when other verbal words exist but were are not a part of the catvar_dict here
+catvar_alternates_dict = v_alternates
 catvar_dict = {}
 with open('.' + catvar_file) as catvar:
 	for entry in catvar:
@@ -93,27 +98,39 @@ with open('.' + catvar_file) as catvar:
 			beg_test_word = entry_pieces[0].split('_')[0]
 			test_word = entry_piece.split('_')[0]
 			if '_V' in entry_piece: #and beg_test_word != test_word:
+				v_word = entry_piece.split('_')[0]
 				count += 1
-				v_entries.append((entry_piece, index))
+				v_entries.append(v_word)
 		if count > 1:#and len(v_entries) < 2:
-			test_list.append(entry)
+			for word in v_entries:
+				alternates_dict[word] = v_entries
 		'''
 		if '_V' in entry:
 			entry_pieces = entry.split('#')
+
+			for entry_piece in entry_pieces:
+				if '_V' in entry_piece:
+					value_piece_no_POS = entry_piece.split('_')[0]
+
+			for entry_piece in entry_pieces:
+				key_piece_no_POS = entry_piece.split('_')[0]	
+				catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
+
+			'''
 			if len(entry_pieces) > 1:
 				# Must create a key for each piece and it's value the first piece
 				for entry_piece in entry_pieces:
 					key_piece_no_POS = entry_piece.split('_')[0]
 					value_piece_no_POS = entry_pieces[0].split('_')[0]
-					catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
+				catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
 			else:
 				# If the entry only has one piece then the key and value are the same 
 				piece_no_POS = entry_pieces[0].split('_')[0]
 				catvar_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
+			'''
 		
 #print(catvar_dict, 'catvar dicctionary')
 print('catvar dictionary create')
-						
 
 preprocess_rules_in_order = []
 with open('.' + preprocess_rule_directory + 'ORDER.txt', 'r') as rule_order:
@@ -325,6 +342,15 @@ def getAskTypes(ask):
 		for verb_type, words in lcs_dict.items():
 			if catvar_word in words:
 				verb_types.append(verb_type)
+			else:
+				catvar_word_alternates = catvar_alternates_dict.get(ask)
+				if catvar_word_alternates:
+					for alternate in catvar_word_alternates:
+						if alternate in words:
+							verb_types.append(verb_type)
+							#TODO Ask if this break should be there or if I should get a type for each alternate
+							break
+				
 		
 		for vb_type in verb_types:
 			for sashank_ask_type, types in sashanks_ask_types.items():
@@ -372,7 +398,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 	arg_tmp = []
 	srl = predictor.predict(sentence=sentence)
 	verbs = srl['verbs']
-	words = srl['words']
+	words = [word.lower() for word in srl['words']]
 	descriptions = []
 
 	for verb in verbs:
@@ -393,6 +419,29 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 				arg2.append(words[index])
 			elif 'ARGM-TMP' in tag:
 				arg_tmp.append(words[index])
+
+	if 'GIVE' in t_ask_types:
+		if 'you' in arg2:
+			t_ask_types = ["GET"]
+		elif 'you' in arg0:
+			t_ask_types = ["GIVE"]
+		elif 'GET' in t_ask_types:
+			if 'you' in arg0:
+				t_ask_types = ["GET"]
+			if 'i' in arg0 or 'we' in arg0:
+				t_ask_types = ["GIVE"]
+	elif 'GET' in t_ask_types:
+		if 'you' in arg0:
+			t_ask_types = ["GET"]
+		elif 'i' in arg0 or 'we' in arg0:
+			t_ask_types = ["GIVE"]
+	elif 'OTHER' in t_ask_types:
+		if arg0 and arg1 and arg2:
+			if 'you' in arg2:
+				t_ask_types = ["GIVE"]
+			elif 'you' in arg0:
+				t_ask_types = ["GET"]
+
 
 	if 'GIVE' in t_ask_types:
 		if arg0 and arg1 and arg2:
@@ -425,7 +474,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			confidence = 'low'
 			
 
-	return (ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions)	
+	return (ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types)	
 
 def parseModality(sentence):
 	parse = []
@@ -521,6 +570,7 @@ def parseSrl(sentence):
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				conj_base_word = dependency['dependentGloss']
 
+	base_word = base_word.lower()
 	lem_base_word = morphRoot(base_word)
 	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
 	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_base_word)
@@ -531,12 +581,13 @@ def parseSrl(sentence):
 	if not t_ask_types:
 		t_ask_types.append('OTHER')
 
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions) = extractAskFromSrl(sentence, base_word, t_ask_types)
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types) = extractAskFromSrl(sentence, base_word, t_ask_types)
 
 	parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
 
 	if conj_base_word:
 		
+		conj_base_word = conj_base_word.lower()
 		conj_lem_base_word = morphRoot(conj_base_word)
 		(conj_additional_s_ask_types, conj_t_ask_types) = getAskTypes(conj_base_word)
 		(conj_additional_lem_s_ask_types, conj_lem_t_ask_types) = getAskTypes(conj_lem_base_word)
@@ -547,7 +598,7 @@ def parseSrl(sentence):
 		if not conj_t_ask_types:
 			conj_t_ask_types.append('OTHER')
 
-		(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions) = extractAskFromSrl(sentence, conj_base_word, conj_t_ask_types)
+		(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types) = extractAskFromSrl(sentence, conj_base_word, conj_t_ask_types)
 
 		parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))	
 
