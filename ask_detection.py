@@ -304,7 +304,7 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, t_ask_types, additional_S_ask_type,  base_word, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, t_ask_types, t_ask_confidence, additional_s_ask_type,  base_word, rule, rule_name):
 	parse_dict = {}
 	if modality:
 		parse_dict['trigger'] = trigger
@@ -316,10 +316,11 @@ def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_w
 	parse_dict['ask_recipient'] = ask_recipient
 	parse_dict['ask_when'] = ask_when
 	parse_dict['ask_action'] = ask_action
-	parse_dict['confidence'] = confidence
-	parse_dict['T_ask_type'] = t_ask_types
-	parse_dict['S_ask_type'] = s_ask_types
-	parse_dict['additional_S_ask_type'] = additional_S_ask_type
+	parse_dict['ask_info_confidence'] = confidence
+	parse_dict['t_ask_type'] = t_ask_types
+	parse_dict['t_ask_confidence'] = t_ask_confidence
+	parse_dict['s_ask_type'] = s_ask_types
+	parse_dict['additional_s_ask_type'] = additional_s_ask_type
 	#parse_dict['semantic_roles'] = descriptions
 	
 	# Commented for now but useful if debugging which rules are being used
@@ -390,8 +391,10 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 	ask_recipient = ''
 	ask_when = ''
 	confidence = ''
+	t_ask_confidence = ''
 	selected_verb = ''
 	tags_for_verb = ''
+	improved_t_ask_types = ''
 	arg0 = []
 	arg1 = []
 	arg2 = []
@@ -419,29 +422,6 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 				arg2.append(words[index])
 			elif 'ARGM-TMP' in tag:
 				arg_tmp.append(words[index])
-
-	if 'GIVE' in t_ask_types:
-		if 'you' in arg2:
-			t_ask_types = ["GET"]
-		elif 'you' in arg0:
-			t_ask_types = ["GIVE"]
-		elif 'GET' in t_ask_types:
-			if 'you' in arg0:
-				t_ask_types = ["GET"]
-			if 'i' in arg0 or 'we' in arg0:
-				t_ask_types = ["GIVE"]
-	elif 'GET' in t_ask_types:
-		if 'you' in arg0:
-			t_ask_types = ["GET"]
-		elif 'i' in arg0 or 'we' in arg0:
-			t_ask_types = ["GIVE"]
-	elif 'OTHER' in t_ask_types:
-		if arg0 and arg1 and arg2:
-			if 'you' in arg2:
-				t_ask_types = ["GIVE"]
-			elif 'you' in arg0:
-				t_ask_types = ["GET"]
-
 
 	if 'GIVE' in t_ask_types:
 		if arg0 and arg1 and arg2:
@@ -472,9 +452,48 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			ask = ' '.join(arg1)
 			ask_when = ' '.join(arg_tmp)
 			confidence = 'low'
-			
 
-	return (ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types)	
+	if 'GIVE' in t_ask_types:
+		if 'you' in arg2:
+			t_ask_types = ["GET"]
+		elif 'you' in arg0:
+			t_ask_types = ["GIVE"]
+		elif 'GET' in t_ask_types:
+			if 'you' in arg0:
+				t_ask_types = ["GET"]
+			if 'i' in arg0 or 'we' in arg0:
+				t_ask_types = ["GIVE"]
+				t_ask_confidence = 'low'
+	elif 'GET' in t_ask_types:
+		if 'you' in arg0:
+			t_ask_types = ["GET"]
+		elif 'i' in arg0 or 'we' in arg0:
+			t_ask_types = ["GIVE"]
+			t_ask_confidence = 'low'
+	elif 'OTHER' in t_ask_types:
+		if arg0 and arg1 and arg2:
+			if 'you' in arg2:
+				t_ask_types = ["GIVE"]
+			elif 'you' in arg0:
+				t_ask_types = ["GET"]
+
+	return (ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence)
+
+def processWord(word, sentence, s_ask_types):
+	word = word.lower()
+	lem_word = morphRoot(word)
+	(additional_s_ask_types, t_ask_types) = getAskTypes(word)
+	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_word)
+
+	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
+	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
+
+	if not t_ask_types:
+		t_ask_types.append('OTHER')
+
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence) = extractAskFromSrl(sentence, word, t_ask_types)
+
+	return buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, t_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '')
 
 def parseModality(sentence):
 	parse = []
@@ -511,7 +530,7 @@ def parseModality(sentence):
 				# TODO store the portions of the tuple in meaningful names
 				(trigger, target, modality, ask, trig_word) = trig_and_targ
 				(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
-				parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '',  '',  s_ask_types, t_ask_types, additional_s_ask_types, target, 'preprocessed rules', 'preprocess rules'))
+				parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '',  '',  s_ask_types, t_ask_types, '', additional_s_ask_types, target, 'preprocessed rules', 'preprocess rules'))
 
 			return parse
 	# Here we loop through each set of generalized rules that were gathered above and 
@@ -535,7 +554,7 @@ def parseModality(sentence):
 				for trig_and_targ in trigs_and_targs: 
 					(trigger, target, modality, ask, trig_word) = trig_and_targ
 					(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
-					parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '', '', s_ask_types, t_ask_types, additional_s_ask_types, target, rule['rule'], rule['rule_name']))
+					parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '', '', s_ask_types, t_ask_types, '', additional_s_ask_types, target, rule['rule'], rule['rule_name']))
 
 				return parse
 
@@ -543,6 +562,9 @@ def parseSrl(sentence):
 	parse = []
 	base_word = ''
 	conj_base_word = ''
+	dep_base_word = ''
+	ccomp_base_word = ''
+	xcomp_base_word = ''
 	ask_who = ''
 	ask = ''
 	ask_recipient = ''
@@ -569,7 +591,30 @@ def parseSrl(sentence):
 		if dependency['dep'] == 'conj':
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				conj_base_word = dependency['dependentGloss']
+		if dependency['dep'] == 'dep':
+			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+				dep_base_word = dependency['dependentGloss']
+		if dependency['dep'] == 'ccomp':
+			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+				ccomp_base_word = dependency['dependentGloss']
+		if dependency['dep'] == 'xcomp':
+			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+				xcomp_base_word = dependency['dependentGloss']
 
+	parse.append(processWord(base_word, sentence, s_ask_types))
+
+	if conj_base_word:
+		parse.append(processWord(conj_base_word, sentence, s_ask_types))
+
+	if dep_base_word:
+		parse.append(processWord(dep_base_word, sentence, s_ask_types))
+
+	if ccomp_base_word:
+		parse.append(processWord(ccomp_base_word, sentence, s_ask_types))
+
+	if xcomp_base_word:
+		parse.append(processWord(xcomp_base_word, sentence, s_ask_types))
+	'''
 	base_word = base_word.lower()
 	lem_base_word = morphRoot(base_word)
 	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
@@ -600,7 +645,8 @@ def parseSrl(sentence):
 
 		(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types) = extractAskFromSrl(sentence, conj_base_word, conj_t_ask_types)
 
-		parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))	
+		parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))
+	'''
 
 	return parse
 
