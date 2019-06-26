@@ -19,7 +19,7 @@ print("My name is:\t%s" % __name__)
 @app.route("/")
 @basic_auth.required
 def hello():
-	return "Hello World"
+	return "Hello World Brodie"
 
 @app.route("/modality/email", methods = ['POST','GET'])
 @basic_auth.required
