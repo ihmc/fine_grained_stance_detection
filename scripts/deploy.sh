@@ -23,4 +23,4 @@ export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
 #aws ecs update-service --cluster ask-detection-$CI_ENVIRONMENT_SLUG --service ask_detection_service --task-definition ask-detection-$CI_ENVIRONMENT_SLUG --region $AWS_REGION
 
 # Attempt to tell service to simply pull the new version of the container image
-aws ecs update-service --cluster ask-detection-cluster --service ask_detection_service --force-new-deployment
+aws ecs update-service --cluster ask-detection-cluster --service ask_detection_service --force-new-deployment --region $AWS_REGION
