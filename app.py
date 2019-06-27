@@ -16,6 +16,11 @@ basic_auth = BasicAuth(app)
 
 print("My name is:\t%s" % __name__)
 
+
+@app.route("/healthcheck")
+def healthCheck():
+	return "Healthy", 200
+
 @app.route("/")
 @basic_auth.required
 def hello():
