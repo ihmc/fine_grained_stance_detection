@@ -1,3 +1,21 @@
+alan_ask_types = {
+	"money": [
+		"finance_money",
+		"finance_info",
+		"scam_lottery",
+		"scam_gift"
+	],
+	"information": [
+		"personal",
+		"business",
+		"privileged_information",
+		"credentials"
+	],
+	"performance": [
+		"PERFORM"
+	]
+}
+
 sashank_categories_sensitive = {
 	"finance_money": [
 		"money",
