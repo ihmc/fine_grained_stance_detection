@@ -585,7 +585,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types, dialogue_act):
 	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence)
 
 def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs):
-	ask_negation_dep_based = ''
+	ask_negation_dep_based = False
 	s_ask_types = []
 	word = word.lower()
 	lem_word = morphRoot(word)
@@ -602,9 +602,10 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 	if not ask_action:
 		(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
 
-	for trig_and_targ in trig_and_targs:
-		if (trig_and_targ[2] == 'Negation' or trig_and_targ[2] == 'NotSucceed') and word == trig_and_targ[3]:
-			ask_negation = True
+	if trig_and_targs:
+		for trig_and_targ in trig_and_targs:
+			if (trig_and_targ[2] == 'Negation' or trig_and_targ[2] == 'NotSucceed') and word == trig_and_targ[3]:
+				ask_negation = True
 
 
 	for ask_type, keywords in sashank_categories_sensitive.items():
