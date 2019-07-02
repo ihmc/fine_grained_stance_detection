@@ -318,7 +318,7 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, confidence_is_ask, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_type,  base_word, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_type,  base_word, rule, rule_name):
 	parse_dict = {}
 	if modality:
 		parse_dict['trigger'] = trigger
@@ -331,7 +331,8 @@ def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_w
 	parse_dict['ask_when'] = ask_when
 	parse_dict['ask_action'] = ask_action
 	parse_dict['ask_negation'] = ask_negation
-	parse_dict['confidence_is_ask'] = confidence_is_ask
+	parse_dict['ask_negation_dep_based'] = ask_negation_dep_based
+	parse_dict['is_ask_confidence'] = is_ask_confidence
 	parse_dict['ask_info_confidence'] = confidence
 	parse_dict['t_ask_type'] = t_ask_types
 	parse_dict['t_ask_confidence'] = t_ask_confidence
@@ -413,7 +414,7 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 	ask = ''
 	ask_recipient = ''
 	ask_when = ''
-	ask_negation = False
+	ask_negation_dep_based = False
 	ask_actor_is_recipient = False
 	confidence = ''
 	root = ''
@@ -456,6 +457,8 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 			ask = dobj
 			ask_action = root
 			confidence = 'low'
+		if neg_gov_gloss == base_word:
+			ask_negation_dep_based = dep_neg_exists
 	else:
 		if nsubj_gov_gloss == base_word and dobj_gov_gloss == base_word and iobj_gov_gloss == base_word:
 			ask_who = nsubj
@@ -474,9 +477,9 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 			ask_action = root
 			confidence = 'low'
 		if neg_gov_gloss == base_word:
-			ask_negation = dep_neg_exists
+			ask_negation_dep_based = dep_neg_exists
 	
-	return(ask_who, ask, ask_recipient, ask_when, ask_negation, base_word, confidence)
+	return(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, base_word, confidence)
 
 def extractAskFromSrl(sentence, base_word, t_ask_types, dialogue_act):
 	ask_who = ''
@@ -581,7 +584,8 @@ def extractAskFromSrl(sentence, base_word, t_ask_types, dialogue_act):
 
 	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence)
 
-def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act):
+def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs):
+	ask_negation_dep_based = ''
 	s_ask_types = []
 	word = word.lower()
 	lem_word = morphRoot(word)
@@ -594,8 +598,13 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 
 	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence) = extractAskFromSrl(sentence, word, t_ask_types, dialogue_act)
 
+
 	if not ask_action:
-		(ask_who, ask, ask_recipient, ask_when, ask_negation, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
+		(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
+
+	for trig_and_targ in trig_and_targs:
+		if (trig_and_targ[2] == 'Negation' or trig_and_targ[2] == 'NotSucceed') and word == trig_and_targ[3]:
+			ask_negation = True
 
 
 	for ask_type, keywords in sashank_categories_sensitive.items():
@@ -623,7 +632,7 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 
 	
 
-	confidence_is_ask = evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient)
+	is_ask_confidence = evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient)
 	'''
 	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
@@ -631,7 +640,7 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 	'''
 
 
-	return buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, confidence_is_ask, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '')
+	return buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '')
 
 def getDialogueAct(sentence):
 	sentence = sentence.lower()
@@ -792,8 +801,9 @@ def parseSrl(sentence):
 
 	# TODO maybe find a way to see if negation goes with a certain portion of the sentence.
 	# Checking if negation is on the surgeried parsse tree
-	if 'TargNegation' in preprocessed_tree or 'TargNotSucceed' in preprocessed_tree:
-		ask_negation = True
+	trig_and_targs = extractTrigsAndTargs(preprocessed_tree)
+	#if 'TargNegation' in preprocessed_tree or 'TargNotSucceed' in preprocessed_tree:
+		#ask_negation = True
 
 	
 	root_dependent_gloss = ''
@@ -856,7 +866,7 @@ def parseSrl(sentence):
 		ask_procedure = 'directive'
 
 	for base_word in base_words:
-		parse.append(processWord(base_word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act))
+		parse.append(processWord(base_word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs))
 	'''			
 	parse.append(processWord(base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
 
@@ -875,7 +885,7 @@ def parseSrl(sentence):
 	if parse_verbs:
 		for verb in parse_verbs:
 			if verb not in base_words:
-				parse.append(processWord(verb, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act))
+				parse.append(processWord(verb, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs))
 	
 
 	return parse
