@@ -318,7 +318,7 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_type,  base_word, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, confidence_is_ask, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_type,  base_word, rule, rule_name):
 	parse_dict = {}
 	if modality:
 		parse_dict['trigger'] = trigger
@@ -331,6 +331,7 @@ def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_w
 	parse_dict['ask_when'] = ask_when
 	parse_dict['ask_action'] = ask_action
 	parse_dict['ask_negation'] = ask_negation
+	parse_dict['confidence_is_ask'] = confidence_is_ask
 	parse_dict['ask_info_confidence'] = confidence
 	parse_dict['t_ask_type'] = t_ask_types
 	parse_dict['t_ask_confidence'] = t_ask_confidence
@@ -422,6 +423,7 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 	nsubj_gov_gloss = ''
 	dobj_gov_gloss = ''
 	iobj_gov_gloss = ''
+	neg_gov_gloss = ''
 	dep_neg_exists = False
 	
 	for dependency in dependencies:
@@ -444,34 +446,39 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 	if 'GIVE' in t_ask_types:
 		if nsubj_gov_gloss == base_word and dobj_gov_gloss == base_word and iobj_gov_gloss == base_word:
 			ask_who = nsubj
-			ask = root
+			ask = dobj
 			ask_recipient = iobj
+			ask_action = root
 			#ask_when = ''
 			confidence = 'high'
 		else:
 			ask_who = nsubj
 			ask = dobj
+			ask_action = root
 			confidence = 'low'
 	else:
 		if nsubj_gov_gloss == base_word and dobj_gov_gloss == base_word and iobj_gov_gloss == base_word:
 			ask_who = nsubj
 			ask = dobj
 			ask_recipient = iobj
+			ask_action = root
 			confidence = 'low'
 		elif 'GET' in t_ask_types or 'PERFORM' in t_ask_types:
 			ask = dobj
 			ask_recipient = nsubj
+			ask_action = root
 			confidence ='high'
 		else:
 			ask_who = nsubj
 			ask = dobj
+			ask_action = root
 			confidence = 'low'
 		if neg_gov_gloss == base_word:
 			ask_negation = dep_neg_exists
 	
-	return(ask_who, ask, ask_recipient, ask_when, ask_negation, base_word, confidence, ask_actor_is_recipient)
+	return(ask_who, ask, ask_recipient, ask_when, ask_negation, base_word, confidence)
 
-def extractAskFromSrl(sentence, base_word, t_ask_types):
+def extractAskFromSrl(sentence, base_word, t_ask_types, dialogue_act):
 	ask_who = ''
 	ask = ''
 	ask_recipient = ''
@@ -492,7 +499,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 	descriptions = []
 
 	for verb in verbs:
-		if verb['verb'] == base_word:
+		if verb['verb'].lower() == base_word:
 			selected_verb = verb['verb']
 			tags_for_verb = verb['tags']
 			
@@ -541,6 +548,13 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			ask_when = ' '.join(arg_tmp)
 			confidence = 'low'
 
+	'''
+	# Handling ProDrop
+	if not ask_who and not arg0:
+		if dialogue_act == 'Action-directive':
+			ask_who = 'you'
+	'''
+
 	if 'GIVE' in t_ask_types:
 		if 'you' in arg2:
 			t_ask_types = ["GET"]
@@ -565,7 +579,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			elif 'you' in arg0:
 				t_ask_types = ["GET"]
 
-	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, ask_actor_is_recipient)
+	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence)
 
 def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act):
 	s_ask_types = []
@@ -578,11 +592,11 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
 	a_ask_types = appendListNoDuplicates(lem_a_ask_types, a_ask_types)
 
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, ask_actor_is_recipient) = extractAskFromSrl(sentence, word, t_ask_types)
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence) = extractAskFromSrl(sentence, word, t_ask_types, dialogue_act)
 
 	if not ask_action:
-		(ask_who, ask, ask_recipient, ask_when, ask_negation, ask_action, confidence, ask_actor_is_recipient) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
-		print("Try new algorithm")
+		(ask_who, ask, ask_recipient, ask_when, ask_negation, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
+
 
 	for ask_type, keywords in sashank_categories_sensitive.items():
 		for keyword in keywords:
@@ -609,7 +623,7 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 
 	
 
-	evaluateAskConfidence(is_past_tense, dialogue_act, ask_actor_is_recipient)
+	confidence_is_ask = evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient)
 	'''
 	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
@@ -617,28 +631,47 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 	'''
 
 
-	return buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '')
+	return buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, confidence_is_ask, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '')
 
 def getDialogueAct(sentence):
 	sentence = sentence.lower()
 	url = 'https://dialogueact.herokuapp.com/dialogueact'
 	json_body = {"email": sentence}
 	response = requests.post(url, json=json_body)
-	print()
 
 	return response.json()[sentence]
 
-def evaluateAskConfidence(is_past_tense, dialogue_act, ask_actor_is_recipient):
-	confidence_score
+def evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient):
+	confidence_score = 0
 	tense_score = 0
 	dialogue_act_score = 0
-	ask_actor_score = 0
+	ask_who = ask_who.lower()
+	ask_recipient = ask_recipient.lower()
+	ask_who_score = 0
+	ask_recipient_score = 0
+	ask_who_words = ['you', 'your']
+	ask_recipient_words = ['i', 'me', 'my', 'we', 'us', 'our']
 
-	if not is_past_tense:
-		tense_score = 1
 
-	if ask_actor_is_recipient:
-		ask_actor_score = 1
+	tense_score = 0.1 if is_past_tense else 1
+
+	if dialogue_act in ['Action-directive', 'Offer-Commit']:
+		dialogue_act_score = 1 if dialogue_act == 'Action-directive' else 0.9
+	else:
+		dialogue_act_score = 0.5
+
+	if any(who_word in ask_who for who_word in ask_who_words):
+		ask_who_score = 1
+	else:
+		ask_who_score = 0.1
+
+	if any(recipient_word in ask_recipient for recipient_word in ask_recipient_words):
+		ask_recipient_score = 1
+	else:
+		ask_recipient_score = 0.1
+
+
+	confidence_score = (dialogue_act_score * tense_score * ask_who_score * ask_recipient_score) * 100
 
 	return confidence_score
 
@@ -756,20 +789,12 @@ def parseSrl(sentence):
 	matches = extractVerbs(parse_tree)
 	for match in matches:
 		parse_verbs.append(match[1])
-	print(matches)
-	print(parse_verbs)
 
+	# TODO maybe find a way to see if negation goes with a certain portion of the sentence.
+	# Checking if negation is on the surgeried parsse tree
 	if 'TargNegation' in preprocessed_tree or 'TargNotSucceed' in preprocessed_tree:
 		ask_negation = True
 
-	#TODO if this becomes unnecessary delete it
-	'''
-	for word in words:
-		for ask_type, keywords in sashank_categories_sensitive.items():
-			if word in keywords and ask_type not in s_ask_types:
-				s_ask_types.append(ask_type)
-	'''
-	
 	
 	root_dependent_gloss = ''
 	aux_dependent = ''
