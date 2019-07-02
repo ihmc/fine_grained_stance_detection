@@ -231,13 +231,21 @@ def morphRoot(word):
 	wlem = WordNetLemmatizer()
 	return wlem.lemmatize(word.lower(),wn.VERB)
 
+def extractVerbs(parse_tree):
+	parse_tree = parse_tree.replace('\\n', '');
+	match = re.findall('\((VB[A-Z]*) *([a-z]+?)\)', parse_tree)
+	
+	return match
+
 def extractTriggerWordAndPos(trigger_string):
 	trigger_string = trigger_string.replace('\\n', '');
 	match = re.search('\(([A-Z]*) *([a-z]+?)\)', trigger_string)
+	
 	trigger_pos = match.group(1)
 	trigger_word = match.group(2)
 	
 	return (trigger_word, trigger_pos)
+	
 	
 def getTriggerModality(word_and_pos):
 	trigger_tuple = (morphRoot(word_and_pos[0].lower()), word_and_pos[1])
@@ -249,13 +257,19 @@ def preprocessSentence(tree):
 	with open('./tree.txt', 'w+') as tree_file:
 		tree_file.write(tree)
 		for rule in preprocess_rules_in_order:
+			#print(rule)
 			# Have to return to the beginning of the file so that the new tree overwrites the previous one.
 			tree_file.seek(0)
+
+			#TODO remove this chunk
+			#with open('.' + preprocess_rule_directory + rule, 'r') as rule_file:
+				#print(rule_file.read())
 
 			# This command is taken out of the tsurgeon.sh file in the coreNLP tregex tool.
 			# The cp option is added so the class will run without being in the same directory 
 			result = subprocess.run(['java', '-mx100m', '-cp', project_path + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + preprocess_rule_directory + rule], stdout = subprocess.PIPE, text=True)
 
+			#print(result.stdout)
 			tree_file.write(result.stdout)
 
 	return result.stdout
@@ -304,7 +318,7 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_type,  base_word, rule, rule_name):
+def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_type,  base_word, rule, rule_name):
 	parse_dict = {}
 	if modality:
 		parse_dict['trigger'] = trigger
@@ -316,13 +330,14 @@ def buildParseDict(trigger, target, modality, ask_who, ask, ask_recipient, ask_w
 	parse_dict['ask_recipient'] = ask_recipient
 	parse_dict['ask_when'] = ask_when
 	parse_dict['ask_action'] = ask_action
-	parse_dict['ask_procedure'] = ask_procedure
+	parse_dict['ask_negation'] = ask_negation
 	parse_dict['ask_info_confidence'] = confidence
 	parse_dict['t_ask_type'] = t_ask_types
 	parse_dict['t_ask_confidence'] = t_ask_confidence
 	parse_dict['s_ask_type'] = s_ask_types
-	parse_dict['additional_s_ask_type'] = additional_s_ask_type
+	#parse_dict['additional_s_ask_type'] = additional_s_ask_type
 	parse_dict['a_ask_type'] = a_ask_types
+	parse_dict['a_ask_procedure'] = ask_procedure
 	#parse_dict['semantic_roles'] = descriptions
 	
 	# Commented for now but useful if debugging which rules are being used
@@ -366,10 +381,7 @@ def getAskTypes(ask):
 					t_ask_types.append(tomek_ask_type)
 
 		
-		for t_ask_type in t_ask_types:
-			for alan_ask_type, types in alan_ask_types.items():
-				if t_ask_type in types and alan_ask_type not in a_ask_types:
-					a_ask_types.append(alan_ask_type)
+		
 	return (s_ask_types, t_ask_types, a_ask_types)
 
 # This functions checks to see if the items in a list already exist 
@@ -382,6 +394,7 @@ def appendListNoDuplicates(list_to_append, original_list):
 	return original_list
 
 def getNLPParse(sentence):
+	sentence = sentence.lower()
 	annotators = '/?annotators=tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
 	url = coreNLP_server + annotators
@@ -389,8 +402,74 @@ def getNLPParse(sentence):
 	return requests.post(url, data=sentence.encode(encoding='UTF-8',errors='ignore'))
 
 def getLemmaWords(sentence):
+	sentence = sentence.lower()
 	words = nltk.word_tokenize(sentence)
 	return [(morphRoot(word.lower())) for word in words]
+
+def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
+	base_word = base_word.lower()
+	ask_who = ''
+	ask = ''
+	ask_recipient = ''
+	ask_when = ''
+	ask_negation = False
+	ask_actor_is_recipient = False
+	confidence = ''
+	root = ''
+	nsubj = ''
+	dobj = ''
+	iobj = ''
+	nsubj_gov_gloss = ''
+	dobj_gov_gloss = ''
+	iobj_gov_gloss = ''
+	dep_neg_exists = False
+	
+	for dependency in dependencies:
+		dep = dependency['dep']
+		if dep == 'root':
+			root = dependency['dependentGloss']
+		if dep == 'neg':
+			neg_gov_gloss = dependency['governorGloss']
+			dep_neg_exists = True
+		if dep == 'nsubj':
+			nsubj = dependency['dependentGloss']
+			nsubj_gov_gloss = dependency['governorGloss']
+		if dep == 'dobj':
+			dobj = dependency['dependentGloss']
+			dobj_gov_gloss = dependency['governorGloss']
+		if dep == 'iobj':
+			iobj = dependency['dependentGloss']
+			iobj_gov_gloss = dependency['governorGloss']
+			
+	if 'GIVE' in t_ask_types:
+		if nsubj_gov_gloss == base_word and dobj_gov_gloss == base_word and iobj_gov_gloss == base_word:
+			ask_who = nsubj
+			ask = root
+			ask_recipient = iobj
+			#ask_when = ''
+			confidence = 'high'
+		else:
+			ask_who = nsubj
+			ask = dobj
+			confidence = 'low'
+	else:
+		if nsubj_gov_gloss == base_word and dobj_gov_gloss == base_word and iobj_gov_gloss == base_word:
+			ask_who = nsubj
+			ask = dobj
+			ask_recipient = iobj
+			confidence = 'low'
+		elif 'GET' in t_ask_types or 'PERFORM' in t_ask_types:
+			ask = dobj
+			ask_recipient = nsubj
+			confidence ='high'
+		else:
+			ask_who = nsubj
+			ask = dobj
+			confidence = 'low'
+		if neg_gov_gloss == base_word:
+			ask_negation = dep_neg_exists
+	
+	return(ask_who, ask, ask_recipient, ask_when, ask_negation, base_word, confidence, ask_actor_is_recipient)
 
 def extractAskFromSrl(sentence, base_word, t_ask_types):
 	ask_who = ''
@@ -402,6 +481,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 	selected_verb = ''
 	tags_for_verb = ''
 	improved_t_ask_types = ''
+	ask_actor_is_recipient = False
 	arg0 = []
 	arg1 = []
 	arg2 = []
@@ -415,7 +495,8 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 		if verb['verb'] == base_word:
 			selected_verb = verb['verb']
 			tags_for_verb = verb['tags']
-		descriptions.append(verb['description'])	
+			
+		descriptions.append(verb['description'])
 
 	if tags_for_verb:
 		for index, tag in enumerate(tags_for_verb):
@@ -484,9 +565,10 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			elif 'you' in arg0:
 				t_ask_types = ["GET"]
 
-	return (ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence)
+	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, ask_actor_is_recipient)
 
-def processWord(word, sentence, s_ask_types, ask_procedure):
+def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act):
+	s_ask_types = []
 	word = word.lower()
 	lem_word = morphRoot(word)
 	(additional_s_ask_types, t_ask_types, a_ask_types) = getAskTypes(word)
@@ -496,17 +578,69 @@ def processWord(word, sentence, s_ask_types, ask_procedure):
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
 	a_ask_types = appendListNoDuplicates(lem_a_ask_types, a_ask_types)
 
-	if not t_ask_types:
-		t_ask_types.append('OTHER')
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, ask_actor_is_recipient) = extractAskFromSrl(sentence, word, t_ask_types)
+
+	if not ask_action:
+		(ask_who, ask, ask_recipient, ask_when, ask_negation, ask_action, confidence, ask_actor_is_recipient) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
+		print("Try new algorithm")
+
+	for ask_type, keywords in sashank_categories_sensitive.items():
+		for keyword in keywords:
+			if (keyword in ask or keyword in ask_action) and ask_type not in s_ask_types:
+				s_ask_types.append(ask_type)
+		'''
+		if (ask in keywords or ask_action in keywords) and ask_type not in s_ask_types:
+			s_ask_types.append(ask_type)
+		'''
 
 	for s_ask_type in s_ask_types:
 		for alan_ask_type, types in alan_ask_types.items():
 			if s_ask_type in types and alan_ask_type not in a_ask_types:
 				a_ask_types.append(alan_ask_type)
 
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence) = extractAskFromSrl(sentence, word, t_ask_types)
+	if 'GIVE' not in t_ask_types and 'GET' not in t_ask_types and 'PERFORM' not in t_ask_types:
+		if ask_procedure:
+			t_ask_types.append('PERFORM')
 
-	return buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '')
+	for t_ask_type in t_ask_types:
+		for alan_ask_type, types in alan_ask_types.items():
+			if t_ask_type in types and alan_ask_type not in a_ask_types:
+				a_ask_types.append(alan_ask_type)
+
+	
+
+	evaluateAskConfidence(is_past_tense, dialogue_act, ask_actor_is_recipient)
+	'''
+	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
+	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
+	a_ask_types = appendListNoDuplicates(lem_a_ask_types, a_ask_types)
+	'''
+
+
+	return buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '')
+
+def getDialogueAct(sentence):
+	sentence = sentence.lower()
+	url = 'https://dialogueact.herokuapp.com/dialogueact'
+	json_body = {"email": sentence}
+	response = requests.post(url, json=json_body)
+	print()
+
+	return response.json()[sentence]
+
+def evaluateAskConfidence(is_past_tense, dialogue_act, ask_actor_is_recipient):
+	confidence_score
+	tense_score = 0
+	dialogue_act_score = 0
+	ask_actor_score = 0
+
+	if not is_past_tense:
+		tense_score = 1
+
+	if ask_actor_is_recipient:
+		ask_actor_score = 1
+
+	return confidence_score
 
 def parseModality(sentence):
 	parse = []
@@ -550,7 +684,7 @@ def parseModality(sentence):
 				# TODO store the portions of the tuple in meaningful names
 				(trigger, target, modality, ask, trig_word) = trig_and_targ
 				(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
-				parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '',  '', '', s_ask_types, t_ask_types, '', '', additional_s_ask_types, target, 'preprocessed rules', 'preprocess rules'))
+				parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '',  '', '', '', s_ask_types, t_ask_types, '', '', additional_s_ask_types, target, 'preprocessed rules', 'preprocess rules'))
 
 			return parse
 	# Here we loop through each set of generalized rules that were gathered above and 
@@ -574,12 +708,14 @@ def parseModality(sentence):
 				for trig_and_targ in trigs_and_targs: 
 					(trigger, target, modality, ask, trig_word) = trig_and_targ
 					(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
-					parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '', '', '', s_ask_types, t_ask_types, '', '', additional_s_ask_types, target, rule['rule'], rule['rule_name']))
+					parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '', '', '', '', s_ask_types, t_ask_types, '', '', additional_s_ask_types, target, rule['rule'], rule['rule_name']))
 
 				return parse
 
 def parseSrl(sentence):
 	parse = []
+	is_past_tense = False
+	ask_negation = False
 	base_word = ''
 	conj_base_word = ''
 	dep_base_word = ''
@@ -590,42 +726,97 @@ def parseSrl(sentence):
 	ask_recipient = ''
 	ask_when = ''
 	ask_procedure = ''
+	matches = ''
 	additional_s_ask_types = []
 	s_ask_types = []
 	t_ask_types = []
 	conj_t_ask_types = []
 	conj_additional_s_ask_types = []
+	parse_verbs = []
 	words = getLemmaWords(sentence)
 	response = getNLPParse(sentence)
+	#print(response.json())
+	#TODO put this back in place for final testing
+	parse_tree = response.json()['sentences'][0]['parse']
+	preprocessed_tree = preprocessSentence(parse_tree)
+	#print(preprocessed_tree, "\n\n")
 	dependencies = response.json()['sentences'][0]['basicDependencies']
 	#print(response.json())
 	tokens = response.json()['sentences'][0]['tokens']
 
+	dialogue_act = getDialogueAct(sentence)
+
+	if 'VBD' in parse_tree or 'VBN' in parse_tree:
+		is_past_tense = True
+
+
+	#print(sentence)
+	#print(is_past_tense, '\n\n')
+
+	matches = extractVerbs(parse_tree)
+	for match in matches:
+		parse_verbs.append(match[1])
+	print(matches)
+	print(parse_verbs)
+
+	if 'TargNegation' in preprocessed_tree or 'TargNotSucceed' in preprocessed_tree:
+		ask_negation = True
+
+	#TODO if this becomes unnecessary delete it
+	'''
 	for word in words:
 		for ask_type, keywords in sashank_categories_sensitive.items():
 			if word in keywords and ask_type not in s_ask_types:
 				s_ask_types.append(ask_type)
+	'''
 	
 	
+	root_dependent_gloss = ''
 	aux_dependent = ''
 	aux_governor  = ''
+	dep_governor_gloss = ''
+	dep_dep = ''
+	punct_dependent = 0
+	punctuation_to_match = [':', ';', '-']
 	nsubj_exists = False
+	base_words = []
 
 	for dependency in dependencies:
+		'''
+		if dependency['dep'] == 'punct' and dependency['dependentGloss'] in punctuation_to_match:
+			dependent = dependency['dependent'] + 1
+			for dependency2 in dependencies:
+				if dependency2['dependent'] == dependent:
+					root_dependent_gloss = dependency2['governerGloss']
+		'''
 		if dependency['dep'] == 'ROOT':
 			base_word = dependency['dependentGloss']
+			base_words.append(dependency['dependentGloss'])
 		if dependency['dep'] == 'conj':
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				conj_base_word = dependency['dependentGloss']
+				base_words.append(dependency['dependentGloss'])
 		if dependency['dep'] == 'dep':
+			dep_governor_gloss = dependency['governorGloss']
+			dep_dependent_gloss = dependency['dependentGloss']
+			dep_dep = dependency['dep']
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				dep_base_word = dependency['dependentGloss']
+				base_words.append(dependency['dependentGloss'])
 		if dependency['dep'] == 'ccomp':
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				ccomp_base_word = dependency['dependentGloss']
+				base_words.append(dependency['dependentGloss'])
+			elif dep_dep == 'dep' and dependency['governorGloss'] == dep_dependent_gloss:
+				if dep_governor_gloss == dependencies[0]['dependentGloss']:
+						ccomp_base_word = dependency['dependentGloss']
+						base_words.append(dependency['dependentGloss'])
 		if dependency['dep'] == 'xcomp':
 			if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 				xcomp_base_word = dependency['dependentGloss']
+				base_words.append(dependency['dependentGloss'])
+
+		
 
 		# This chunk is for determining if the ask is a request or a directive
 		if dependency['dep'] == 'aux':
@@ -638,53 +829,29 @@ def parseSrl(sentence):
 				
 	if not nsubj_exists:
 		ask_procedure = 'directive'
-			
-	parse.append(processWord(base_word, sentence, s_ask_types, ask_procedure))
+
+	for base_word in base_words:
+		parse.append(processWord(base_word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act))
+	'''			
+	parse.append(processWord(base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
 
 	if conj_base_word:
-		parse.append(processWord(conj_base_word, sentence, s_ask_types, ask_procedure))
+		parse.append(processWord(conj_base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
 
 	if dep_base_word:
-		parse.append(processWord(dep_base_word, sentence, s_ask_types, ask_procedure))
+		parse.append(processWord(dep_base_word,  parse_verbs, ssentence, s_ask_types, ask_procedure, ask_negation))
 
 	if ccomp_base_word:
-		parse.append(processWord(ccomp_base_word, sentence, s_ask_types, ask_procedure))
+		parse.append(processWord(ccomp_base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
 
 	if xcomp_base_word:
-		parse.append(processWord(xcomp_base_word, sentence, s_ask_types, ask_procedure))
+		parse.append(processWord(xcomp_base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
 	'''
-	base_word = base_word.lower()
-	lem_base_word = morphRoot(base_word)
-	(additional_s_ask_types, t_ask_types) = getAskTypes(base_word)
-	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_base_word)
-
-	addtional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
-	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
-
-	if not t_ask_types:
-		t_ask_types.append('OTHER')
-
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types) = extractAskFromSrl(sentence, base_word, t_ask_types)
-
-	parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, t_ask_types, additional_s_ask_types, base_word, '', ''))
-
-	if conj_base_word:
-		
-		conj_base_word = conj_base_word.lower()
-		conj_lem_base_word = morphRoot(conj_base_word)
-		(conj_additional_s_ask_types, conj_t_ask_types) = getAskTypes(conj_base_word)
-		(conj_additional_lem_s_ask_types, conj_lem_t_ask_types) = getAskTypes(conj_lem_base_word)
-
-		conj_additional_s_ask_types = appendListNoDuplicates(conj_additional_lem_s_ask_types, conj_additional_s_ask_types)
-		conj_t_ask_types = appendListNoDuplicates(conj_lem_t_ask_types, conj_t_ask_types)
-
-		if not conj_t_ask_types:
-			conj_t_ask_types.append('OTHER')
-
-		(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types) = extractAskFromSrl(sentence, conj_base_word, conj_t_ask_types)
-
-		parse.append(buildParseDict('', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, s_ask_types, conj_t_ask_types, conj_additional_s_ask_types, conj_base_word, '', ''))
-	'''
+	if parse_verbs:
+		for verb in parse_verbs:
+			if verb not in base_words:
+				parse.append(processWord(verb, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act))
+	
 
 	return parse
 
