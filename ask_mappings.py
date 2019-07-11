@@ -234,7 +234,7 @@ tomeks_ask_types = {
     "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
     "11.3 Bring and Take Verbs",
     "13.5.2.d Obtain - Exchange",
-		"30.2.a.i Sight Verbs / Bare NP"
+		"30.2.a.i Sight Verbs / Bare NP",
     "37.1.e Verbs of Transfer of a Message / -that/to",
     "37.2.a Tell Verbs",
     "37.2.b Tell Verbs / -of/about",

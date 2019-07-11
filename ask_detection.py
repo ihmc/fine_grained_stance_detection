@@ -1,6 +1,7 @@
 from allennlp.predictors.predictor import Predictor
 predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar.gz")
 
+import unicodedata
 import json
 import nltk
 import csv
@@ -202,6 +203,8 @@ def getModality(text):
 
 def getSrl(text):
 
+	text = unicodedata.normalize('NFKC',text)
+	print(repr(text), "Here is the text adam sent\n\n\n")
 	# Split input text into sentences
 	sentences = nltk.sent_tokenize(text)
 	sentence_srls = []
@@ -652,9 +655,11 @@ def getDialogueAct(sentence):
 	return response.json()[sentence]
 
 def evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient):
+	hyper_link_exists = False
 	confidence_score = 0
 	tense_score = 0
 	dialogue_act_score = 0
+	hyper_link_score = 0
 	ask_who = ask_who.lower()
 	ask_recipient = ask_recipient.lower()
 	ask_who_score = 0
@@ -681,7 +686,7 @@ def evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient):
 		ask_recipient_score = 0.1
 
 
-	confidence_score = (dialogue_act_score * tense_score * ask_who_score * ask_recipient_score) * 100
+	confidence_score = (dialogue_act_score + tense_score + ask_who_score + ask_recipient_score) / 4
 
 	return confidence_score
 
@@ -755,6 +760,9 @@ def parseModality(sentence):
 
 				return parse
 
+def handleHTMLParse(html_parse):
+	return
+
 def parseSrl(sentence):
 	parse = []
 	is_past_tense = False
@@ -778,13 +786,12 @@ def parseSrl(sentence):
 	parse_verbs = []
 	words = getLemmaWords(sentence)
 	response = getNLPParse(sentence)
-	#print(response.json())
+	#print(response.json(), '\n\n')
 	#TODO put this back in place for final testing
 	parse_tree = response.json()['sentences'][0]['parse']
 	preprocessed_tree = preprocessSentence(parse_tree)
 	#print(preprocessed_tree, "\n\n")
 	dependencies = response.json()['sentences'][0]['basicDependencies']
-	#print(response.json())
 	tokens = response.json()['sentences'][0]['tokens']
 
 	dialogue_act = getDialogueAct(sentence)
