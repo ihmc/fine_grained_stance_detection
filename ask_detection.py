@@ -188,6 +188,7 @@ for rule in word_specific_rules:
 #print(lexical_specific_rules)
 
 def getModality(text):
+	text = unicodedata.normalize('NFKC',text)
 
 	# Split input text into sentences
 	sentences = nltk.sent_tokenize(text)
@@ -202,9 +203,29 @@ def getModality(text):
 	return sentence_modalities
 
 def getSrl(text):
+	sentence_srls = []
+	pattern = '\[\[\[ASKMARKER1234-(\d+)-ASKMARKER1234(.*?)/ASKMARKER1234-\d+-ASKMARKER1234\]\]\]'
+	text_to_process = unicodedata.normalize('NFKC',text)
 
-	text = unicodedata.normalize('NFKC',text)
-	print(repr(text), "Here is the text adam sent\n\n\n")
+	lines = text_to_process.split('\n')
+
+	
+	for line in lines:
+		line_text = line.strip()
+		if not line:
+			continue
+		link_offsets = []
+		link_strings = []
+		match = re.search(pattern, line_text)
+		while match:
+			link_offsets.append((match.start(0), match.start(0) + len(match.group(2))))
+			link_strings.append(match.group(2))
+			line_text = line_text.replace(match.group(0), match.group(2))
+			match = re.search(pattern, line_text)
+			print(line_text, '\n\n')
+		sentence_srls.extend(parseSrl(line_text.lower(), link_offsets, link_strings))
+
+	'''
 	# Split input text into sentences
 	sentences = nltk.sent_tokenize(text)
 	sentence_srls = []
@@ -214,6 +235,8 @@ def getSrl(text):
 		sentence_srls.append({"sentence": sentence, "matches": constituency_parse})
 
 
+	return sentence_srls
+	'''
 	return sentence_srls
 
 def readLocalFiles():
@@ -400,7 +423,7 @@ def appendListNoDuplicates(list_to_append, original_list):
 
 def getNLPParse(sentence):
 	sentence = sentence.lower()
-	annotators = '/?annotators=tokenize,pos,parse,depparse&tokenize.english=true'
+	annotators = '/?annotators=ssplit,tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
 	url = coreNLP_server + annotators
 
@@ -587,7 +610,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types, dialogue_act):
 
 	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence)
 
-def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs):
+def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs, link_exists):
 	ask_negation_dep_based = False
 	s_ask_types = []
 	word = word.lower()
@@ -626,7 +649,7 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 				a_ask_types.append(alan_ask_type)
 
 	if 'GIVE' not in t_ask_types and 'GET' not in t_ask_types and 'PERFORM' not in t_ask_types:
-		if ask_procedure:
+		if ask_procedure and link_exists:
 			t_ask_types.append('PERFORM')
 
 	for t_ask_type in t_ask_types:
@@ -636,7 +659,7 @@ def processWord(word, sentence, s_ask_types, ask_procedure, ask_negation, depend
 
 	
 
-	is_ask_confidence = evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient)
+	is_ask_confidence = evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient, link_exists)
 	'''
 	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
@@ -651,10 +674,9 @@ def getDialogueAct(sentence):
 	url = 'https://dialogueact.herokuapp.com/dialogueact'
 	json_body = {"email": sentence}
 	response = requests.post(url, json=json_body)
+	return response.json()[sentence] if sentence in response.json() else ''
 
-	return response.json()[sentence]
-
-def evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient):
+def evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient, link_exists):
 	hyper_link_exists = False
 	confidence_score = 0
 	tense_score = 0
@@ -669,6 +691,8 @@ def evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient):
 
 
 	tense_score = 0.1 if is_past_tense else 1
+
+	hyper_link_score = 0.9 if link_exists else 0.1
 
 	if dialogue_act in ['Action-directive', 'Offer-Commit']:
 		dialogue_act_score = 1 if dialogue_act == 'Action-directive' else 0.9
@@ -686,7 +710,7 @@ def evaluateAskConfidence(is_past_tense, dialogue_act, ask_who, ask_recipient):
 		ask_recipient_score = 0.1
 
 
-	confidence_score = (dialogue_act_score + tense_score + ask_who_score + ask_recipient_score) / 4
+	confidence_score = float('%.3f'%((dialogue_act_score + tense_score + ask_who_score + ask_recipient_score + hyper_link_score) / 5))
 
 	return confidence_score
 
@@ -763,7 +787,8 @@ def parseModality(sentence):
 def handleHTMLParse(html_parse):
 	return
 
-def parseSrl(sentence):
+#def parseSrl(sentence):
+	'''
 	parse = []
 	is_past_tense = False
 	ask_negation = False
@@ -799,19 +824,13 @@ def parseSrl(sentence):
 	if 'VBD' in parse_tree or 'VBN' in parse_tree:
 		is_past_tense = True
 
-
-	#print(sentence)
-	#print(is_past_tense, '\n\n')
-
+	# Extract all verbs from the constituency parse to be used for fallback if all verbs are not found in the dependencies
 	matches = extractVerbs(parse_tree)
 	for match in matches:
 		parse_verbs.append(match[1])
 
-	# TODO maybe find a way to see if negation goes with a certain portion of the sentence.
-	# Checking if negation is on the surgeried parsse tree
+	# We extract the triggers and targets here to check later on if Negation occurred
 	trig_and_targs = extractTrigsAndTargs(preprocessed_tree)
-	#if 'TargNegation' in preprocessed_tree or 'TargNotSucceed' in preprocessed_tree:
-		#ask_negation = True
 
 	
 	root_dependent_gloss = ''
@@ -825,13 +844,11 @@ def parseSrl(sentence):
 	base_words = []
 
 	for dependency in dependencies:
-		'''
 		if dependency['dep'] == 'punct' and dependency['dependentGloss'] in punctuation_to_match:
 			dependent = dependency['dependent'] + 1
 			for dependency2 in dependencies:
 				if dependency2['dependent'] == dependent:
 					root_dependent_gloss = dependency2['governerGloss']
-		'''
 		if dependency['dep'] == 'ROOT':
 			base_word = dependency['dependentGloss']
 			base_words.append(dependency['dependentGloss'])
@@ -859,8 +876,6 @@ def parseSrl(sentence):
 				xcomp_base_word = dependency['dependentGloss']
 				base_words.append(dependency['dependentGloss'])
 
-		
-
 		# This chunk is for determining if the ask is a request or a directive
 		if dependency['dep'] == 'aux':
 			aux_dependent = dependency['dependent']
@@ -869,32 +884,174 @@ def parseSrl(sentence):
 			nsubj_exists = True
 			if dependency['dependent'] > aux_dependent and dependency['governor'] == aux_governor:
 				ask_procedure = 'request'
+
 				
 	if not nsubj_exists:
 		ask_procedure = 'directive'
 
 	for base_word in base_words:
-		parse.append(processWord(base_word, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs))
-	'''			
-	parse.append(processWord(base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
+		parse.append(processWord(base_word, sentence, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs))
 
-	if conj_base_word:
-		parse.append(processWord(conj_base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
-
-	if dep_base_word:
-		parse.append(processWord(dep_base_word,  parse_verbs, ssentence, s_ask_types, ask_procedure, ask_negation))
-
-	if ccomp_base_word:
-		parse.append(processWord(ccomp_base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
-
-	if xcomp_base_word:
-		parse.append(processWord(xcomp_base_word, parse_verbs, sentence, s_ask_types, ask_procedure, ask_negation))
-	'''
 	if parse_verbs:
 		for verb in parse_verbs:
 			if verb not in base_words:
-				parse.append(processWord(verb, sentence, s_ask_types, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs))
+				parse.append(processWord(verb, sentence, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs))
 	
 
 	return parse
+	'''
 
+def parseSrl(line, link_offsets, link_strings):
+	sentence_srls = []
+	sentences = nltk.sent_tokenize(line)
+	is_past_tense = False
+	ask_negation = False
+	base_word = ''
+	conj_base_word = ''
+	dep_base_word = ''
+	ccomp_base_word = ''
+	xcomp_base_word = ''
+	matches = ''
+	'''
+	additional_s_ask_types = []
+	s_ask_types = []
+	t_ask_types = []
+	conj_t_ask_types = []
+	conj_additional_s_ask_types = []
+	'''
+	
+	
+	
+	response = getNLPParse(line)
+	core_nlp_sentences = response.json()['sentences']
+	print(core_nlp_sentences)
+
+	previous_token_char_end_offset = 0
+	current_token_char_begin_offset = 0
+	for nlp_sentence in core_nlp_sentences:
+		ask_procedure = ''
+		link_exists = False
+		rebuilt_sentence = []
+		parse_verbs = []
+		#response = getNLPParse(sentence)
+		#nlp_sentence = response.json()['sentences'][0]
+		parse = []
+		#words = getLemmaWords(sentence)
+		parse_tree = nlp_sentence['parse']
+		dependencies = nlp_sentence['basicDependencies']
+		tokens = nlp_sentence['tokens']	
+
+		for token in tokens:
+			rebuilt_sentence.append(token['before'])
+			rebuilt_sentence.append(token['originalText'])
+
+		rebuilt_sentence = ''.join(rebuilt_sentence)
+		print(rebuilt_sentence, '\n\n')
+
+		sentence_begin_char_offset = tokens[0]['characterOffsetBegin']
+		sentence_end_char_offset = tokens[len(tokens) - 1]['characterOffsetEnd']
+
+		
+
+		preprocessed_tree = preprocessSentence(parse_tree)
+		#print(preprocessed_tree)
+		#TODO NEED TO WORK OUT HOW TO SEND SENTENCES TO THE DIALOGUE ACT TAGGER INDIVIDUALLY
+		dialogue_act = getDialogueAct(rebuilt_sentence)
+	
+		# Extract all verbs from the constituency parse to be used for fallback if all verbs are not found in the dependencies
+		matches = extractVerbs(parse_tree)
+		for match in matches:
+			parse_verbs.append(match[1])
+
+		# We extract the triggers and targets here to check later on if Negation occurred
+		trig_and_targs = extractTrigsAndTargs(preprocessed_tree)
+		#print(trig_and_targs, '\n\n')
+
+		#TODO need this to be more accurate for each portion not just the whole sentence
+		#If either of these verbs parts of speech exists in the parse tree then the sentence has a past tense part
+		if 'VBD' in parse_tree or 'VBN' in parse_tree:
+			is_past_tense = True
+
+		root_dependent_gloss = ''
+		aux_dependent = ''
+		aux_governor  = ''
+		advmod_governor_gloss = ''
+		advmod_dependent_gloss = ''
+		dep_governor_gloss = ''
+		dep_dep = ''
+		punct_dependent = 0
+		punctuation_to_match = [':', ';', '-']
+		nsubj_exists = False
+		base_words = []
+
+		for dependency in dependencies:
+			'''
+			if dependency['dep'] == 'punct' and dependency['dependentGloss'] in punctuation_to_match:
+				dependent = dependency['dependent'] + 1
+				for dependency2 in dependencies:
+					if dependency2['dependent'] == dependent:
+						root_dependent_gloss = dependency2['governerGloss']
+			'''
+			if dependency['dep'] == 'ROOT':
+				base_word = dependency['dependentGloss']
+				base_words.append(dependency['dependentGloss'])
+			if dependency['dep'] == 'conj':
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+					conj_base_word = dependency['dependentGloss']
+					base_words.append(dependency['dependentGloss'])
+			if dependency['dep'] == 'dep':
+				dep_governor_gloss = dependency['governorGloss']
+				dep_dependent_gloss = dependency['dependentGloss']
+				dep_dep = dependency['dep']
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+					dep_base_word = dependency['dependentGloss']
+					base_words.append(dependency['dependentGloss'])
+			if dependency['dep'] == 'ccomp':
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+					ccomp_base_word = dependency['dependentGloss']
+					base_words.append(dependency['dependentGloss'])
+				elif dep_dep == 'dep' and dependency['governorGloss'] == dep_dependent_gloss:
+					if dep_governor_gloss == dependencies[0]['dependentGloss']:
+							ccomp_base_word = dependency['dependentGloss']
+							base_words.append(dependency['dependentGloss'])
+			if dependency['dep'] == 'xcomp':
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+					xcomp_base_word = dependency['dependentGloss']
+					base_words.append(dependency['dependentGloss'])
+
+			# This chunk is for determining if the ask is a request or a directive
+			if dependency['dep'] == 'aux':
+				aux_dependent = dependency['dependent']
+				aux_governor  = dependency['governor']
+			if dependency['dep'] == 'nsubj' and aux_dependent:
+				nsubj_exists = True
+				if dependency['dependent'] > aux_dependent and dependency['governor'] == aux_governor:
+					ask_procedure = 'request'
+
+			if dependency['dep'] == 'advmod':
+				advmod_governor_gloss = dependency['governorGloss']
+				advmod_dependent_gloss = dependency['dependentGloss']
+
+					
+		if not nsubj_exists:
+			ask_procedure = 'directive'
+
+		for base_word in base_words:
+			link_exists = False
+			for index, link_offset in enumerate(link_offsets):
+				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
+					if base_word == advmod_governor_gloss and link_strings[index] == advmod_dependent_gloss:
+						link_exists = True
+				
+			parse.append(processWord(base_word, rebuilt_sentence, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs, link_exists))
+
+		if parse_verbs:
+			for verb in parse_verbs:
+				if verb not in base_words:
+					parse.append(processWord(verb, rebuilt_sentence, ask_procedure, ask_negation, dependencies, is_past_tense, dialogue_act, trig_and_targs, link_exists))
+	
+
+		sentence_srls.append({"sentence": rebuilt_sentence, "matches": parse})
+	
+
+	return sentence_srls
