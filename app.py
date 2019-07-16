@@ -41,8 +41,7 @@ def handleModality():
 def handleSrl():
 	payload = request.get_json();
 
-
-	sentence_srls = ask_detection.getSrl(payload['text'])
+	sentence_srls = ask_detection.getSrl(payload['text'], payload['links'])
 
 	return json.dumps(sentence_srls)
 
