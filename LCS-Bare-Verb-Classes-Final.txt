@@ -1469,7 +1469,7 @@
 (
  :NUMBER "30.2.a.i"
  :NAME "Sight Verbs / Bare NP"
- :WORDS (examine eye glimpse inspect investigate note observe overhear perceive regard savor scan scent scrutinize study survey view watch witness click read review see watch check look rsvp register reply click open provide try watch find contact contains download note receive refer update visit highlight notify observe watch contain delete execute consider support send unsubscribe reset review submit cancel pay deliver like start type help confirm take test connect try copy-and-paste update copy paste request respond)
+ :WORDS (examine eye glimpse inspect investigate note observe overhear perceive regard savor scan scent scrutinize study survey view watch witness click read review see watch check look rsvp register reply click open provide try watch find contact contains download note receive refer update visit highlight notify observe watch contain delete execute consider support send unsubscribe reset review submit cancel pay deliver like start type help confirm take test connect try copy-and-paste update copy paste request respond share)
  :NON_LEVIN_WORDS (cross-examine experience peruse spy)
  :COLLOCATIONS ()
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>

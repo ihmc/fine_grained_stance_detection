@@ -329,10 +329,10 @@ def extractTrigsAndTargs(tree):
 	targ_match = re.findall(targ_regex, tree_no_new_lines)
 
 	if not trig_match:
-		print('Trigger did not match, investigate tree and regex')
+		#print('Trigger did not match, investigate tree and regex')
 		return None
 	if not targ_match:
-		print('Target did not match, investigate tree and regex')
+		#print('Target did not match, investigate tree and regex')
 		return None
 
 	# Extract the trigger and target from the tree, remove "Trig" and "Targ" so the part of speech 
@@ -671,7 +671,7 @@ def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_pa
 		if (link_exists or link_in_sentence) and ask:
 			t_ask_types = ['PERFORM']
 
-	if t_ask_types == ['PERFORM'] and link_in_sentence and not link_exists and ask:
+	if t_ask_types == ['PERFORM'] and link_in_sentence and not link_exists and ask and word_number:
 		for index, link_string in enumerate(link_strings):
 			if ask == link_string.lower():
 				link_id = link_ids[index]
