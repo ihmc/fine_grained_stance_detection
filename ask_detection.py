@@ -374,7 +374,7 @@ def buildParseDict(sentence, trigger, target, modality, ask_who, ask, ask_recipi
 	if link_id:
 		parse_dict['url'] = {link_id: links.get(link_id)}
 	else:
-		parse_dict['url'] = ''
+		parse_dict['url'] = {}
 	#parse_dict['ask_negation_dep_based'] = ask_negation_dep_based
 	#parse_dict['ask_info_confidence'] = confidence
 	parse_dict['t_ask_type'] = t_ask_types
@@ -538,7 +538,9 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 	arg1 = []
 	arg2 = []
 	arg_tmp = []
+	word_number = []
 	srl = predictor.predict(sentence=sentence)
+	#print(srl)
 	verbs = srl['verbs']
 	words = [word.lower() for word in srl['words']]
 	descriptions = []
@@ -558,6 +560,8 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 				arg0.append(words[index])
 			elif tag_label == 'ARG1':
 				arg1.append(words[index])
+				#The placement of the word within the sentence
+				word_number.append(index)
 			elif tag_label == 'ARG2':
 				arg2.append(words[index])
 			elif 'ARGM-TMP' in tag:
@@ -617,9 +621,9 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			elif 'you' in arg0:
 				t_ask_types = ["GET"]
 
-	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence)
+	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number)
 
-def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_past_tense, trig_and_targs, link_in_sentence, link_exists, link_id, links):
+def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_past_tense, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links):
 	ask_negation_dep_based = False
 	s_ask_types = [] 
 	a_ask_types = []
@@ -631,7 +635,7 @@ def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_pa
 	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
 
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence) = extractAskFromSrl(sentence, word, t_ask_types)
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number) = extractAskFromSrl(sentence, word, t_ask_types)
 
 	if not ask_action:
 		(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
@@ -655,12 +659,38 @@ def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_pa
 	if 'PERFORM' in t_ask_types:
 		if link_exists:
 			t_ask_types = ['PERFORM']
-		else: 
+		#Remove PERFORM if GIVE or GET has also been chosen.
+		#NOTE It should not be the case that GIVE and GET are both present at this time.
+		elif len(t_ask_types) > 1: 
 			t_ask_types.remove('PERFORM')
 
+	
 	if 'GIVE' not in t_ask_types and 'GET' not in t_ask_types and 'PERFORM' not in t_ask_types:
 		if (link_exists or link_in_sentence) and ask:
 			t_ask_types = ['PERFORM']
+
+	if t_ask_types == ['PERFORM'] and link_in_sentence and not link_exists and ask:
+		for index, link_string in enumerate(link_strings):
+			if ask == link_string.lower():
+				link_id = link_ids[index]
+				link_exists = True
+		ask_pieces = ask.split(' ')
+		for index, ask_piece in enumerate(ask_pieces):
+			dependent_number = word_number[index] + 1
+			for dependency in dependencies:
+				if dependency['dependent'] == dependent_number:
+					gov_gloss = dependency['governorGloss']
+					dep_gloss = dependency['dependentGloss']
+					dependent = dependency['dependent']
+					governor = dependency['governor']
+			for dependency in dependencies:	
+				if dependent == dependency['governor'] or governor == dependency['governor']:
+					for index, link_string in enumerate(link_strings):
+						#TODO Look into this more as this will always take the last dependency that matched.
+						if dependency['dependentGloss'] in link_string.lower():
+							link_id = link_ids[index]
+							link_exists = True
+			
 
 	for t_ask_type in t_ask_types:
 		for alan_ask_type, types in alan_ask_types.items():
@@ -789,7 +819,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 	
 	response = getNLPParse(line)
 	core_nlp_sentences = response.json()['sentences']
-	#print(core_nlp_sentences)
+	#print(core_nlp_sentences, "\n\n")
 
 	previous_token_char_end_offset = 0
 	current_token_char_begin_offset = 0
@@ -799,7 +829,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 		link_exists = False
 		rebuilt_sentence = []
 		parse_verbs = []
-		parse = []
 		#TODO Investigate if this is needed
 		#words = getLemmaWords(sentence)
 		parse_tree = nlp_sentence['parse']
@@ -857,6 +886,15 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 			if dependency['dep'] == 'ROOT':
 				base_word = dependency['dependentGloss']
 				base_words.append(dependency['dependentGloss'])
+
+			'''
+			if dependency['dep'] == 'root':
+				small_root = dependency['dependentGloss']
+
+			if dependency['governorGloss'] == dependencies[0]['dependentGloss'] and dependency['governerGloss'] == small_root:
+				if dependency['dep'] == 'conj':
+			'''
+				
 			if dependency['dep'] == 'conj':
 				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
 					conj_base_word = dependency['dependentGloss']
@@ -903,14 +941,13 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 			for index, link_offset in enumerate(link_offsets):
 				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
 					link_in_sentence = True
-					if base_word == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index]:
+					if base_word == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index].lower():
 						link_id = link_ids[index]
 						link_exists = True
 						break
 
-			ask_details = processWord(base_word, rebuilt_sentence, ask_procedure, ask_negation, dependencies, is_past_tense, trig_and_targs, link_in_sentence, link_exists, link_id, links)
+			ask_details = processWord(base_word, rebuilt_sentence, ask_procedure, ask_negation, dependencies, is_past_tense, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
 			if ask_details:
-				#parse.append(ask_details)
 				line_parse_matches.append(ask_details)
 
 		if parse_verbs:
@@ -919,14 +956,13 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 					for index, link_offset in enumerate(link_offsets):
 						if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
 							link_in_sentence = True
-							if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index]:
+							if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index].lower():
 								link_id = link_ids[index]
 								link_exists = True
 								break
 
-					ask_details = processWord(verb, rebuilt_sentence, ask_procedure, ask_negation, dependencies, is_past_tense, trig_and_targs, link_in_sentence, link_exists, link_id, links)
+					ask_details = processWord(verb, rebuilt_sentence, ask_procedure, ask_negation, dependencies, is_past_tense, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
 					if ask_details:
-						#parse.append(ask_details)
 						line_parse_matches.append(ask_details)
 
 		#sentence_srls.append({"sentence": rebuilt_sentence, "matches": parse})
