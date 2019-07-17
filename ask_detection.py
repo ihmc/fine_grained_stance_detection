@@ -301,7 +301,7 @@ def preprocessSentence(tree):
 
 			# This command is taken out of the tsurgeon.sh file in the coreNLP tregex tool.
 			# The cp option is added so the class will run without being in the same directory 
-			result = subprocess.run(['java', '-mx100m', '-cp', project_path + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + preprocess_rule_directory + rule], stdout = subprocess.PIPE, text=True)
+			result = subprocess.run(['java', '-mx100m', '-cp', '.' + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + preprocess_rule_directory + rule], stdout = subprocess.PIPE, text=True)
 
 			#print(result.stdout)
 			tree_file.write(result.stdout)
