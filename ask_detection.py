@@ -301,12 +301,14 @@ def preprocessSentence(tree):
 
 			# This command is taken out of the tsurgeon.sh file in the coreNLP tregex tool.
 			# The cp option is added so the class will run without being in the same directory 
-			result = subprocess.run(['java', '-mx100m', '-cp', '.' + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + preprocess_rule_directory + rule], stdout = subprocess.PIPE, text=True)
+			# Text is commented out here because that parameter only exists in python 3.7
+			result = subprocess.run(['java', '-mx100m', '-cp', '.' + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + preprocess_rule_directory + rule], stdout = subprocess.PIPE)#, text=True)
 
-			#print(result.stdout)
-			tree_file.write(result.stdout)
+			string_tree = result.stdout.decode("utf-8")
+			#print(string_tree)
+			tree_file.write(string_tree)
 
-	return result.stdout
+	return string_tree
 
 
 # This function runs regex on a parse tree in order to extract potential trigger and target
