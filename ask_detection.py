@@ -701,7 +701,7 @@ def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_pa
 	if ask_negation or ask_negation_dep_based:
 		ask_negation = True
 
-	if t_ask_types:
+	if t_ask_types and ask:
 		is_ask_confidence = evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types)
 		return buildParseDict(sentence, '', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '', link_id, links)
 
