@@ -1,27 +1,27 @@
-image: docker:latest
-
-services:
-- docker:dind
-
-stages:
-- build
-- deploy
-
-before_script:
-  - docker login -u $DOCKER_USER -p $DOCKER_PASS registry.ased.io
-
-Build:
-  stage: build
-  script:
-    - docker build --pull -t $REGISTRY_IMAGE .
-    - docker push $REGISTRY_IMAGE 
-
-Production:
-  stage: deploy
-  services:
-    - docker:dind
-  environment:
-    name: production
-  script:
-    - source scripts/deploy.sh
+#image: docker:latest
+#
+#services:
+#- docker:dind
+#
+#stages:
+#- build
+#- deploy
+#
+#before_script:
+#  - docker login -u $DOCKER_USER -p $DOCKER_PASS registry.ased.io
+#
+#Build:
+#  stage: build
+#  script:
+#    - docker build --pull -t $REGISTRY_IMAGE .
+#    - docker push $REGISTRY_IMAGE 
+#
+#Production:
+#  stage: deploy
+#  services:
+#    - docker:dind
+#  environment:
+#    name: production
+#  script:
+#    - source scripts/deploy.sh
   #when: manual
