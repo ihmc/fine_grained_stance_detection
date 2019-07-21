@@ -131,6 +131,7 @@ sashank_categories_sensitive = {
 	]
 }
 
+# These types are not being used currently for sashanks types.
 sashanks_ask_types = {
   "finance_money": [
     "11.1 Send Verbs",

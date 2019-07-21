@@ -373,6 +373,7 @@ def buildParseDict(sentence, trigger, target, modality, ask_who, ask, ask_recipi
 	#parse_dict['ask_when'] = ask_when
 	parse_dict['ask_negation'] = ask_negation
 	parse_dict['is_ask_confidence'] = is_ask_confidence
+	parse_dict['link_id'] = link_id
 	if link_id:
 		parse_dict['url'] = {link_id: links.get(link_id)}
 	else:
@@ -542,7 +543,6 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 	arg_tmp = []
 	word_number = []
 	srl = predictor.predict(sentence=sentence)
-	#print(srl)
 	verbs = srl['verbs']
 	words = [word.lower() for word in srl['words']]
 	descriptions = []
@@ -598,6 +598,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			ask = ' '.join(arg1)
 			ask_when = ' '.join(arg_tmp)
 			confidence = 'low'
+
 
 	if 'GIVE' in t_ask_types:
 		if 'you' in arg2:
@@ -865,6 +866,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 		if 'VBD' in parse_tree or 'VBN' in parse_tree:
 			is_past_tense = True
 
+		small_root = ''
 		root_dependent_gloss = ''
 		aux_dependent = ''
 		aux_governor  = ''
@@ -889,27 +891,29 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 				base_word = dependency['dependentGloss']
 				base_words.append(dependency['dependentGloss'])
 
-			'''
-			if dependency['dep'] == 'root':
+			if dependency['dep'] == 'root' and not small_root:
 				small_root = dependency['dependentGloss']
+				base_words.append(dependency['dependentGloss'])
 
-			if dependency['governorGloss'] == dependencies[0]['dependentGloss'] and dependency['governerGloss'] == small_root:
+			#TODO there is a way to simplify this whole operation here. Need to figure it out later.
+			'''
+			if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governerGloss'] == small_root:
 				if dependency['dep'] == 'conj':
 			'''
 				
 			if dependency['dep'] == 'conj':
-				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
 					conj_base_word = dependency['dependentGloss']
 					base_words.append(dependency['dependentGloss'])
 			if dependency['dep'] == 'dep':
 				dep_governor_gloss = dependency['governorGloss']
 				dep_dependent_gloss = dependency['dependentGloss']
 				dep_dep = dependency['dep']
-				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
 					dep_base_word = dependency['dependentGloss']
 					base_words.append(dependency['dependentGloss'])
 			if dependency['dep'] == 'ccomp':
-				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
 					ccomp_base_word = dependency['dependentGloss']
 					base_words.append(dependency['dependentGloss'])
 				elif dep_dep == 'dep' and dependency['governorGloss'] == dep_dependent_gloss:
@@ -917,7 +921,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 							ccomp_base_word = dependency['dependentGloss']
 							base_words.append(dependency['dependentGloss'])
 			if dependency['dep'] == 'xcomp':
-				if dependency['governorGloss'] == dependencies[0]['dependentGloss']:
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
 					xcomp_base_word = dependency['dependentGloss']
 					base_words.append(dependency['dependentGloss'])
 
