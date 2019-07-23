@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    deployapp: ask_detection
+  name: ask_detection
+  namespace: ased-k8s-panacea-development
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      deployapp: ask_detection
+  template:
+    metadata:
+      labels:
+        deployapp: ask_detection
+    spec:
+      securityContext:
+        runAsUser: 1100
+        fsGroup: 1100
+      containers:
+      - image: registry.ased.io/panacea/ask_detction
+        name: ask_detection
+        ports:
+        - containerPort: 5000 # Change this to your running port
+      imagePullSecrets:
+      - name: regcred

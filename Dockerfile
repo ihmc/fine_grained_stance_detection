@@ -15,6 +15,12 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+RUN useradd -ms /bin/bash vault
+RUN usermod -u 1001 vault
+RUN groupmod -g 1001 vault
+RUN chown -R vault:vault /app
+USER vault
+
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
 
