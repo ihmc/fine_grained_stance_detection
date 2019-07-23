@@ -16,8 +16,8 @@ WORKDIR /app
 COPY . /app
 
 RUN useradd -ms /bin/bash vault
-RUN usermod -u 1001 vault
-RUN groupmod -g 1001 vault
+RUN usermod -u 1100 vault
+RUN groupmod -g 1100 vault
 RUN chown -R vault:vault /app
 USER vault
 
