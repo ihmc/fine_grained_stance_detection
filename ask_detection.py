@@ -443,7 +443,8 @@ def getNLPParse(sentence):
 	sentence = sentence.lower()
 	annotators = '/?annotators=ssplit,tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
-	url = coreNLP_server + annotators
+	coreNLP_ased = 'http://10.108.18.14:9000'
+	url = coreNLP_ased + annotators
 
 	return requests.post(url, data=sentence.encode(encoding='UTF-8',errors='ignore'))
 
