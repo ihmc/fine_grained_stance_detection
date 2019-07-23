@@ -952,6 +952,22 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 						link_exists = True
 						break
 
+					child_dependent_nums = []
+					#TODO Need to figure out if breaking here is appropriate or if I should build a list of all the dependencies with the verb as the dependentGloss.
+					for dependency in dependencies:
+						if base_word == dependency['dependentGloss']:
+							verb_dependent_num = dependency['dependent']
+							break
+					for dependency in dependencies:
+						if dependency['governor'] == verb_dependent_num:
+							child_dependent_nums.append(dependency['dependent'])
+					for child_dependent_num in child_dependent_nums:
+						for dependency in dependencies:
+							if child_dependent_num == dependency['governor'] and dependency['dependentGloss'] in link_strings[index].lower():
+								link_id = link_ids[index]
+								link_exists = True
+								break
+
 			ask_details = processWord(base_word, rebuilt_sentence, ask_procedure, ask_negation, dependencies, is_past_tense, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
 			if ask_details:
 				line_parse_matches.append(ask_details)
@@ -966,6 +982,22 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 								link_id = link_ids[index]
 								link_exists = True
 								break
+
+							child_dependent_nums = []
+							#TODO Need to figure out if breaking here is appropriate or if I should build a list of all the dependencies with the verb as the dependentGloss.
+							for dependency in dependencies:
+								if verb == dependency['dependentGloss']:
+									verb_dependent_num = dependency['dependent']
+									break
+							for dependency in dependencies:
+								if dependency['governor'] == verb_dependent_num:
+									child_dependent_nums.append(dependency['dependent'])
+							for child_dependent_num in child_dependent_nums:
+								for dependency in dependencies:
+									if child_dependent_num == dependency['governor'] and dependency['dependentGloss'] in link_strings[index].lower():
+										link_id = link_ids[index]
+										link_exists = True
+										break
 
 					ask_details = processWord(verb, rebuilt_sentence, ask_procedure, ask_negation, dependencies, is_past_tense, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
 					if ask_details:
