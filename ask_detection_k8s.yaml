@@ -19,7 +19,7 @@ spec:
         runAsUser: 1100
         fsGroup: 1100
       containers:
-      - image: registry.ased.io/panacea/ask_detction
+      - image: registry.ased.io/panacea/ask_detection
         name: ask-detection
         ports:
         - containerPort: 5000 # Change this to your running port
