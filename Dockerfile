@@ -17,6 +17,7 @@ COPY . /app
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --trusted-host pypi.python.org -r requirements.txt
+RUN python -m spacy download en_core_web_sm
 
 RUN useradd -ms /bin/bash vault
 RUN usermod -u 1100 vault
