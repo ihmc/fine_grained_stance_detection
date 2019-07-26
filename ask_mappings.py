@@ -31,7 +31,11 @@ sashank_categories_sensitive = {
       "rupee",
       "rupees",
       "riyal",
-      "riyals"
+      "riyals",
+      "$",
+      "£",
+      "€",
+      "₹"
    ],
    "finance_info":[
       "bank",
@@ -46,7 +50,10 @@ sashank_categories_sensitive = {
       "irs",
       "fund",
       "account number",
-      "account no"
+      "account no",
+      "direct deposit",
+      "deposit",
+      "beneficiary"
    ],
    "personal":[
       "email",
@@ -92,7 +99,8 @@ sashank_categories_sensitive = {
       "email id",
       "id",
       "user id",
-      "login"
+      "login",
+      "slack"
    ],
    "privileged_information":[
       "report",
@@ -116,7 +124,14 @@ sashank_categories_sensitive = {
       "word doc",
       "doc",
       "slides",
-      "presentation"
+      "presentation",
+      "contract",
+      "wiki",
+      "gitlab",
+      "ased",
+      "testbed",
+      "eval",
+      "irb"
    ],
    "ideology":[
       "human rights",
@@ -145,7 +160,9 @@ sashank_categories_sensitive = {
       "animal",
       "event",
       "donate",
-      "election"
+      "election",
+      "disaster",
+      "relief"
    ],
    "scam_lottery":[
       "lottery",
@@ -158,14 +175,24 @@ sashank_categories_sensitive = {
       "gift",
       "present",
       "gift card",
-      "gifts card"
+      "gifts card",
+      "shop",
+      "store"
    ],
    "scam_job":[
       "job",
       "hiring",
       "work experience",
       "interview",
-      "candidate"
+      "candidate",
+      "indeed",
+      "glassdoor",
+      "linkedin",
+      "LinkedIn",
+      "hackerrank",
+      "leetcode",
+      "triplebyte",
+      "recruiter"
    ],
    "phishing":[
       "link",
@@ -174,7 +201,31 @@ sashank_categories_sensitive = {
       "join us",
       "upload here",
       "apply",
-      "apply here"
+      "apply here",
+      "surveymonkey",
+      "survey monkey",
+      "survey gizmo",
+      "surveygizmo",
+      "doodle",
+      "surveyshare",
+      "survey",
+      "eventbrite",
+      "event brite"
+   ],
+   "work_life":[
+      "leave",
+      "vacation",
+      "sabbatical",
+      "training",
+      "training notice",
+      "notice period",
+      "resignation",
+      "quit",
+      "work from home",
+      "family leave",
+      "temporary work",
+      "temporary work assignment",
+      "sick leave"
    ]
 }
 
