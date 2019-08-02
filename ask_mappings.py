@@ -70,7 +70,11 @@ sashank_categories_sensitive = {
       "mobile no",
       "phone no",
       "mobile num",
-      "phone num"
+      "phone num",
+      "social network",
+      "twitter",
+      "facebook",
+      "social media"
    ],
    "personal_sensitive":[
       "ssn",
@@ -79,7 +83,10 @@ sashank_categories_sensitive = {
       "citizenship",
       "originally from",
       "home address",
-      "signature"
+      "signature",
+      "date of birth",
+      "birth date",
+      "day of birth"
    ],
    "business":[
       "proposal",
