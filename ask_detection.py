@@ -1,6 +1,7 @@
 from allennlp.predictors.predictor import Predictor
 predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar.gz")
 
+import line_profiler
 import unicodedata
 import json
 import nltk
@@ -20,174 +21,39 @@ from nltk.corpus import wordnet as wn
 nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
+from load_resources import preprocess_rules_in_order, catvar_dict, lcs_dict
 from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types
 from catvar_v_alternates import v_alternates
 
 
-modality_lookup = {}
-sentence_modalities = []
-word_specific_rules = []
-
-
-# Url for server hosting coreNLP
-coreNLP_server = 'http://panacea:nlp_preprocessing@simon.arcc.albany.edu:44444'
-
-tsurgeon_class = 'edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon'
-
-project_path = os.path.abspath(os.path.dirname(__file__))
-
-# Path for files needed for catvar processing
-catvar_file = '/catvar.txt'
-lcs_file = '/LCS-Bare-Verb-Classes-Final.txt'
-
-# Url for server hosting coreNLP
-coreNLP_server = 'http://panacea:nlp_preprocessing@simon.arcc.albany.edu:44444'
-
-# When reading in files locally these directorys must be inside the project directory(i.e. mood and modality)
-# They can be named whatever you would like just make sure they exists
-# All files meant to be read in should be in the text directory.
-# The output directory will be filled with the modality results of processing the input files
-input_directory = '/text/'
-output_directory = '/output/'
-rule_directory = '/generalized-templates_v1_will_change_after_working_on_idiosyncraticRules/'
-
-# Rule directories
-# TODO This list will be thinned out as rule sets are chosen for superiority
-generalized_rule_directory = '/generalized-templates_v1_will_change_after_working_on_idiosyncraticRules/'
-generalized_rule_v2_directory = '/generalized-templates_v2/'
-generalized_v3_directory = '/generalized-templates_v3/'
-lexical_item_rule_directory = '/lexical-item-rules/'
-preprocess_rule_directory = '/idiosyncratic/'
-
-# Paths for the tsurgeon java tool
-tregex_directory = '/stanford-tregex-2018-10-16/'
-tsurgeon_script = tregex_directory + 'tsurgeon.sh'
-
-lcs_dict = {}
-with open('.' + lcs_file) as lcs:
-	backup_regex = '\(\s\s:NUMBER \"(.+)\"\s\s:NAME \"(.+)\"\s\s:WORD \((.*)\) \)'
-	unit_regex = ':NUMBER \"(.+)\"\s*:NAME \"(.+)\"\s*:WORDS \((.*)\)' 
-	lines = lcs.readlines() 
-	file_as_string = ''
-	for line in lines:
-		file_as_string += line
-
-	matches = re.findall(unit_regex, file_as_string, re.MULTILINE)
-	#print(matches)
-	for match in matches:
-		lcs_key = match[0] + ' ' + match[1]
-		word_list = match[2].split()
-		lcs_dict[lcs_key] = word_list	
-
-#print(lcs_dict)
-print('LCS dictionary created')
-
-test_list = []
 # catvar_alternates_dict is a dictionary where each key has an array of verbal words from the catvar file
 # that exist on a line with more than 1 verbal form. This is to cover cases when a small spelling change is present
 # in catvar or when other verbal words exist but were are not a part of the catvar_dict here
 catvar_alternates_dict = v_alternates
-catvar_dict = {}
-with open('.' + catvar_file) as catvar:
-	for entry in catvar:
-		'''
-		v_entries = []
-		#if '_V' not in entry_pieces[0]:
-		entry_pieces = entry.split('#')
-		count = 0
-		for index, entry_piece in enumerate(entry_pieces):
-			beg_test_word = entry_pieces[0].split('_')[0]
-			test_word = entry_piece.split('_')[0]
-			if '_V' in entry_piece: #and beg_test_word != test_word:
-				v_word = entry_piece.split('_')[0]
-				count += 1
-				v_entries.append(v_word)
-		if count > 1:#and len(v_entries) < 2:
-			for word in v_entries:
-				alternates_dict[word] = v_entries
-		'''
-		if '_V' in entry:
-			entry_pieces = entry.split('#')
 
-			for entry_piece in entry_pieces:
-				if '_V' in entry_piece:
-					value_piece_no_POS = entry_piece.split('_')[0]
+# Rule directories
+# TODO This list will be thinned out as rule sets are chosen for superiority
+lexical_item_rule_directory = '/lexical-item-rules/'
+preprocess_rule_directory = '/idiosyncratic/'
 
-			for entry_piece in entry_pieces:
-				key_piece_no_POS = entry_piece.split('_')[0]	
-				catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
+# Url for server hosting coreNLP
+coreNLP_server = 'http://panacea:nlp_preprocessing@simon.arcc.albany.edu:44444'
 
-			'''
-			if len(entry_pieces) > 1:
-				# Must create a key for each piece and it's value the first piece
-				for entry_piece in entry_pieces:
-					key_piece_no_POS = entry_piece.split('_')[0]
-					value_piece_no_POS = entry_pieces[0].split('_')[0]
-				catvar_dict[key_piece_no_POS] = {'catvar_value': value_piece_no_POS}
-			else:
-				# If the entry only has one piece then the key and value are the same 
-				piece_no_POS = entry_pieces[0].split('_')[0]
-				catvar_dict[piece_no_POS] = {'catvar_value': piece_no_POS}
-			'''
-		
-#print(catvar_dict, 'catvar dicctionary')
-print('catvar dictionary create')
+# When reading in files locally these directorys must be inside the project directory
+# They can be named whatever you would like just make sure they exists
+# All files meant to be read in should be in the text directory.
+# The output directory will be filled with the results of processing the input files
+input_directory = '/text/'
+output_directory = '/output/'
+rule_directory = '/generalized-templates_v1_will_change_after_working_on_idiosyncraticRules/'
 
-preprocess_rules_in_order = []
-with open('.' + preprocess_rule_directory + 'ORDER.txt', 'r') as rule_order:
-	for rule in rule_order:
-		rule = rule.strip('\n')
-		preprocess_rules_in_order.append(rule)
-
-print('Preprocess rules loaded')
-
-# Reading a provided CSV as a lexicon and parsing out each word and it's modality
-# as well as a list of rules that should apply for each lexical item
-# A sequence of 2 or 3 words can exist as well so those are checked for first
-lexical_items = []
-with open('./ModalityLexiconSubcatTags.csv') as modalityCSV:
-	csv_reader = csv.reader(modalityCSV)
-	for word, pos, modality, rules in csv_reader:
-		lexical_items.append(word)
-		for rule in rules.split("|"):
-			if rule:
-				word_specific_rules.append((word, rule.strip(' '), modality))
-		for pos in pos.split("|"):
-			modality_lookup[(word, pos)] = modality
-
-print("Lexicon loaded")
-
-if not os.path.exists('.' + lexical_item_rule_directory):
-	print('Lexical item rule directory does not exist, creating now');
-	os.mkdir('.' + lexical_item_rule_directory)
-
-
-# Rule here refers to a tuple containing the rule as well as its corresponding lexical item, and modality (lexical item, rule name, modality)
-lexical_specific_rules = []
-for rule in word_specific_rules:
-	if rule[1] + '.txt' not in preprocess_rules_in_order:
-		with open('.' + generalized_v3_directory + rule[1] + '.txt') as rule_file:
-			filled_in_rule = rule_file.read().replace('**', rule[0])
-			rule_name = rule[0] + '-' + rule[2] + '-' + rule[1]
-
-			filled_in_rule = filled_in_rule.replace('TargLabel', 'Targ' + rule[2])
-			filled_in_rule = filled_in_rule.replace('TrigLabel', 'Trig' + rule[2])
-
-		# A new file name is built from the combination of the lexical item and the rule
-		lexical_specific_rule_file = '.' + lexical_item_rule_directory + rule_name + '.txt'
-		#print(lexical_specific_rule_file)
-		rule_dict = {}
-		rule_dict['rule'] = filled_in_rule
-		rule_dict['rule_name'] = rule_name
-		rule_dict['modality'] = rule[2]
-		rule_dict['lexical_item'] = rule[0]
-		lexical_specific_rules.append(rule_dict)
-		with open(lexical_specific_rule_file, 'w+') as lexical_rule:
-			lexical_rule.write(filled_in_rule)
-			
-#print(lexical_specific_rules)
+# Paths for the tsurgeon java tool
+tregex_directory = '/stanford-tregex-2018-10-16/'
+tsurgeon_script = tregex_directory + 'tsurgeon.sh'
+tsurgeon_class = 'edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon'
 
 def getModality(text):
+	sentence_modalities = []
 	text = unicodedata.normalize('NFKC',text)
 
 	# Split input text into sentences
@@ -213,38 +79,27 @@ def getSrl(text, links):
 
 	
 	for line in lines:
-		line_text = line.strip()
 		if not line:
 			continue
+		line_text = line.strip()
 		link_offsets = []
 		link_ids = []
 		link_strings = []
 		match = re.search(pattern, line_text)
+
 		while match:
 			link_offsets.append((match.start(0), match.start(0) + len(match.group(2))))
 			link_ids.append(match.group(1))
 			link_strings.append(match.group(2))
 			line_text = line_text.replace(match.group(0), match.group(2))
 			match = re.search(pattern, line_text)
-		#sentence_srls.extend(parseSrl(line_text.lower(), link_offsets, link_ids, link_strings))
+
 		line_matches = parseSrl(line_text.lower(), link_offsets, link_ids, link_strings, links)
 		if line_matches: 
 			parse_matches.extend(line_matches)
 
 	sorted_matches = sorted(parse_matches, key = lambda k: k['is_ask_confidence'], reverse=True)
 
-	'''
-	# Split input text into sentences
-	sentences = nltk.sent_tokenize(text)
-	sentence_srls = []
-
-	for sentence in sentences:
-		constituency_parse = parseSrl(sentence)
-		sentence_srls.append({"sentence": sentence, "matches": constituency_parse})
-
-
-	return sentence_srls
-	'''
 	return {'email': text, 'matches': sorted_matches}
 
 def readLocalFiles():
@@ -291,13 +146,8 @@ def preprocessSentence(tree):
 	with open('./tree.txt', 'w+') as tree_file:
 		tree_file.write(tree)
 		for rule in preprocess_rules_in_order:
-			#print(rule)
 			# Have to return to the beginning of the file so that the new tree overwrites the previous one.
 			tree_file.seek(0)
-
-			#TODO remove this chunk
-			#with open('.' + preprocess_rule_directory + rule, 'r') as rule_file:
-				#print(rule_file.read())
 
 			# This command is taken out of the tsurgeon.sh file in the coreNLP tregex tool.
 			# The cp option is added so the class will run without being in the same directory 
@@ -444,7 +294,7 @@ def getNLPParse(sentence):
 	annotators = '/?annotators=ssplit,tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
 	coreNLP_ased = 'http://10.108.18.14:9000'
-	url = coreNLP_ased + annotators
+	url = coreNLP_server + annotators
 
 	return requests.post(url, data=sentence.encode(encoding='UTF-8',errors='ignore'))
 
@@ -644,10 +494,12 @@ def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_pa
 	if not ask_action:
 		(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
 
+	'''
 	if trig_and_targs:
 		for trig_and_targ in trig_and_targs:
 			if (trig_and_targ[2] == 'Negation' or trig_and_targ[2] == 'NotSucceed') and word == trig_and_targ[3]:
 				ask_negation = True
+	'''
 
 
 	for ask_type, keywords in sashank_categories_sensitive.items():
@@ -727,18 +579,6 @@ def evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types):
 	else:
 		return 0.1
 
-	'''
-	tense_score = 0.1 if is_past_tense else 1
-
-	if link_exists:
-		return 0.9
-	else:
-		hyper_link_score = 0.1
-	'''
-	#confidence_score = float('%.3f'%((tense_score + ask_who_score + ask_recipient_score + hyper_link_score) / 4))
-
-	#return confidence_score
-
 def parseModality(sentence):
 	parse = []
 	trigger_string = ''
@@ -811,7 +651,7 @@ def parseModality(sentence):
 
 def parseSrl(line, link_offsets, link_ids, link_strings, links):
 	line_parse_matches = []
-	sentences = nltk.sent_tokenize(line)
+	#sentences = nltk.sent_tokenize(line)
 	is_past_tense = False
 	ask_negation = False
 	base_word = ''
@@ -850,7 +690,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 
 		
 
-		preprocessed_tree = preprocessSentence(parse_tree)
+		#preprocessed_tree = preprocessSentence(parse_tree)
 		#print(preprocessed_tree)
 	
 		# Extract all verbs from the constituency parse to be used for fallback if all verbs are not found in the dependencies
@@ -859,7 +699,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 			parse_verbs.append(parse_verb_match[1])
 
 		# We extract the triggers and targets here to check later on if Negation occurred
-		trig_and_targs = extractTrigsAndTargs(preprocessed_tree)
+		#trig_and_targs = extractTrigsAndTargs(preprocessed_tree)
+		trig_and_targs = ''
 		#print(trig_and_targs, '\n\n')
 
 		#TODO need this to be more accurate for each portion not just the whole sentence
@@ -944,7 +785,9 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 			ask_procedure = 'directive'
 
 		for base_word in base_words:
+			link_id = ''
 			link_exists = False
+			ask_negation = False
 			for index, link_offset in enumerate(link_offsets):
 				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
 					link_in_sentence = True
@@ -960,6 +803,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 							verb_dependent_num = dependency['dependent']
 							break
 					for dependency in dependencies:
+						if dependency['dep'] == 'neg' and dependency['governorGloss'] == base_word:
+							ask_negation = True
 						if dependency['governor'] == verb_dependent_num:
 							child_dependent_nums.append(dependency['dependent'])
 					for child_dependent_num in child_dependent_nums:
@@ -975,6 +820,9 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 
 		if parse_verbs:
 			for verb in parse_verbs:
+				link_id = ''
+				link_exists = False
+				ask_negation = False
 				if verb not in base_words:
 					for index, link_offset in enumerate(link_offsets):
 						if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
@@ -991,6 +839,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 									verb_dependent_num = dependency['dependent']
 									break
 							for dependency in dependencies:
+								if dependency['dep'] == 'neg' and dependency['governorGloss'] == verb:
+									ask_negation = True
 								if dependency['governor'] == verb_dependent_num:
 									child_dependent_nums.append(dependency['dependent'])
 							for child_dependent_num in child_dependent_nums:
