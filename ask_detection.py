@@ -278,6 +278,33 @@ def getAskTypes(ask):
 
 	return (s_ask_types, t_ask_types)
 
+def getTAskType(ask):
+	verb_types = []
+	t_ask_types = []
+	catvar_object = catvar_dict.get(ask)
+
+	if catvar_object != None:
+		catvar_word = catvar_object['catvar_value']
+
+		for verb_type, words in lcs_dict.items():
+			if catvar_word in words:
+				verb_types.append(verb_type)
+			else:
+				catvar_word_alternates = catvar_alternates_dict.get(ask)
+				if catvar_word_alternates:
+					for alternate in catvar_word_alternates:
+						if alternate in words:
+							verb_types.append(verb_type)
+							#TODO Ask if this break should be there or if I should get a type for each alternate
+							break
+
+	for vb_type in verb_types:
+		for tomek_ask_type, types in tomeks_ask_types.items():
+				if vb_type in types and tomek_ask_type not in t_ask_types:
+					t_ask_types.append(tomek_ask_type)
+
+	return t_ask_types
+
 # This functions checks to see if the items in a list already exist 
 # in the original list and if not then add them.
 def appendListNoDuplicates(list_to_append, original_list):
@@ -760,9 +787,10 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 							ccomp_base_word = dependency['dependentGloss']
 							base_words.append(dependency['dependentGloss'])
 			if dependency['dep'] == 'xcomp':
-				if dependencies[0]['dependentGloss'] in base_words:
+				check_t_ask_types = getTAskType(dependencies[0]['dependentGloss'])
+				if dependencies[0]['dependentGloss'] in base_words and 'PERFORM' not in check_t_ask_types:
 					base_words.remove(dependencies[0]['dependentGloss'])
-				if dependencies[0]['dependentGloss'] in parse_verbs:
+				if dependencies[0]['dependentGloss'] in parse_verbs and 'PERFORM' not in check_t_ask_types:
 					parse_verbs.remove(dependencies[0]['dependentGloss'])
 				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
 					xcomp_base_word = dependency['dependentGloss']
