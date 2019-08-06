@@ -76,7 +76,6 @@ def getSrl(text, links):
 
 	lines = text_to_process.split('\n')
 
-	
 	for line in lines:
 		if not line:
 			continue
@@ -566,7 +565,7 @@ def evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types):
 	hyper_link_score = 0
 
 	if is_past_tense:
-		return 0.1
+		return 0
 	elif link_exists:
 		return 0.9
 	elif ask and s_ask_types:
@@ -687,7 +686,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 		sentence_begin_char_offset = tokens[0]['characterOffsetBegin']
 		sentence_end_char_offset = tokens[len(tokens) - 1]['characterOffsetEnd']
 
-		
 
 		#preprocessed_tree = preprocessSentence(parse_tree)
 		#print(preprocessed_tree)
@@ -762,6 +760,9 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 							ccomp_base_word = dependency['dependentGloss']
 							base_words.append(dependency['dependentGloss'])
 			if dependency['dep'] == 'xcomp':
+				if dependencies[0]['dependentGloss'] in base_words:
+					base_words.remove(dependencies[0]['dependentGloss'])
+					parse_verbs.remove(dependencies[0]['dependentGloss'])
 				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
 					xcomp_base_word = dependency['dependentGloss']
 					base_words.append(dependency['dependentGloss'])
