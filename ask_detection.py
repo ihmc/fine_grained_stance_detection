@@ -762,6 +762,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 			if dependency['dep'] == 'xcomp':
 				if dependencies[0]['dependentGloss'] in base_words:
 					base_words.remove(dependencies[0]['dependentGloss'])
+				if dependencies[0]['dependentGloss'] in parse_verbs:
 					parse_verbs.remove(dependencies[0]['dependentGloss'])
 				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
 					xcomp_base_word = dependency['dependentGloss']
