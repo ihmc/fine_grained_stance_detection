@@ -257,7 +257,7 @@
 (
  :NUMBER "10.5"
  :NAME "Verbs of Possessional Deprivation : Steal Verbs"
- :WORDS (abduct cadge capture confiscate cop emancipate embezzle exorcise extort extract filch flog grab impound kidnap liberate lift nab pilfer pinch pirate plagiarize purloin reclaim recover redeem regain repossess rescue retrieve rustle seize smuggle snatch sneak sponge steal swipe take thieve wangle weasel winkle withdraw wrest)
+ :WORDS (abduct cadge capture confiscate cop emancipate embezzle exorcise extort extract filch flog grab impound kidnap liberate lift nab pilfer pinch pirate plagiarize purloin reclaim recover redeem regain repossess rescue retrieve rustle seize smuggle snatch sneak sponge steal swipe take thieve wangle weasel winkle withdraw wrest doubt suspect forebode)
  :NON_LEVIN_WORDS (annex apprehend arrest conquer defeat down elicit
                    hijack misappropriate prostrate ransom remount
                    salvage snatch_away solicit subdue vanquish)
