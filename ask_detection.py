@@ -378,8 +378,6 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 			ask = dobj
 			ask_action = root
 			confidence = 'low'
-		if neg_gov_gloss == base_word:
-			ask_negation_dep_based = dep_neg_exists
 	else:
 		if nsubj_gov_gloss == base_word and dobj_gov_gloss == base_word and iobj_gov_gloss == base_word:
 			ask_who = nsubj
@@ -387,7 +385,7 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 			ask_recipient = iobj
 			ask_action = root
 			confidence = 'low'
-		elif 'GET' in t_ask_types or 'PERFORM' in t_ask_types:
+		elif 'LOSE' in t_ask_types or 'GAIN' in t_ask_types or 'PERFORM' in t_ask_types:
 			ask = dobj
 			ask_recipient = nsubj
 			ask_action = root
@@ -397,8 +395,9 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 			ask = dobj
 			ask_action = root
 			confidence = 'low'
-		if neg_gov_gloss == base_word:
-			ask_negation_dep_based = dep_neg_exists
+
+	if neg_gov_gloss == base_word:
+		ask_negation_dep_based = dep_neg_exists
 	
 	return(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, base_word, confidence)
 
@@ -464,7 +463,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			ask_recipient = ' '.join(arg0)
 			ask_when = ' '.join(arg_tmp)
 			confidence = 'low'
-		elif 'GET' in t_ask_types:
+		elif 'LOSE' in t_ask_types or 'GAIN' in t_ask_types:
 			ask = ' '.join(arg1)
 			ask_recipient = ' '.join(arg0)
 			ask_when = ' '.join(arg_tmp)
@@ -476,20 +475,22 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			confidence = 'low'
 
 
+	# If this is used again we need a case for LOSE
+	'''
 	if 'GIVE' in t_ask_types:
 		if 'you' in arg2:
-			t_ask_types = ["GET"]
+			t_ask_types = ["GAIN"]
 		elif 'you' in arg0:
 			t_ask_types = ["GIVE"]
-		elif 'GET' in t_ask_types:
+		elif 'GAIN' in t_ask_types:
 			if 'you' in arg0:
-				t_ask_types = ["GET"]
+				t_ask_types = ["GAIN"]
 			if 'i' in arg0 or 'we' in arg0:
 				t_ask_types = ["GIVE"]
 				t_ask_confidence = 'low'
-	elif 'GET' in t_ask_types:
+	elif 'GAIN' in t_ask_types:
 		if 'you' in arg0:
-			t_ask_types = ["GET"]
+			t_ask_types = ["GAIN"]
 		elif 'i' in arg0 or 'we' in arg0:
 			t_ask_types = ["GIVE"]
 			t_ask_confidence = 'low'
@@ -498,7 +499,8 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 			if 'you' in arg2:
 				t_ask_types = ["GIVE"]
 			elif 'you' in arg0:
-				t_ask_types = ["GET"]
+				t_ask_types = ["GAIN"]
+	'''
 
 	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number)
 
@@ -540,13 +542,13 @@ def processWord(word, sentence, ask_procedure, ask_negation, dependencies, is_pa
 	if 'PERFORM' in t_ask_types:
 		if link_exists:
 			t_ask_types = ['PERFORM']
-		#Remove PERFORM if GIVE or GET has also been chosen.
-		#NOTE It should not be the case that GIVE and GET are both present at this time.
+		#Remove PERFORM if GIVE or GAIN has also been chosen.
+		#NOTE It should not be the case that GIVE and GAIN are both present at this time.
 		elif len(t_ask_types) > 1: 
 			t_ask_types.remove('PERFORM')
 
 	
-	if 'GIVE' not in t_ask_types and 'GET' not in t_ask_types and 'PERFORM' not in t_ask_types:
+	if 'GIVE' not in t_ask_types and 'LOSE' not in t_ask_types and 'GAIN' not in t_ask_types and 'PERFORM' not in t_ask_types:
 		if (link_exists or link_in_sentence) and ask:
 			t_ask_types = ['PERFORM']
 
