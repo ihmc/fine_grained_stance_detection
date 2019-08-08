@@ -1336,7 +1336,7 @@
 (
  :NUMBER "29.5.a"
  :NAME "Conjecture Verbs / -to be"
- :WORDS (desire doubt expect feel hold know maintain mean recognize suspect)
+ :WORDS (desire doubt expect feel hold know maintain mean recognize suspect lose disown deny forfeit relinquish sacrifice suffer grieve anguish mourn)
  :NON_LEVIN_WORDS (anticipate let require)
  :COLLOCATIONS ("to")
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
