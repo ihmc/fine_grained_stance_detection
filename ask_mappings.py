@@ -312,13 +312,38 @@ sashanks_ask_types = {
 }
 
 tomeks_ask_types = {
-  "GET": [
+  "LOSE": [ #verbs may need to be used differently in their passive (subject) vs active form (DO) for this class but not focused on that for now
+    "10.5 Verbs of Possessional Deprivation : Steal Verbs",
+    "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
+    "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
+    "17.1 Throw Verbs",
+    "17.2.i Pelt Verbs",
+    "17.2.ii Pelt Verbs -- stone",
+    "18.1.a Hit Verbs - Change of State / -with",
+    "18.1.b Hit Verbs - Change of State",
+    "18.1.c Hit Verbs  - Locational / -at/with",
+    "18.1.d Hit Verbs  - Locational / against",
+    "18.1.e Hit Verbs  - Change of State / together",
+    "18.2.a Swat Verbs",
+    "18.2.b Swat Verbs  - Locational",
+    "18.3 Spank Verbs",
+    "18.4.a Nonagentive Verbs of Impact by Contact - Locational",
+    "18.4.b Nonagentive Verbs of Impact by Contact - Change of State",
+    "19.a.i Poke Verbs",
+    "19.a.ii Poke Verbs - Change of State",
+    "19.b Poke Verbs - Locational / -through",
+    "19.c.i Poke Verbs / -with",
+    "19.c.ii Poke Verbs - Change of State / -with",
+    "19.d Poke Verbs - Locational / -with"
+    #adding these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all!
+  ],
+  "GAIN": [
     "13.5.1.a Get - No Exchange",
     "13.5.1.b.ii Get - Exchange",
     "13.5.2.a Obtain - No Exchange (CAUSE)",
     "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
-    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)",
-    "32.1 Want Verbs"
+    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)"
+    #"32.1 Want Verbs"
   ],
   "GIVE": [
     "11.1 Send Verbs",
@@ -328,7 +353,7 @@ tomeks_ask_types = {
     "13.3 Verbs of Future Having",
     "13.4.1.a Verbs of Fulfilling - Possessional / -to",
     "13.4.1.b Verbs of Fulfilling - Change of State / -with",
-	"32.1 Want Verbs"
+    "32.1 Want Verbs"
   ],
   "APPLY": [],
   "PERFORM": [
