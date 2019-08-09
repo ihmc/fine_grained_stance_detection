@@ -312,7 +312,8 @@ sashanks_ask_types = {
 }
 
 tomeks_ask_types = {
-  "LOSE": [ #verbs may need to be used differently in their passive (subject) vs active form (DO) for this class but not focused on that for now
+  "LOSE": [ #verbs may need to be used differently in their passive (victim in subject) vs active form (victim in DO) for this class but not focused on that for now
+    "10.5.1.a Panacea Lose related Verbs"
     "10.5 Verbs of Possessional Deprivation : Steal Verbs",
     "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
     "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
@@ -335,7 +336,11 @@ tomeks_ask_types = {
     "19.c.i Poke Verbs / -with",
     "19.c.ii Poke Verbs - Change of State / -with",
     "19.d Poke Verbs - Locational / -with"
-    #adding these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all!
+    #added these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all!
+    #added (cripple martyr orphan outlaw) from "29.7 Orphan Verbs" to "10.5 Verbs of Possessional Deprivation : Steal Verbs"
+    #added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc
+    #moved additionally added verbs in 10.5 to a new category called "10.5.1.a Panacea Lose related Verbs"
+           
   ],
   "GAIN": [
     "13.5.1.a Get - No Exchange",

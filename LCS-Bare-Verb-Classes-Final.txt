@@ -257,11 +257,19 @@
 (
  :NUMBER "10.5"
  :NAME "Verbs of Possessional Deprivation : Steal Verbs"
- :WORDS (abduct cadge capture confiscate cop emancipate embezzle exorcise extort extract filch flog grab impound kidnap liberate lift nab pilfer pinch pirate plagiarize purloin reclaim recover redeem regain repossess rescue retrieve rustle seize smuggle snatch sneak sponge steal swipe take thieve wangle weasel winkle withdraw wrest doubt suspect forebode lose disown deny forfeit relinquish sacrifice suffer grieve anguish mourn)
+ :WORDS (abduct cadge capture confiscate cop emancipate embezzle exorcise extort extract filch flog grab impound kidnap liberate lift nab pilfer pinch pirate plagiarize purloin reclaim recover redeem regain repossess rescue retrieve rustle seize smuggle snatch sneak sponge steal swipe take thieve wangle weasel winkle withdraw wrest)
  :NON_LEVIN_WORDS (annex apprehend arrest conquer defeat down elicit
                    hijack misappropriate prostrate ransom remount
                    salvage snatch_away solicit subdue vanquish)
  :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "10.5.1.a"
+ :NAME "Panacea Lose related Verbs"
+ :WORDS (doubt suspect forebode lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn cripple martyr orphan outlaw butcher bully)
+ :NON_LEVIN_WORDS ()
+ :COLLOCATIONS ()
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
 ) 
 (
