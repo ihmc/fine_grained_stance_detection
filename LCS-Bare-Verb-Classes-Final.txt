@@ -1483,6 +1483,14 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
+ :NUMBER "30.2.1.a.i"
+ :NAME "Panacea Sight Verbs / Bare NP"
+ :WORDS (examine eye glimpse inspect investigate note observe overhear perceive savor scan scent scrutinize study survey view watch witness cancel check click confirm connect consider contact contain contains copy copy-and-paste delete deliver download execute find help highlight look note notify observe open paste pay provide read receive refer register reply request reset respond review rsvp see send share start submit support take test try type unsubscribe update visit watch)
+ :NON_LEVIN_WORDS (cross-examine experience peruse spy)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
  :NUMBER "30.2.a.ii"
  :NAME "Sight Verbs / Bare NP"
  :WORDS (descry discover espy examine eye glimpse inspect investigate note observe overhear perceive recognize regard savor scan scent scrutinize sight spot spy study survey view watch witness)
