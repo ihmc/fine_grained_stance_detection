@@ -257,7 +257,7 @@
 (
  :NUMBER "10.5"
  :NAME "Verbs of Possessional Deprivation : Steal Verbs"
- :WORDS (abduct cadge capture confiscate cop emancipate embezzle exorcise extort extract filch flog grab impound kidnap liberate lift nab pilfer pinch pirate plagiarize purloin reclaim recover redeem regain repossess rescue retrieve rustle seize smuggle snatch sneak sponge steal swipe take thieve wangle weasel winkle withdraw wrest doubt suspect forebode)
+ :WORDS (abduct cadge capture confiscate cop emancipate embezzle exorcise extort extract filch flog grab impound kidnap liberate lift nab pilfer pinch pirate plagiarize purloin reclaim recover redeem regain repossess rescue retrieve rustle seize smuggle snatch sneak sponge steal swipe take thieve wangle weasel winkle withdraw wrest doubt suspect forebode lose disown deny forfeit relinquish sacrifice suffer grieve anguish mourn)
  :NON_LEVIN_WORDS (annex apprehend arrest conquer defeat down elicit
                    hijack misappropriate prostrate ransom remount
                    salvage snatch_away solicit subdue vanquish)
@@ -1336,7 +1336,7 @@
 (
  :NUMBER "29.5.a"
  :NAME "Conjecture Verbs / -to be"
- :WORDS (desire doubt expect feel hold know maintain mean recognize suspect lose disown deny forfeit relinquish sacrifice suffer grieve anguish mourn)
+ :WORDS (desire doubt expect feel hold know maintain mean recognize suspect)
  :NON_LEVIN_WORDS (anticipate let require)
  :COLLOCATIONS ("to")
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
