@@ -334,8 +334,7 @@ tomeks_ask_types = {
     "19.b Poke Verbs - Locational / -through",
     "19.c.i Poke Verbs / -with",
     "19.c.ii Poke Verbs - Change of State / -with",
-    "19.d Poke Verbs - Locational / -with",
-    "29.5.a Conjecture Verbs / -to be"
+    "19.d Poke Verbs - Locational / -with"
     #adding these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all!
   ],
   "GAIN": [
