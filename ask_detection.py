@@ -609,7 +609,10 @@ def evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_ty
 	elif link_exists:
 		return 0.9
 	elif 'PERFORM' in t_ask_types:
-		return 0.8
+		if s_ask_types:
+			return 0.8
+		else:
+			return 0.7
 	elif ask and s_ask_types:
 		return 0.75
 	elif ask:
