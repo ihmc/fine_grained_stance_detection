@@ -1409,9 +1409,24 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
+ :NUMBER "29.7"
+ :NAME "Panacea Orphan Verbs"
+ :WORDS (cripple martyr orphan outlaw pauper widow)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
  :NUMBER "29.8.a"
  :NAME "Captain Verbs / Beneficiary"
  :WORDS (boss bully butcher butler caddy captain champion chaperone chauffeur clerk coach cox crew doctor emcee escort guard host model mother nurse partner pilot pioneer police referee shepherd skipper sponsor star tailor tutor umpire understudy usher valet volunteer witness)
+ :MISSING_WORDS (prostitute)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.8.a"
+ :NAME "Panacea Captain Verbs / Beneficiary"
+ :WORDS (boss bully butcher)
  :MISSING_WORDS (prostitute)
  :COLLOCATIONS ("for")
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
@@ -1573,6 +1588,23 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 )
 (
+ :NUMBER "31.1.a"
+ :NAME "Panacea Amuse Verbs / -with"
+ :WORDS (abash afflict affront aggravate agitate agonize alarm alienate anger annoy antagonize appal assuage baffle beguile bewilder bewitch boggle bore bother bug confound confuse crush cut daunt deject demolish demoralize depress devastate disappoint disarm discombobulate discomfit discompose disconcert discourage disgrace disgruntle disgust dishearten disillusion dismay dispirit displease disquiet dissatisfy distract distress disturb embarass enrage exasperate exhaust flabbergast fluster frighten frustrate grieve harass haunt horrify humiliate hurt hypnotize infuriate insult intimidate intoxicate irk irritate madden mollify mortify muddle nauseate obsess offend outrage overawe overwhelm pain perplex perturb plague preoccupy provoke puzzle rankle repel repulse revolt ruffle sadden scandalize scare shake shame shock sicken spook stagger sting stir strike stump stun stupefy tantalize tease terrify terrorize threaten thrill throw tire torment trouble try unnerve unsettle uplift upset vex weary worry wound)
+ :NON_LEVIN_WORDS (adulate aggrieve alleviate
+                   befuddle budge clinch debase disserve
+                   divert embarrass endanger enervate exhort
+                   fatigue foil fool harm impair imperil
+                   inconvenience infatuate inflame innervate
+                   instigate jade manipulate menace mitigate molest
+                   overpower overrule palpate pester pestle
+                   propitiate quench
+                   taunt
+                   torture transfix transgress violate)
+ :COLLOCATIONS ("in" "with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
+(
  :NUMBER "31.1.b"
  :NAME "Amuse Verbs / -that"
  :WORDS (abash affect afflict affront aggravate agitate agonize alarm alienate amaze amuse anger annoy antagonize appal appease arouse assuage astonish astound awe baffle beguile bewilder bewitch boggle bore bother bug calm captivate chagrin charm cheer chill comfort concern confound confuse console content convince cow crush cut daunt daze dazzle deject delight demolish demoralize depress devastate disappoint disarm discombobulate discomfit discompose disconcert discourage disgrace disgruntle disgust dishearten disillusion dismay dispirit displease disquiet dissatisfy distract distress disturb dumbfound elate electrify embarass embolden enchant encourage engage engross enlighten enliven enrage enrapture entertain enthrall enthuse entice entrance exasperate excite exhaust exhilarate fascinate faze flabbergast flatter floor fluster frighten frustrate gall galvanize gladden gratify grieve harass haunt hearten horrify humble humiliate hurt hypnotize impress incense infuriate inspire insult interest intimidate intoxicate intrigue invigorate irk irritate jar jollify jolt lull madden mesmerize miff mollify mortify move muddle mystify nauseate nettle numb obsess offend outrage overawe overwhelm pacify pain peeve perplex perturb pique placate plague please preoccupy provoke puzzle rankle reassure refresh relax relieve repel repulse revitalize revolt rile ruffle sadden satisfy scandalize scare shake shame shock sicken sober solace soothe spellbind spook stagger startle stimulate sting stir strike stump stun stupefy surprise tantalize tease tempt terrify terrorize threaten thrill throw tickle tire titillate torment touch transport trouble try unnerve unsettle uplift upset vex weary worry wound wow)
@@ -1608,6 +1640,17 @@
                    distrust dread envy execrate fear hate implicate
                    indulge invoke involve lament loathe mourn pamper
                    pity reaffirm regret resent revenge rue vindicate)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.b"
+ :NAME "Panacea Admire Verbs - Positive / -in"
+ :WORDS ()
+ :NON_LEVIN_WORDS (abhor deplore despise detest disdain dislike
+                   distrust dread envy execrate fear hate implicate
+                   indulge lament loathe mourn
+                   pity regret resent revenge rue vindicate)
  :COLLOCATIONS ("in")
  :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
 ) 
@@ -1690,6 +1733,22 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
+ :NUMBER "31.3.c"
+ :NAME "Panacea Marvel Verbs / -for"
+ :WORDS (bleed care cry fear grieve mourn weep)
+ :NON_LEVIN_WORDS (repent)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.d"
+ :NAME "Panacea Marvel Verbs / -from"
+ :WORDS (ache hurt suffer)
+ :NON_LEVIN_WORDS ()
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
  :NUMBER "31.3.e"
  :NAME "Marvel Verbs / -in"
  :WORDS (bask believe delight exult glory luxuriate rejoice revel wallow)
@@ -1706,6 +1765,14 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
+ :NUMBER "31.3.f"
+ :NAME "Panacea Marvel Verbs / -of"
+ :WORDS (beware despair disapprove sicken tire weary)
+ :MISSING_WORDS (repent)
+ :COLLOCATIONS ("of")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
  :NUMBER "31.3.g"
  :NAME "Marvel Verbs / -on"
  :WORDS (groove)
@@ -1718,6 +1785,14 @@
  :NAME "Marvel Verbs / -over"
  :WORDS (anger anguish delight enthuse exult fret fume gloat grieve gush hunger marvel moon mope mourn obsess puzzle rage rave rejoice rhapsodize salivate seethe sorrow wonder worry)
  :NON_LEVIN_WORDS (meditate muse ruminate triumph)
+ :COLLOCATIONS ("over")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.h"
+ :NAME "Panacea Marvel Verbs / -over"
+ :WORDS (anger anguish exult fret fume gloat grieve gush hunger marvel mope mourn obsess puzzle rage rave rhapsodize salivate seethe sorrow wonder worry)
+ :NON_LEVIN_WORDS (ruminate)
  :COLLOCATIONS ("over")
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
@@ -1796,6 +1871,19 @@
 (
  :NUMBER "33.b"
  :NAME "Judgment Verbs - Negative / -for/as"
+ :WORDS (abuse backbite calumniate castigate censure chasten chastise chide condemn criticize decry defame denigrate denounce deprecate deride disparage fault fine impeach insult lambaste malign mock penalize persecute prosecute punish rebuke reprimand reproach reprove revile ridicule scold scorn shame snub upbraid victimize vilify)
+ :NON_LEVIN_WORDS (accurse applaud assail assault attack avenge believe
+                   belittle betray blame blaspheme confront curse damn
+                   deceive defend degrade discipline dishonor
+                   double-cross doubt excoriate excuse felicitate gibe
+                   imprecate incriminate indict interrogate oppress
+                   overweigh sanction slander stultify trick wrong)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "33.b"
+ :NAME "Panacea Judgment Verbs - Negative / -for/as"
  :WORDS (abuse backbite calumniate castigate censure chasten chastise chide condemn criticize decry defame denigrate denounce deprecate deride disparage fault fine impeach insult lambaste malign mock penalize persecute prosecute punish rebuke reprimand reproach reprove revile ridicule scold scorn shame snub upbraid victimize vilify)
  :NON_LEVIN_WORDS (accurse applaud assail assault attack avenge believe
                    belittle betray blame blaspheme confront curse damn

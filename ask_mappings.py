@@ -313,7 +313,7 @@ sashanks_ask_types = {
 
 tomeks_ask_types = {
   "LOSE": [ #verbs may need to be used differently in their passive (victim in subject) vs active form (victim in DO) for this class but not focused on that for now
-    "10.5.1.a Panacea Lose related Verbs"
+    "10.5.1.a Panacea Lose related Verbs",
     "10.5 Verbs of Possessional Deprivation : Steal Verbs",
     "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
     "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
@@ -335,7 +335,25 @@ tomeks_ask_types = {
     "19.b Poke Verbs - Locational / -through",
     "19.c.i Poke Verbs / -with",
     "19.c.ii Poke Verbs - Change of State / -with",
-    "19.d Poke Verbs - Locational / -with"
+    "19.d Poke Verbs - Locational / -with",
+    "29.7 Panacea Orphan Verbs",
+    "29.8.a Panacea Captain Verbs / Beneficiary",
+    "31.1.a Panacea Amuse Verbs / -with",
+    "31.2.b Panacea Admire Verbs - Positive / -in",
+    "31.2.d Admire Verbs - Negative / -for/as",
+    "31.3.c Panacea Marvel Verbs / -for",
+    "31.3.d Panacea Marvel Verbs / -from",
+    "31.3.f Panacea Marvel Verbs / -of",
+    "31.3.h Panacea Marvel Verbs / -over",
+    "33.b Panacea Judgment Verbs - Negative / -for/as",
+    "37.8.a Complain Verbs / -that/to",
+    "37.8.b Complain Verbs / -about/to",
+    "42.1.a Murder Verbs - Kill",
+    "42.1.c Murder Verbs - General",
+    "42.2 Poison Verbs",
+    "44.a Destroy Verbs / -with",
+    "48.2 Verbs of Disappearance",
+    "51.2 Leave Verbs"
     #added these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all!
     #added (cripple martyr orphan outlaw) from "29.7 Orphan Verbs" to "10.5 Verbs of Possessional Deprivation : Steal Verbs"
     #added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc
