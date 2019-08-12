@@ -93,7 +93,7 @@ def getSrl(text, links):
 			line_text = line_text.replace(match.group(0), match.group(2))
 			match = re.search(pattern, line_text)
 
-		line_matches = parseSrl(line_text.lower(), link_offsets, link_ids, link_strings, links)
+		line_matches = parseSrl(line_text, link_offsets, link_ids, link_strings, links)
 		if line_matches: 
 			framing_matches.extend(line_matches[0])
 			ask_matches.extend(line_matches[1])
@@ -318,7 +318,6 @@ def appendListNoDuplicates(list_to_append, original_list):
 	return original_list
 
 def getNLPParse(sentence):
-	sentence = sentence.lower()
 	annotators = '/?annotators=ssplit,tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
 	coreNLP_ased = 'http://10.108.18.14:9000'
