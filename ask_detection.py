@@ -93,7 +93,7 @@ def getSrl(text, links):
 			line_text = line_text.replace(match.group(0), match.group(2))
 			match = re.search(pattern, line_text)
 
-		line_matches = parseSrl(line_text.lower(), link_offsets, link_ids, link_strings, links)
+		line_matches = parseSrl(line_text, link_offsets, link_ids, link_strings, links)
 		if line_matches: 
 			framing_matches.extend(line_matches[0])
 			ask_matches.extend(line_matches[1])
@@ -318,7 +318,6 @@ def appendListNoDuplicates(list_to_append, original_list):
 	return original_list
 
 def getNLPParse(sentence):
-	sentence = sentence.lower()
 	annotators = '/?annotators=ssplit,tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
 	coreNLP_ased = 'http://10.108.18.14:9000'
@@ -609,7 +608,10 @@ def evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_ty
 	elif link_exists:
 		return 0.9
 	elif 'PERFORM' in t_ask_types:
-		return 0.8
+		if s_ask_types:
+			return 0.8
+		else:
+			return 0.7
 	elif ask and s_ask_types:
 		return 0.75
 	elif ask:
@@ -627,7 +629,12 @@ def getBaseWordsPos(base_word_dependents, tokens):
 				base_words_pos.append(token['pos'])
 
 	return base_words_pos
-		
+
+def isVerbNegated(verb, dependencies):
+	for dependency in dependencies:
+		if dependency['dep'] == 'neg' and dependency['governorGloss'] == verb:
+			return True
+	return False
 
 def parseModality(sentence):
 	parse = []
@@ -848,10 +855,14 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 		if not nsubj_exists:
 			ask_procedure = 'directive'
 
+
 		for base_word_index, base_word in enumerate(base_words):
 			link_id = ''
 			link_exists = False
 			ask_negation = False
+
+			ask_negation = isVerbNegated(base_word, dependencies)
+
 			for index, link_offset in enumerate(link_offsets):
 				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
 					link_in_sentence = True
@@ -867,8 +878,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 							verb_dependent_num = dependency['dependent']
 							break
 					for dependency in dependencies:
-						if dependency['dep'] == 'neg' and dependency['governorGloss'] == base_word:
-							ask_negation = True
 						if dependency['governor'] == verb_dependent_num:
 							child_dependent_nums.append(dependency['dependent'])
 					for child_dependent_num in child_dependent_nums:
@@ -892,6 +901,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 				link_exists = False
 				ask_negation = False
 				if verb not in base_words:
+					ask_negation = isVerbNegated(verb, dependencies)
+
 					for index, link_offset in enumerate(link_offsets):
 						if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
 							link_in_sentence = True
@@ -907,8 +918,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 									verb_dependent_num = dependency['dependent']
 									break
 							for dependency in dependencies:
-								if dependency['dep'] == 'neg' and dependency['governorGloss'] == verb:
-									ask_negation = True
 								if dependency['governor'] == verb_dependent_num:
 									child_dependent_nums.append(dependency['dependent'])
 							for child_dependent_num in child_dependent_nums:
