@@ -265,7 +265,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
 ) 
 (
- :NUMBER "10.5.1.a"
+ :NUMBER "10.5.p"
  :NAME "Panacea Lose related Verbs"
  :WORDS (doubt suspect forebode lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn cripple martyr orphan outlaw butcher bully)
  :NON_LEVIN_WORDS ()
@@ -1409,7 +1409,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "29.7"
+ :NUMBER "29.7.p"
  :NAME "Panacea Orphan Verbs"
  :WORDS (cripple martyr orphan outlaw pauper widow)
  :COLLOCATIONS ()
@@ -1424,7 +1424,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "29.8.a"
+ :NUMBER "29.8.a.p"
  :NAME "Panacea Captain Verbs / Beneficiary"
  :WORDS (boss bully butcher)
  :MISSING_WORDS (prostitute)
@@ -1498,7 +1498,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "30.2.1.a.i"
+ :NUMBER "30.2.a.i.p"
  :NAME "Panacea Sight Verbs / Bare NP"
  :WORDS (examine eye glimpse inspect investigate note observe overhear perceive savor scan scent scrutinize study survey view watch witness cancel check click confirm connect consider contact contain contains copy copy-and-paste delete deliver download execute find help highlight look note notify observe open paste pay provide read receive refer register reply request reset respond review rsvp see send share start submit support take test try type unsubscribe update visit watch)
  :NON_LEVIN_WORDS (cross-examine experience peruse spy)
@@ -1588,7 +1588,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 )
 (
- :NUMBER "31.1.a"
+ :NUMBER "31.1.a.p"
  :NAME "Panacea Amuse Verbs / -with"
  :WORDS (abash afflict affront aggravate agitate agonize alarm alienate anger annoy antagonize appal assuage baffle beguile bewilder bewitch boggle bore bother bug confound confuse crush cut daunt deject demolish demoralize depress devastate disappoint disarm discombobulate discomfit discompose disconcert discourage disgrace disgruntle disgust dishearten disillusion dismay dispirit displease disquiet dissatisfy distract distress disturb embarass enrage exasperate exhaust flabbergast fluster frighten frustrate grieve harass haunt horrify humiliate hurt hypnotize infuriate insult intimidate intoxicate irk irritate madden mollify mortify muddle nauseate obsess offend outrage overawe overwhelm pain perplex perturb plague preoccupy provoke puzzle rankle repel repulse revolt ruffle sadden scandalize scare shake shame shock sicken spook stagger sting stir strike stump stun stupefy tantalize tease terrify terrorize threaten thrill throw tire torment trouble try unnerve unsettle uplift upset vex weary worry wound)
  :NON_LEVIN_WORDS (adulate aggrieve alleviate
@@ -1644,7 +1644,7 @@
  :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.2.b"
+ :NUMBER "31.2.b.p"
  :NAME "Panacea Admire Verbs - Positive / -in"
  :WORDS ()
  :NON_LEVIN_WORDS (abhor deplore despise detest disdain dislike
@@ -1733,7 +1733,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.3.c"
+ :NUMBER "31.3.c.p"
  :NAME "Panacea Marvel Verbs / -for"
  :WORDS (bleed care cry fear grieve mourn weep)
  :NON_LEVIN_WORDS (repent)
@@ -1741,7 +1741,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.3.d"
+ :NUMBER "31.3.d.p"
  :NAME "Panacea Marvel Verbs / -from"
  :WORDS (ache hurt suffer)
  :NON_LEVIN_WORDS ()
@@ -1765,7 +1765,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.3.f"
+ :NUMBER "31.3.f.p"
  :NAME "Panacea Marvel Verbs / -of"
  :WORDS (beware despair disapprove sicken tire weary)
  :MISSING_WORDS (repent)
@@ -1789,7 +1789,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.3.h"
+ :NUMBER "31.3.h.p"
  :NAME "Panacea Marvel Verbs / -over"
  :WORDS (anger anguish exult fret fume gloat grieve gush hunger marvel mope mourn obsess puzzle rage rave rhapsodize salivate seethe sorrow wonder worry)
  :NON_LEVIN_WORDS (ruminate)
@@ -1882,7 +1882,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "33.b"
+ :NUMBER "33.b.p"
  :NAME "Panacea Judgment Verbs - Negative / -for/as"
  :WORDS (abuse backbite calumniate castigate censure chasten chastise chide condemn criticize decry defame denigrate denounce deprecate deride disparage fault fine impeach insult lambaste malign mock penalize persecute prosecute punish rebuke reprimand reproach reprove revile ridicule scold scorn shame snub upbraid victimize vilify)
  :NON_LEVIN_WORDS (accurse applaud assail assault attack avenge believe
