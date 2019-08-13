@@ -636,6 +636,20 @@ def isVerbNegated(verb, dependencies):
 			return True
 	return False
 
+def combineVerbAndPosListsNoDups(base_words, base_word_dependents, parse_verbs, parse_verbs_pos, tokens):
+	verbs_and_pos = []
+
+	base_words_pos = getBaseWordsPos(base_word_dependents, tokens)
+
+	for index, verb in enumerate(base_words):
+		verbs_and_pos.append((verb, base_words_pos[index]))
+
+	for index, verb in enumerate(parse_verbs):
+		if verb not in base_words:
+			verbs_and_pos.append((verb, parse_verbs_pos[index]))	
+
+	return verbs_and_pos
+
 def parseModality(sentence):
 	parse = []
 	trigger_string = ''
@@ -706,10 +720,11 @@ def parseModality(sentence):
 
 				return parse
 
+
+
 def parseSrl(line, link_offsets, link_ids, link_strings, links):
 	line_framing_matches = []
 	line_ask_matches = []
-	#sentences = nltk.sent_tokenize(line)
 	ask_negation = False
 	base_word = ''
 	conj_base_word = ''
@@ -722,8 +737,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 	core_nlp_sentences = response.json()['sentences']
 	#print(core_nlp_sentences, "\n\n")
 
-	previous_token_char_end_offset = 0
-	current_token_char_begin_offset = 0
 	for nlp_sentence in core_nlp_sentences:
 		ask_procedure = ''
 		link_in_sentence = False
@@ -736,6 +749,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 		parse_tree = nlp_sentence['parse']
 		dependencies = nlp_sentence['basicDependencies']
 		tokens = nlp_sentence['tokens']	
+		sentence_begin_char_offset = tokens[0]['characterOffsetBegin']
+		sentence_end_char_offset = tokens[len(tokens) - 1]['characterOffsetEnd']
 
 		for token in tokens:
 			rebuilt_sentence.append(token['before'])
@@ -743,25 +758,11 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 
 		rebuilt_sentence = ''.join(rebuilt_sentence)
 
-		sentence_begin_char_offset = tokens[0]['characterOffsetBegin']
-		sentence_end_char_offset = tokens[len(tokens) - 1]['characterOffsetEnd']
-
-
-		#preprocessed_tree = preprocessSentence(parse_tree)
-		#print(preprocessed_tree)
-	
-		# Extract all verbs from the constituency parse to be used for fallback if all verbs are not found in the dependencies
+		# Extract all verbs and their parts of speech from the constituency parse to be used for fallback if all verbs are not found in the dependencies
 		parse_verb_matches = extractVerbs(parse_tree)
-		#print(parse_verb_matches)
 		for parse_verb_match in parse_verb_matches:
 			parse_verbs_pos.append(parse_verb_match[0])
 			parse_verbs.append(parse_verb_match[1])
-
-		# We extract the triggers and targets here to check later on if Negation occurred
-		#trig_and_targs = extractTrigsAndTargs(preprocessed_tree)
-		trig_and_targs = ''
-		#print(trig_and_targs, '\n\n')
-
 
 		small_root = ''
 		root_dependent_gloss = ''
@@ -850,23 +851,25 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 				advmod_governor_gloss = dependency['governorGloss']
 				advmod_dependent_gloss = dependency['dependentGloss']
 
-		base_words_pos = getBaseWordsPos(base_words_dependents, tokens)
+		# Put the verbs with their parts of speech into one list without duplicates
+		verbs_and_pos = combineVerbAndPosListsNoDups(base_words, base_words_dependents, parse_verbs, parse_verbs_pos, tokens)
 
 		if not nsubj_exists:
 			ask_procedure = 'directive'
 
-
-		for base_word_index, base_word in enumerate(base_words):
+		for index, verb_and_pos in enumerate(verbs_and_pos):
+			verb = verb_and_pos[0]
+			pos = verb_and_pos[1]
 			link_id = ''
 			link_exists = False
 			ask_negation = False
 
-			ask_negation = isVerbNegated(base_word, dependencies)
+			ask_negation = isVerbNegated(verb, dependencies)
 
 			for index, link_offset in enumerate(link_offsets):
 				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
 					link_in_sentence = True
-					if base_word == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index].lower():
+					if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index].lower():
 						link_id = link_ids[index]
 						link_exists = True
 						break
@@ -874,7 +877,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 					child_dependent_nums = []
 					#TODO Need to figure out if breaking here is appropriate or if I should build a list of all the dependencies with the verb as the dependentGloss.
 					for dependency in dependencies:
-						if base_word == dependency['dependentGloss']:
+						if verb == dependency['dependentGloss']:
 							verb_dependent_num = dependency['dependent']
 							break
 					for dependency in dependencies:
@@ -887,54 +890,12 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 								link_exists = True
 								break
 
-			ask_details = processWord(base_word, base_words_pos[base_word_index], rebuilt_sentence, ask_procedure, ask_negation, dependencies, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
+			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
 			if ask_details:
 				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
 					line_ask_matches.append(ask_details)
 				elif 'GAIN' in ask_details['t_ask_type'] or 'LOSE' in ask_details['t_ask_type']:
 					line_framing_matches.append(ask_details)
-
-
-		if parse_verbs:
-			for verb_index, verb in enumerate(parse_verbs):
-				link_id = ''
-				link_exists = False
-				ask_negation = False
-				if verb not in base_words:
-					ask_negation = isVerbNegated(verb, dependencies)
-
-					for index, link_offset in enumerate(link_offsets):
-						if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
-							link_in_sentence = True
-							if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index].lower():
-								link_id = link_ids[index]
-								link_exists = True
-								break
-
-							child_dependent_nums = []
-							#TODO Need to figure out if breaking here is appropriate or if I should build a list of all the dependencies with the verb as the dependentGloss.
-							for dependency in dependencies:
-								if verb == dependency['dependentGloss']:
-									verb_dependent_num = dependency['dependent']
-									break
-							for dependency in dependencies:
-								if dependency['governor'] == verb_dependent_num:
-									child_dependent_nums.append(dependency['dependent'])
-							for child_dependent_num in child_dependent_nums:
-								for dependency in dependencies:
-									if child_dependent_num == dependency['governor'] and dependency['dependentGloss'] in link_strings[index].lower():
-										link_id = link_ids[index]
-										link_exists = True
-										break
-
-					ask_details = processWord(verb, parse_verbs_pos[verb_index], rebuilt_sentence, ask_procedure, ask_negation, dependencies, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
-					if ask_details:
-						if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
-							line_ask_matches.append(ask_details)
-						elif 'GAIN' in ask_details['t_ask_type'] or 'LOSE' in ask_details['t_ask_type']:
-							line_framing_matches.append(ask_details)
-
-		#sentence_srls.append({"sentence": rebuilt_sentence, "matches": parse})
 
 	if line_framing_matches or line_ask_matches:
 		return (line_framing_matches, line_ask_matches)
