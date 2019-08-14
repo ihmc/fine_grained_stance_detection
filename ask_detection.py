@@ -506,7 +506,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 
 	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number)
 
-def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependencies, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links):
+def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links):
 	ask_negation_dep_based = False
 	is_past_tense = False
 	s_ask_types = [] 
@@ -890,7 +890,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 								link_exists = True
 								break
 
-			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, trig_and_targs, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
+			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
 			if ask_details:
 				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
 					line_ask_matches.append(ask_details)
