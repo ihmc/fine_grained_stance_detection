@@ -72,6 +72,8 @@ def getSrl(text, links):
 	sentence_srls = []
 	framing_matches = []
 	ask_matches = []
+	last_ask = {}
+	last_ask_index = -1
 	pattern = '\[\[\[ASKMARKER1234-(\d+)-ASKMARKER1234(.*?)/ASKMARKER1234-\d+-ASKMARKER1234\]\]\]'
 	text_to_process = unicodedata.normalize('NFKC',text)
 
@@ -93,13 +95,33 @@ def getSrl(text, links):
 			line_text = line_text.replace(match.group(0), match.group(2))
 			match = re.search(pattern, line_text)
 
-		line_matches = parseSrl(line_text, link_offsets, link_ids, link_strings, links)
-		if line_matches: 
-			framing_matches.extend(line_matches[0])
-			ask_matches.extend(line_matches[1])
+		line_matches = parseSrl(line_text, link_offsets, link_ids, link_strings, links, last_ask, last_ask_index)
+		if line_matches:
+			# NOTE The last_ask and last_ask_index are overidding the values initialized at the beginning 
+			# of this function. This on purpose so that each time parseSrl is called it will get the 
+			# most up to date info
+			(framings, asks, asks_to_update, last_ask, last_ask_index) = line_matches
 
-	sorted_framing = sorted(framing_matches, key = lambda k: k['is_ask_confidence'], reverse=True)
-	sorted_asks = sorted(ask_matches, key = lambda k: k['is_ask_confidence'], reverse=True)
+			if framings: 
+				framing_matches.extend(framings)
+			if asks:	
+				ask_matches.extend(asks)
+
+			# If parseSrl determines that the last ask needs to be update then it will update the appropriate ask
+			# in ask_matches with the new information that was altered in last_ask inside parseSrl
+			if asks_to_update:
+				for ask in asks_to_update:
+					# Ask will be a tuple with the first part being the updated ask and the second part being the index in ask_matches that needs updating
+					ask_matches[ask[1]] = ask[0]
+				last_ask = asks_to_update[-1][0]
+				last_ask_index = asks_to_update[-1][1]
+			#print(ask_matches)
+			#print(len(ask_matches), "Ask matches length\n\n")
+			
+
+	filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches)
+	sorted_framing = sorted(framing_matches, key = lambda k: k['is_ask_confidence'] , reverse=True)
+	sorted_asks = sorted(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches), key = lambda k: k['is_ask_confidence'], reverse=True)
 
 	return {'email': text, 'framing': sorted_framing, 'asks': sorted_asks}
 
@@ -533,6 +555,8 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 
 	if word_pos in ['VBD', 'VBN']:
 		is_past_tense = True
+		# 8/13/19 Bonnie said for now we can ignore past tense and leave it out of asks, may change later
+		#return
 
 
 	for ask_type, keywords in sashank_categories_sensitive.items():
@@ -722,9 +746,10 @@ def parseModality(sentence):
 
 
 
-def parseSrl(line, link_offsets, link_ids, link_strings, links):
+def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_ask_index):
 	line_framing_matches = []
 	line_ask_matches = []
+	asks_to_update = []
 	ask_negation = False
 	base_word = ''
 	conj_base_word = ''
@@ -739,6 +764,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 
 	for nlp_sentence in core_nlp_sentences:
 		ask_procedure = ''
+		update_last_ask = False
 		link_in_sentence = False
 		link_exists = False
 		rebuilt_sentence = []
@@ -860,6 +886,10 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 		for index, verb_and_pos in enumerate(verbs_and_pos):
 			verb = verb_and_pos[0]
 			pos = verb_and_pos[1]
+			# 8/13/19 Bonnie said for now we can ignore VBG and leave it out of asks, may change later
+			if pos == 'VBG':
+				continue
+			#print(verb, "  ", pos)
 			link_id = ''
 			link_exists = False
 			ask_negation = False
@@ -867,9 +897,13 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 			ask_negation = isVerbNegated(verb, dependencies)
 
 			for index, link_offset in enumerate(link_offsets):
-				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index].lower() in rebuilt_sentence:
+				#print(link_offset[0], "   ", sentence_begin_char_offset, "    ", link_offset[1], "    ", sentence_end_char_offset, "\n", link_strings[index], "\n", rebuilt_sentence)
+
+				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index] in rebuilt_sentence:
 					link_in_sentence = True
-					if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index].lower():
+
+					#print(advmod_governor_gloss, "   ", advmod_dependent_gloss, "   ", link_strings[index], "\n\n")
+					if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index]:
 						link_id = link_ids[index]
 						link_exists = True
 						break
@@ -885,7 +919,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 							child_dependent_nums.append(dependency['dependent'])
 					for child_dependent_num in child_dependent_nums:
 						for dependency in dependencies:
-							if child_dependent_num == dependency['governor'] and dependency['dependentGloss'] in link_strings[index].lower():
+							if child_dependent_num == dependency['governor'] and dependency['dependentGloss'] in link_strings[index]:
 								link_id = link_ids[index]
 								link_exists = True
 								break
@@ -894,8 +928,21 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links):
 			if ask_details:
 				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
 					line_ask_matches.append(ask_details)
+					last_ask = ask_details
+					last_ask_index += 1
 				elif 'GAIN' in ask_details['t_ask_type'] or 'LOSE' in ask_details['t_ask_type']:
 					line_framing_matches.append(ask_details)
 
-	if line_framing_matches or line_ask_matches:
-		return (line_framing_matches, line_ask_matches)
+		if not line_ask_matches and link_in_sentence and last_ask and last_ask['is_ask_confidence'] != 0:
+			last_ask['is_ask_confidence'] = evaluateAskConfidence(False, True, '', '', '')
+			last_ask['link_id'] = link_ids[0]
+			last_ask['link_url'] = { link_ids[0]: links.get(link_ids[0])}
+			if last_ask['ask_negation']:
+				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"]}[NOT {last_ask["ask_action"]}[{last_ask["ask_target"]}({link_ids[0]}){last_ask["s_ask_type"]}]]>'
+			else:
+				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"]}[{last_ask["ask_action"]}[{last_ask["ask_target"]}({link_ids[0]}){last_ask["s_ask_type"]}]]>'
+
+			asks_to_update.append((last_ask, last_ask_index))
+
+	if line_framing_matches or line_ask_matches or asks_to_update:
+		return (line_framing_matches, line_ask_matches, asks_to_update, last_ask, last_ask_index)
