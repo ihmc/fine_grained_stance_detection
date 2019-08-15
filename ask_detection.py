@@ -115,8 +115,6 @@ def getSrl(text, links):
 					ask_matches[ask[1]] = ask[0]
 				last_ask = asks_to_update[-1][0]
 				last_ask_index = asks_to_update[-1][1]
-			#print(ask_matches)
-			#print(len(ask_matches), "Ask matches length\n\n")
 			
 
 	filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches)
@@ -144,7 +142,7 @@ def morphRoot(word):
 	return wlem.lemmatize(word.lower(),wn.VERB)
 
 def extractVerbs(parse_tree):
-	parse_tree = parse_tree.replace('\\n', '');
+	parse_tree = parse_tree.replace('\\n', '')
 	match = re.findall('\((VB[A-Z]*) *([a-z]+?)\)', parse_tree)
 	
 	return match
@@ -553,7 +551,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 				ask_negation = True
 	'''
 
-	if word_pos in ['VBD', 'VBN']:
+	if word_pos in ['VBD', 'VBN', 'VBG']:
 		is_past_tense = True
 		# 8/13/19 Bonnie said for now we can ignore past tense and leave it out of asks, may change later
 		#return
@@ -787,8 +785,9 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 		# Extract all verbs and their parts of speech from the constituency parse to be used for fallback if all verbs are not found in the dependencies
 		parse_verb_matches = extractVerbs(parse_tree)
 		for parse_verb_match in parse_verb_matches:
-			parse_verbs_pos.append(parse_verb_match[0])
 			parse_verbs.append(parse_verb_match[1])
+			parse_verbs_pos.append(parse_verb_match[0])
+			
 
 		small_root = ''
 		root_dependent_gloss = ''
@@ -858,6 +857,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 					base_words.remove(dependencies[0]['dependentGloss'])
 					base_words_dependents.remove(dependencies[0]['dependent'])
 				if dependencies[0]['dependentGloss'] in parse_verbs and 'PERFORM' not in check_t_ask_types:
+					parse_verbs_pos.pop(parse_verbs.index(dependencies[0]['dependentGloss']))
 					parse_verbs.remove(dependencies[0]['dependentGloss'])
 				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
 					xcomp_base_word = dependency['dependentGloss']
@@ -887,9 +887,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			verb = verb_and_pos[0]
 			pos = verb_and_pos[1]
 			# 8/13/19 Bonnie said for now we can ignore VBG and leave it out of asks, may change later
-			if pos == 'VBG':
-				continue
-			#print(verb, "  ", pos)
+			#if pos == 'VBG':
+			#	continue
 			link_id = ''
 			link_exists = False
 			ask_negation = False
@@ -897,12 +896,10 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			ask_negation = isVerbNegated(verb, dependencies)
 
 			for index, link_offset in enumerate(link_offsets):
-				#print(link_offset[0], "   ", sentence_begin_char_offset, "    ", link_offset[1], "    ", sentence_end_char_offset, "\n", link_strings[index], "\n", rebuilt_sentence)
 
 				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index] in rebuilt_sentence:
 					link_in_sentence = True
 
-					#print(advmod_governor_gloss, "   ", advmod_dependent_gloss, "   ", link_strings[index], "\n\n")
 					if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index]:
 						link_id = link_ids[index]
 						link_exists = True
