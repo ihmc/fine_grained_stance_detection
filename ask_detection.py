@@ -595,10 +595,11 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 					dependent = dependency['dependent']
 					governor = dependency['governor']
 			for dependency in dependencies:	
+				# TODO governor == dependency['governor'] will at least always match itself may need to fix this
 				if dependent == dependency['governor'] or governor == dependency['governor']:
 					for index, link_string in enumerate(link_strings):
 						#TODO Look into this more as this will always take the last dependency that matched.
-						if dependency['dependentGloss'] in link_string.lower():
+						if dependency['dependentGloss'].lower() in link_string.lower():
 							link_id = link_ids[index]
 							link_exists = True
 			
