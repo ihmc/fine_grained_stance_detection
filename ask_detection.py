@@ -1,5 +1,6 @@
 from allennlp.predictors.predictor import Predictor
 predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar.gz")
+#predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/bert-base-srl-2019.06.17.tar.gz")
 
 import unicodedata
 import json
@@ -610,9 +611,11 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 			t_ask_types.remove('PERFORM')
 
 	
+	'''
 	if 'GIVE' not in t_ask_types and 'LOSE' not in t_ask_types and 'GAIN' not in t_ask_types and 'PERFORM' not in t_ask_types:
 		if (link_exists or link_in_sentence) and ask:
 			t_ask_types = ['PERFORM']
+	'''
 
 	if t_ask_types == ['PERFORM'] and link_in_sentence and not link_exists and ask and word_number:
 		for index, link_string in enumerate(link_strings):
