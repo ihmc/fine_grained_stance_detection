@@ -21,7 +21,7 @@ nltk.download('punkt')
 nltk.download('averaged_perceptron_tagger')
 
 from load_resources import preprocess_rules_in_order, catvar_dict, lcs_dict
-from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types
+from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
 from catvar_v_alternates import v_alternates
 
 
@@ -277,6 +277,7 @@ def getAskTypes(ask):
 	if catvar_object != None:
 		catvar_word = catvar_object['catvar_value']
 
+		'''
 		for verb_type, words in lcs_dict.items():
 			if catvar_word in words:
 				verb_types.append(verb_type)
@@ -298,6 +299,39 @@ def getAskTypes(ask):
 			for tomek_ask_type, types in tomeks_ask_types.items():
 				if vb_type in types and tomek_ask_type not in t_ask_types:
 					t_ask_types.append(tomek_ask_type)
+		'''
+		if catvar_word in perform_verbs:
+			return(s_ask_types, ['PERFORM'])
+		else:
+			catvar_word_alternates = catvar_alternates_dict.get(ask)
+			if catvar_word_alternates:
+				for alternate in catvar_word_alternates:
+					if alternate in perform_verbs:
+						return(s_ask_types, ['PERFORM'])
+		if catvar_word in give_verbs:
+			return(s_ask_types, ['GIVE'])
+		else:
+			catvar_word_alternates = catvar_alternates_dict.get(ask)
+			if catvar_word_alternates:
+				for alternate in catvar_word_alternates:
+					if alternate in give_verbs:
+						return(s_ask_types, ['GIVE'])
+		if catvar_word in lose_verbs:
+			return(s_ask_types, ['LOSE'])
+		else:
+			catvar_word_alternates = catvar_alternates_dict.get(ask)
+			if catvar_word_alternates:
+				for alternate in catvar_word_alternates:
+					if alternate in lose_verbs:
+						return(s_ask_types, ['LOSE'])
+		if catvar_word in gain_verbs:
+			return(s_ask_types, ['GAIN'])
+		else:
+			catvar_word_alternates = catvar_alternates_dict.get(ask)
+			if catvar_word_alternates:
+				for alternate in catvar_word_alternates:
+					if alternate in gain_verbs:
+						return(s_ask_types, ['GAIN'])
 
 	return (s_ask_types, t_ask_types)
 
