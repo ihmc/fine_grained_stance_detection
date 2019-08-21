@@ -865,7 +865,6 @@ sashank_categories_sensitive = {
    "finance_money":[
       "money",
       "cash",
-      "check",
       "bit coin",
       "bitcoin",
       "cheque",

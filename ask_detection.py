@@ -458,7 +458,7 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 	
 	return(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, base_word, confidence)
 
-def extractAskFromSrl(sentence, base_word, t_ask_types):
+def extractAskFromSrl(srl, base_word, t_ask_types):
 	ask_who = ''
 	ask = ''
 	ask_recipient = ''
@@ -474,11 +474,12 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 	arg2 = []
 	arg_tmp = []
 	word_number = []
-	srl = predictor.predict(sentence=sentence)
 	verbs = srl['verbs']
 	words = [word.lower() for word in srl['words']]
 	descriptions = []
 
+	#TODO if the same verb is in the sentence twice this will always take the second version of it 
+	# This needs to be fixed, maybe through deleting the verb once it is used
 	for verb in verbs:
 		if verb['verb'].lower() == base_word:
 			selected_verb = verb['verb']
@@ -500,6 +501,11 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 				arg2.append(words[index])
 			elif 'ARGM-TMP' in tag:
 				arg_tmp.append(words[index])
+
+	# Handling causes (seems like bugs in allennlp) where there is no arg1 but and arg2 and it seems like the arg2 should be arg1
+	if not arg1 and arg2:
+		arg1 = arg2
+		arg2 = []
 
 	if 'GIVE' in t_ask_types:
 		if arg0 and arg1 and arg2:
@@ -561,7 +567,7 @@ def extractAskFromSrl(sentence, base_word, t_ask_types):
 
 	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number)
 
-def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links):
+def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl):
 	ask_negation_dep_based = False
 	is_past_tense = False
 	s_ask_types = [] 
@@ -574,7 +580,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
 
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number) = extractAskFromSrl(sentence, word, t_ask_types)
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number) = extractAskFromSrl(srl, word, t_ask_types)
 
 	if not ask_action:
 		(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
@@ -806,6 +812,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 		rebuilt_sentence = []
 		parse_verbs_pos = []
 		parse_verbs = []
+
 		#TODO Investigate if this is needed
 		#words = getLemmaWords(sentence)
 		parse_tree = nlp_sentence['parse']
@@ -827,6 +834,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			parse_verbs_pos.append(parse_verb_match[0])
 			
 
+		srl = predictor.predict(sentence=rebuilt_sentence)
 		small_root = ''
 		root_dependent_gloss = ''
 		aux_dependent = ''
@@ -959,7 +967,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 								link_exists = True
 								break
 
-			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links)
+			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl)
 			if ask_details:
 				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
 					line_ask_matches.append(ask_details)
