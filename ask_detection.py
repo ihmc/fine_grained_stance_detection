@@ -1009,7 +1009,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 		if not line_ask_matches and link_in_sentence and last_ask and last_ask['is_ask_confidence'] != 0:
 			last_ask['is_ask_confidence'] = evaluateAskConfidence(False, True, '', '', '')
 			last_ask['link_id'] = link_ids[0]
-			last_ask['link_url'] = { link_ids[0]: links.get(link_ids[0])}
+			last_ask['url'] = { link_ids[0]: links.get(link_ids[0])}
 			if last_ask['ask_negation']:
 				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"][0]}[NOT {last_ask["ask_action"]}[{last_ask["ask_target"]}({link_ids[0]}){last_ask["s_ask_type"]}]]>'
 			else:
