@@ -458,7 +458,7 @@ def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 	
 	return(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, base_word, confidence)
 
-def extractAskFromSrl(srl, base_word, t_ask_types):
+def extractAskFromSrl(sentence, srl, base_word, t_ask_types):
 	ask_who = ''
 	ask = ''
 	ask_recipient = ''
@@ -473,6 +473,7 @@ def extractAskFromSrl(srl, base_word, t_ask_types):
 	arg1 = []
 	arg2 = []
 	arg_tmp = []
+	arg_mnr = []
 	word_number = []
 	verbs = srl['verbs']
 	words = [word.lower() for word in srl['words']]
@@ -501,12 +502,15 @@ def extractAskFromSrl(srl, base_word, t_ask_types):
 				arg2.append(words[index])
 			elif 'ARGM-TMP' in tag:
 				arg_tmp.append(words[index])
+			elif 'ARGM-MNR' in tag:
+				arg_mnr.append(words[index])
 
-	# Handling causes (seems like bugs in allennlp) where there is no arg1 but and arg2 and it seems like the arg2 should be arg1
+	# Handling cases (seems like bugs in allennlp) where there is no arg1 but and arg2 and it seems like the arg2 should be arg1
 	if not arg1 and arg2:
 		arg1 = arg2
-		arg2 = []
-
+		arg2 = arg_mnr
+		arg_mnr = []
+	
 	if 'GIVE' in t_ask_types:
 		if arg0 and arg1 and arg2:
 			ask_who = ' '.join(arg0)
@@ -565,13 +569,14 @@ def extractAskFromSrl(srl, base_word, t_ask_types):
 				t_ask_types = ["GAIN"]
 	'''
 
-	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number)
+	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2)
 
 def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl):
 	ask_negation_dep_based = False
 	is_past_tense = False
 	s_ask_types = [] 
 	a_ask_types = []
+	arg2 = ''
 	word = word.lower()
 	lem_word = morphRoot(word)
 	(additional_s_ask_types, t_ask_types) = getAskTypes(word)
@@ -580,17 +585,10 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
 
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number) = extractAskFromSrl(srl, word, t_ask_types)
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2) = extractAskFromSrl(sentence, srl, word, t_ask_types)
 
 	if not ask_action:
 		(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
-
-	'''
-	if trig_and_targs:
-		for trig_and_targ in trig_and_targs:
-			if (trig_and_targ[2] == 'Negation' or trig_and_targ[2] == 'NotSucceed') and word == trig_and_targ[3]:
-				ask_negation = True
-	'''
 
 	if word_pos in ['VBD', 'VBN', 'VBG']:
 		is_past_tense = True
@@ -598,10 +596,42 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 		#return
 
 
+	if arg2:
+		arg2 = ' '.join(arg2)
+
 	for ask_type, keywords in sashank_categories_sensitive.items():
 		for keyword in keywords:
-			if (keyword in ask or keyword in ask_action) and ask_type not in s_ask_types:
+			if ask_type not in s_ask_types:
+				left_boundary_regex = r'\b' + keyword + ' '
+				right_boundary_regex = ' ' + keyword + r'\b'
+				if keyword in ['$', '£', '€', '₹']:
+					if keyword == '$':
+						left_boundary_regex = r'\$'
+						right_boundary_regex = r'\$'
+
+					left_boundary_regex = keyword
+					right_boundary_regex = keyword
+
+				if keyword in ask:
+					if len(keyword) == len(ask):
+						s_ask_types.append(ask_type)
+					elif re.search(left_boundary_regex, ask):
+						s_ask_types.append(ask_type)
+					elif re.search(right_boundary_regex, ask):
+						s_ask_types.append(ask_type)
+				if keyword.lower() == ask_action.lower():
+					s_ask_types.append(ask_type)
+				if keyword in arg2:
+					if len(keyword) == len(arg2):
+						s_ask_types.append(ask_type)
+					elif re.search(left_boundary_regex, arg2):
+						s_ask_types.append(ask_type)
+					elif re.search(right_boundary_regex, arg2):
+						s_ask_types.append(ask_type)
+			'''
+			if (keyword in ask or keyword in ask_action or keyword in arg2) and ask_type not in s_ask_types:
 				s_ask_types.append(ask_type)
+			'''
 
 	for s_ask_type in s_ask_types:
 		for alan_ask_type, types in alan_ask_types.items():
