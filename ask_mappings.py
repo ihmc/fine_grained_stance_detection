@@ -211,6 +211,7 @@ lose_verbs = [
 	"fluster",
 	"forebode",
 	"forfeit",
+	"forget",
 	"free",
 	"fret",
 	"frighten",
