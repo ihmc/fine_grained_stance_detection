@@ -1130,4 +1130,3 @@ panacea_ask_types = {
   ],
   "OTHER": []
 }
-
