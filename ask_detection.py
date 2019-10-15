@@ -16,11 +16,11 @@ import subprocess
 # that FLASK provides do  not confuse the two.
 import requests
 
-nltk.download('wordnet')
+#nltk.download('wordnet')
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
-nltk.download('punkt')
-nltk.download('averaged_perceptron_tagger')
+#nltk.download('punkt')
+#nltk.download('averaged_perceptron_tagger')
 
 from load_resources import preprocess_rules_in_order, catvar_dict, lcs_dict
 from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs

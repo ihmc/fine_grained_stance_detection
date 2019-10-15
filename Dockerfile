@@ -31,6 +31,7 @@ EXPOSE 5000
 
 # Define environment variable
 ENV NAME Ask_Detection
+ENV NLTK_DATA "./nltk_data"
 
 # Run app.py when the container launches
 #RUN python -m nltk.downloader punkt
