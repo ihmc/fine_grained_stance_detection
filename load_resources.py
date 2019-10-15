@@ -6,7 +6,7 @@ project_path = os.path.abspath(os.path.dirname(__file__))
 
 # Path for files needed for catvar processing
 catvar_file = '/catvar.txt'
-lcs_file = '/LCS-Bare-Verb-Classes-Final.txt'
+lcs_file = '/LCS-Bare-Verb-Classes-Final_27Aug19.txt'
 
 # Rule directories
 # TODO This list will be thinned out as rule sets are chosen for superiority
