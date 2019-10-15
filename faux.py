@@ -1158,7 +1158,7 @@ sashanks_ask_types = {
 
 tomeks_ask_types = {
   "LOSE": [ #verbs may need to be used differently in their passive (victim in subject) vs active form (victim in DO) for this class but not focused on that for now
-    "10.5.p Panacea Lose related Verbs",
+    #"10.5.p Panacea Lose related Verbs", #REMOVED AS NOT IN ORIGINAL LCS
     "10.5 Verbs of Possessional Deprivation : Steal Verbs",
     "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
     "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
@@ -1181,18 +1181,26 @@ tomeks_ask_types = {
     "19.c.i Poke Verbs / -with",
     "19.c.ii Poke Verbs - Change of State / -with",
     "19.d Poke Verbs - Locational / -with",
-    #"29.2.b.p Characterize Verbs / -S",
-    "29.2.b.p Panacea Characterize Verbs / -S",
-    "29.7.p Panacea Orphan Verbs",
-    "29.8.a.p Panacea Captain Verbs / Beneficiary",
-    "31.1.a.p Panacea Amuse Verbs / -with",
-    "31.2.b.p Panacea Admire Verbs - Positive / -in",
+    #"29.2.b.p Characterize Verbs / -S", #USED ORIGINAL
+    "29.2.b. Characterize Verbs / -S",
+    #"29.7.p Panacea Orphan Verbs", #USED ORIGINAL
+    "29.7 Orphan Verbs",
+    #"29.8.a.p Panacea Captain Verbs / Beneficiary", #USED ORIGINAL
+    "29.8.a Captain Verbs / Beneficiary",
+    #"31.1.a.p Panacea Amuse Verbs / -with", #USED ORIGINAL
+    "31.1.a Amuse Verbs / -with",
+    #"31.2.b.p Panacea Admire Verbs - Positive / -in", #USED ORIGINAL
+    "31.2.b Admire Verbs - Positive / -in",
     "31.2.d Admire Verbs - Negative / -for/as",
-    "31.3.c.p Panacea Marvel Verbs / -for",
-    "31.3.d.p Panacea Marvel Verbs / -from",
-    "31.3.f.p Panacea Marvel Verbs / -of",
-    "31.3.h.p Panacea Marvel Verbs / -over",
-    #"33.b Panacea Judgment Verbs - Negative / -for/as",
+    #"31.3.c.p Panacea Marvel Verbs / -for", #USED ORIGINAL
+    "31.3.c Marvel Verbs / -for",
+    #"31.3.d.p Panacea Marvel Verbs / -from", #USED ORIGINAL
+    "31.3.d Marvel Verbs / -from",
+    #"31.3.f.p Panacea Marvel Verbs / -of", #USED ORIGINAL
+    "31.3.f Marvel Verbs / -of",
+    #"31.3.h.p Panacea Marvel Verbs / -over", #USED ORIGINAL
+    "31.3.h Marvel Verbs / -over",
+    #"33.b Panacea Judgment Verbs - Negative / -for/as", #USED ORIGINAL
     "33.b Judgment Verbs - Negative / -for/as",
     "37.8.a Complain Verbs / -that/to",
     "37.8.b Complain Verbs / -about/to",
@@ -1236,7 +1244,8 @@ tomeks_ask_types = {
     "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
     "11.3 Bring and Take Verbs",
     "13.5.2.d Obtain - Exchange",
-    "30.2.a.i.p Panacea Sight Verbs / Bare NP",
+    #"30.2.a.i.p Panacea Sight Verbs / Bare NP", #USED ORIGINAL
+    "30.2.a.i Sight Verbs / Bare NP",
     "37.1.e Verbs of Transfer of a Message / -that/to",
     "37.2.a Tell Verbs",
     "37.2.b Tell Verbs / -of/about",
