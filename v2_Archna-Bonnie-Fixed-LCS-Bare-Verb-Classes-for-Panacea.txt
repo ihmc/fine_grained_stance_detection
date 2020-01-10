@@ -249,7 +249,7 @@
 (
  :NUMBER "10.5.p"
  :NAME "Verbs of Possessional Deprivation : Steal Verbs"
- :WORDS (abduct cadge capture confiscate cop emancipate embezzle exorcise extort extract filch flog grab impound kidnap liberate lift nab pilfer pinch pirate plagiarize purloin repossess retrieve rustle seize smuggle snatch sneak sponge steal swipe take thieve wangle weasel winkle withdraw wrest)
+ :WORDS (abduct apprehend arrest cadge capture confiscate cop defeat down emancipate embezzle exorcise extort extract filch flog grab hijack impound kidnap liberate lift misappropriate nab pilfer pinch pirate plagiarize prostrate purloin ransom remount repossess retrieve rustle seize smuggle snatch snatch_away sneak solicit sponge steal subdue swipe take thieve vanquish wangle weasel winkle withdraw wrest)
  :NON_LEVIN_WORDS (annex apprehend arrest conquer defeat down elicit hijack misappropriate prostrate ransom remount salvage snatch_away solicit subdue vanquish)
  :COLLOCATIONS ("from")
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
@@ -265,7 +265,7 @@
 (
  :NUMBER "10.6.a.p"
  :NAME "Verbs of Possessional Deprivation : Cheat Verbs / -of"
- :WORDS (balk bereave bilk bleed burgle cheat con cull defraud denude deplete depopulate deprive despoil disabuse disarm dispossess divest drain fleece gull milk mulct plunder purge ransack render rid rifle rob sap strip swindle void wean)
+ :WORDS (accuse balk bereave bilk bleed burgle cheat con cull defraud denude deplete depopulate deprive despoil disabuse disarm dispossess divest drain extricate fleece gull inoculate invalidate loot milk mulct nullify pillage plunder purge ransack render rid rifle rob sap strip swindle unload unravel void wean)
  :NON_LEVIN_WORDS (accuse defray disinfect exempt extricate inoculate invalidate loot nullify pillage remedy unload unravel vaccinate)
  :COLLOCATIONS ("of" "from" "out of" "off of" "off")
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
@@ -278,7 +278,7 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
 ) 
 (
- :NUMBER "10.6.c"
+ :NUMBER "10.6.c.p"
  :NAME "Verbs of Possessional Deprivation : Cheat Verbs / -out of"
  :WORDS (burgle cheat con swindle)
  :COLLOCATIONS ("out of")
@@ -1227,7 +1227,8 @@
 (
  :NUMBER "29.2.b.p"
  :NAME "Panacea Characterize Verbs / -S"
- :WORDS ()
+ :WORDS (defy entitle envision found interpret license picture specify uncover undertake)
+ :NON_LEVIN_WORDS (defy entitle envision found interpret license picture specify uncover undertake)
  :COLLOCATIONS ("to")
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
@@ -1579,14 +1580,6 @@
  :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.2.b.p"
- :NAME "Panacea Admire Verbs - Positive / -in"
- :WORDS ()
- :NON_LEVIN_WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate implicate indulge lament loathe mourn pity regret resent revenge rue vindicate)
- :COLLOCATIONS ("in")
- :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
-) 
-(
  :NUMBER "31.2.c"
  :NAME "Admire Verbs - Positive / -that"
  :WORDS (admire adore appreciate enjoy fancy favor like love miss respect savor tolerate treasure trust value)
@@ -1598,6 +1591,13 @@
  :NUMBER "31.2.d"
  :NAME "Admire Verbs - Negative / -for/as"
  :WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate lament loathe mourn pity regret resent rue)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.d.p"
+ :NAME "Admire Verbs - Negative / -for/as"
+ :WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate implicate lament loathe mourn pity regret resent revenge rue vindicate)
  :COLLOCATIONS ("for" "as")
  :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
 ) 
