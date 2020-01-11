@@ -1608,6 +1608,7 @@
  :COLLOCATIONS ("for" "as")
  :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
 )
+
 (
  :NUMBER "31.2.e"
  :NAME "Admire Verbs - Negative / -in"
