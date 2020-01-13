@@ -3,6 +3,7 @@ predictor = Predictor.from_path("./srl-model-2018.05.25.tar.gz")
 #predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar.gz")
 #predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/bert-base-srl-2019.06.17.tar.gz")
 
+import health
 import unicodedata
 import json
 import nltk

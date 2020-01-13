@@ -16,6 +16,10 @@ basic_auth = BasicAuth(app)
 
 print("My name is:\t%s" % __name__)
 
+@app.route("/health")
+def health():
+    health = ask_detection.health.getHealth()
+    return json.dumps(health)
 
 @app.route("/healthcheck")
 def healthCheck():
