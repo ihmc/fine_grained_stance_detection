@@ -1,0 +1,3518 @@
+(
+ :NUMBER "9.1"
+ :NAME "Put Verbs"
+ :WORDS (arrange immerse install lodge mount place position put set situate sling stash stow)
+ :NON_LEVIN_WORDS (bury bury_alive deposit disarrange displace implant insert juxtapose locate park put_forward superimpose)
+ :COLLOCATIONS ("at" "in" "on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.2.i"
+ :NAME "Verbs of Putting in a Spatial Configuration"
+ :WORDS (dangle hang lay lean perch rest sit stand suspend)
+ :COLLOCATIONS ("at" "in" "on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.2.ii"
+ :NAME "Verbs of Putting in a Spatial Configuration"
+ :WORDS (dangle hang lay lean perch rest sit stand suspend)
+ :NON_LEVIN_WORDS (enfilade prop)
+ :COLLOCATIONS ("up" "at" "in" "on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.3.a"
+ :NAME "Funnel Verbs - Locational"
+ :WORDS (channel dip dump funnel ladle push rake ram scoop scrape shake shovel siphon spoon squash squeeze squish sweep tuck wedge wipe wring)
+ :NON_LEVIN_WORDS (hoe sop)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.3.b"
+ :NAME "Funnel Verbs - Change of State"
+ :WORDS (bang hammer pound shovel squash squeeze squish wad wedge wipe wring)
+ :COLLOCATIONS ("into")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.4.a.i"
+ :NAME "Verbs of Putting with a Specified Direction / up (particle)"
+ :WORDS (hoist lift raise)
+ :COLLOCATIONS ("up")
+ :COMPONENT_OF_MEANING ("UPWARD") ;; OVERLAP <<SPATIAL>>
+ )
+(
+ :NUMBER "9.4.a.ii"
+ :NAME "Verbs of Putting with a Specified Direction / up (particle)"
+ :WORDS ()
+ :NON_LEVIN_WORDS (elevate)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UPWARD") ;; BLOCK <<SPATIAL>>
+ )
+(
+ :NUMBER "9.4.b.i"
+ :NAME "Verbs of Putting with a Specified Direction / down (particle)"
+ :WORDS (lower)
+ :COLLOCATIONS ("down")
+ :COMPONENT_OF_MEANING ("DOWNWARD") ;; OVERLAP <<SPATIAL>>
+) 
+(
+ :NUMBER "9.4.b.ii"
+ :NAME "Verbs of Putting with a Specified Direction / down (particle)"
+ :WORDS (drop lower)
+ :COLLOCATIONS ("down")
+ :COMPONENT_OF_MEANING ("DOWNWARD") ;; OVERLAP <<SPATIAL>>
+) 
+(
+ :NUMBER "9.5"
+ :NAME "Pour Verbs"
+ :WORDS (dribble drip pour slop slosh spew spill spurt)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; BLOCK <<SPATIAL>>
+) 
+(
+ :NUMBER "9.6"
+ :NAME "Coil Verbs"
+ :WORDS (coil curl loop roll spin twirl twist whirl wind)
+ :NON_LEVIN_WORDS (twine)
+ :COLLOCATIONS ("around")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.7.a"
+ :NAME "Spray/Load Verbs - Locational / Agent"
+ :WORDS (brush cram crowd cultivate dab daub drape drizzle dust hang heap inject jam load mound pack pile plant plaster prick pump rub scatter seed settle sew shower slather smear smudge sow spatter splash splatter spray spread sprinkle spritz squirt stack stick stock strew string stuff swab vest wash wrap)
+ :COLLOCATIONS ("on" "at" "onto" "into")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.7.b"
+ :NAME "Spray/Load Verbs - Locational / No Agent"
+ :WORDS (brush dab daub drizzle dust pump rub spatter splash splatter spray sprinkle spritz squirt)
+ :COLLOCATIONS ("on" "at" "onto" "into")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.7.c"
+ :NAME "Spray/Load Verbs - Locational / Agent-at"
+ :WORDS (brush dab daub drizzle dust pump rub spatter splash splatter spray sprinkle spritz squirt)
+ :NON_LEVIN_WORDS (cram)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.7.d"
+ :NAME "Spray/Load Verbs - Change of State"
+ :WORDS (brush cram crowd cultivate dab daub drape drizzle dust hang heap inject jam load mound pack pile plant plaster prick pump rub scatter seed settle sew shower slather smear smudge sow spatter splash splatter spray spread sprinkle spritz squirt stack stick stock strew string stuff swab vest wash wrap)
+ :NON_LEVIN_WORDS (afforest encumber overload overstock overstuff replant roughcast sophisticate upholster)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.8.a"
+ :NAME "Fill Verbs - Locational / No agent"
+ :WORDS (adorn anoint bandage bathe bestrew bind blanket block blot bombard carpet choke cloak clog clutter coat contaminate cover dam dapple deck decorate deluge dirty dot douse drench edge embellish emblazon encircle encrust endow enrich entangle face festoon fill fleck flood frame garland garnish imbue impregnate infect inlay interlace interlard interleave intersperse interweave inundate lard lash line litter mask mottle ornament pad pave plate plug pollute replenish repopulate riddle ring ripple robe saturate season shroud smother soak soil speckle splotch spot staff stain stipple stud suffuse surround swaddle swathe taint tile trim veil vein wreathe)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("IN" "ROUND" "AROUND" "ABOUT" "UPON" "ON" "AT") ;; BLOCK <<SPATIAL>>
+) 
+(
+ :NUMBER "9.8.b"
+ :NAME "Fill Verbs - Change of State / Agent"
+ :WORDS (adorn anoint bandage bathe bestrew bind blanket block blot bombard carpet choke cloak clog clutter coat contaminate cover dam dapple deck decorate deluge dirty dot douse drench edge embellish emblazon encircle encrust endow enrich entangle face festoon fill fleck flood frame garland garnish imbue impregnate infect inlay interlace interlard interleave intersperse interweave inundate lard lash line litter mask mottle ornament pad pave plate plug pollute replenish repopulate riddle ring ripple robe saturate season shroud smother soak soil speckle splotch spot staff stain stipple stud suffuse surround swaddle swathe taint tile trim veil vein wreathe)
+ :NON_LEVIN_WORDS (blockade bomb defile disorder envelop envelope extinguish fringe grace marble nickel-plate splint sully)
+ :COLLOCATIONS ("in" "with")
+ :COMPONENT_OF_MEANING ("IN" "ROUND" "AROUND" "ABOUT" "UPON" "ON" "AT") ;; OVERLAP <<SPATIAL>>
+) 
+(
+ :NUMBER "9.8.d"
+ :NAME "Fill Verbs - Change of State / -in"
+ :WORDS (bathe blanket cloak coat cover deck festoon garland line robe shroud swaddle swathe veil wreathe)
+ :COLLOCATIONS ("in" "with")
+ :COMPONENT_OF_MEANING ("IN" "ROUND" "AROUND" "ABOUT" "UPON" "ON" "AT") ;; OVERLAP <<SPATIAL>>
+) 
+(
+ :NUMBER "9.8.e"
+ :NAME "Fill Verbs - Locational / -up"
+ :WORDS (bandage bind block choke clog clutter cover dam dirty fill flood litter pad soak spot stain stop)
+ :COLLOCATIONS ("up")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "9.9.i"
+ :NAME "Butter Verbs"
+ :WORDS (grease polish powder sand water wax)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "9.9.ii"
+ :NAME "Butter Verbs"
+ :WORDS (asphalt bait blanket blindfold board bread brick bridle bronze butter buttonhole cap carpet caulk chrome cloak cork crown diaper drug feather fence flour forest frame fuel gag garland glove graffiti gravel groove halter harness heel ink label leash leaven lipstick mantle mulch muzzle nickel oil ornament panel paper parquet patch pepper perfume pitch plank plaster poison pomade poster postmark putty robe roof rosin rouge rut saddle salt salve seed sequin shawl shingle shoe shutter silver slate slipcover sod sole spice stain starch stopper stress string stucco sugar sulphur tag tar tarmac tassel thatch ticket tile turf veil veneer wallpaper whitewash wreathe yoke zipcode)
+ :NON_LEVIN_WORDS (aromatize black calk clay dope grease lubricate overfill polish powder sand transfuse water wax)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "9.10"
+ :NAME "Pocket Verbs"
+ :WORDS (archive bag bank beach bed bench berth billet bin bottle box cage can case cellar cloister coop corral crate dock drydock file fork garage ground hangar house jail jar jug kennel land lodge pasture pen pillory pocket pot sheathe shelter shelve shoulder skewer snare spindle spit spool stable string tin trap tree warehouse)
+ :NON_LEVIN_WORDS (bale imprison)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("INTO") ;; BLOCK <<SPATIAL>>
+) 
+(
+ :NUMBER "10.1"
+ :NAME "Remove Verbs"
+ :WORDS (abstract cull delete discharge disengage disgorge dislodge dismiss draw eject eliminate eradicate evict excise excommunicate expel extirpate extract extrude lop omit ostracize oust partition pry reap remove separate sever shoo subtract uproot winkle withdraw wrench)
+ :NON_LEVIN_WORDS (abolish annul cancel deduce deduct deflect depose dispose emit except exclude harvest infer repeal rescind retract revoke withhold)
+ :MISSING_WORDS (sort)
+ :COLLOCATIONS ("from" "off of" "off" "off of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "10.2.a"
+ :NAME "Banish Verbs / -from"
+ :NON_LEVIN_WORDS (retract)
+ :MISSING_WORDS (banish bar deport detain disinter distance evacuate exhume expel export extradite recall remove restrain)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "10.2.b"
+ :NAME "Banish Verbs / -to"
+ :WORDS (banish deport evacuate expel extradite recall remove)
+ :NON_LEVIN_WORDS (exile)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "10.3.a"
+ :NAME "Clear Verbs  - Locational"
+ :WORDS (clean clear drain empty)
+ :COLLOCATIONS ("off of" "off")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.3.b"
+ :NAME "Clear Verbs  - Change of State"
+ :WORDS (clean clear drain empty)
+ :COLLOCATIONS ("of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "10.4.1.a"
+ :NAME "Manner Subclass of Wipe Verbs - Locational / Source"
+ :WORDS (bail buff dab distill dust erase expunge flush leach lick pluck polish prune purge rinse rub scour scrape scratch scrub shave skim smooth soak squeeze strain strip suck suction swab sweep trim wash wear weed whisk winnow wipe wring)
+ :MISSING_WORDS (burnish chafe sieve)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("OFF" "OFF OF") ;; BLOCK <<SPATIAL>>
+) 
+(
+ :NUMBER "10.4.1.b.i"
+ :NAME "Manner Subclass of Wipe Verbs  - Change of State"
+ :WORDS (bail buff dab dust flush leach lick pluck polish prune rinse rub scour scrape scratch scrub shave skim smooth soak squeeze strain strip suck suction swab sweep trim wash wear weed whisk winnow wipe wring)
+ :COLLOCATIONS ("off" "off of" "out of" "from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.4.1.b.ii"
+ :NAME "Manner Subclass of Wipe Verbs  - Change of State"
+ :WORDS (bail buff dab distill dust erase expunge flush leach lick pluck polish prune purge rinse rub scour scrape scratch scrub shave skim smooth soak squeeze strain strip suck suction swab sweep trim wash wear weed whisk winnow wipe wring)
+ :NON_LEVIN_WORDS (blank repolish)
+ :COLLOCATIONS ("of")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.4.1.c"
+ :NAME "Manner Subclass of Wipe Verbs - Locational / Goal-at"
+ :WORDS (dab dust lick pluck rub scrape scratch scrub skim suck swab sweep whisk wipe)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.4.2.a"
+ :NAME "Instrument Subclass of Wipe Verbs - Locational"
+ :WORDS (brush comb file filter hoover hose iron mop plow rake sandpaper shear shovel siphon sponge towel vacuum)
+ :NON_LEVIN_WORDS (lathe plough)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.4.2.b"
+ :NAME "Instrument Subclass of Wipe Verbs - Change of State"
+ :WORDS (brush comb file filter hoover hose iron mop plow rake sandpaper shear shovel siphon sponge towel vacuum)
+ :COLLOCATIONS ("of")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.5"
+ :NAME "Verbs of Possessional Deprivation : Steal Verbs"
+ :WORDS (abduct cadge capture confiscate cop emancipate embezzle exorcise extort extract filch flog grab impound kidnap liberate lift nab pilfer pinch pirate plagiarize purloin reclaim recover redeem regain repossess rescue retrieve rustle seize smuggle snatch sneak sponge steal swipe take thieve wangle weasel winkle withdraw wrest)
+ :NON_LEVIN_WORDS (annex apprehend arrest conquer defeat down elicit hijack misappropriate prostrate ransom remount salvage snatch_away solicit subdue vanquish)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "10.5.p"
+ :NAME "Panacea Lose related Verbs"
+ :WORDS (doubt suspect forebode lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn cripple martyr orphan outlaw butcher bully)
+ :NON_LEVIN_WORDS ()
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "10.6.a"
+ :NAME "Verbs of Possessional Deprivation : Cheat Verbs / -of"
+ :WORDS (absolve acquit balk bereave bilk bleed burgle cheat cleanse con cull cure defraud denude deplete depopulate deprive despoil disabuse disarm disencumber dispossess divest drain ease exonerate fleece free gull milk mulct pardon plunder purge purify ransack relieve render rid rifle rob sap strip swindle unburden void wean)
+ :NON_LEVIN_WORDS (accuse defray disinfect exempt extricate inoculate invalidate loot nullify pillage remedy unload unravel vaccinate)
+ :COLLOCATIONS ("of" "from" "out of" "off of" "off")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.6.b"
+ :NAME "Verbs of Possessional Deprivation : Cheat Verbs / -of habit"
+ :WORDS (break)
+ :COLLOCATIONS ("of")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.6.c"
+ :NAME "Verbs of Possessional Deprivation : Cheat Verbs / -out of"
+ :WORDS (burgle cheat con swindle)
+ :COLLOCATIONS ("out of")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "10.7"
+ :NAME "Pit Verbs"
+ :WORDS (gill gut head hull husk lint louse milk peel pinion pip pit pith pod poll pulp rind scale scalp seed shell shuck skin snail stalk stem stone string tail tassel top vein weed wind worm zest)
+ :MISSING_WORDS (bark beard bone burl core)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; BLOCK <<SPATIAL>>
+) 
+(
+ :NUMBER "10.8"
+ :NAME "Debone Verbs"
+ :WORDS (deaccent debone debowel debug debur declaw defang defat defeather deflea deflesh defoam defog deforest defrost defuzz degas degerm deglaze degrease degrit degum degut dehair dehead dehorn dehull dehusk deice deink delint delouse deluster demast derat derib derind desalt descale desex desprout destarch destress detassel detusk devein dewater dewax deworm)
+ :NON_LEVIN_WORDS (deflower disembowel unearth unreel unsheathe unveil)
+ :MISSING_WORDS (debark)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; BLOCK <<SPATIAL>>
+) 
+(
+ :NUMBER "10.9"
+ :NAME "Mine Verbs"
+ :WORDS (mine quarry)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "11.1"
+ :NAME "Send Verbs"
+ :WORDS (airmail convey deliver dispatch express fedex forward hand mail pass port post return send shift ship shunt slip smuggle sneak transfer transport ups)
+ :NON_LEVIN_WORDS (detour freight pass_on transmit)
+ :COLLOCATIONS ("to" "from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "11.2.a"
+ :NAME "Slide Verbs"
+ :WORDS (bounce float move roll slide)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; INTRANS <<SPATIAL>>
+) 
+(
+ :NUMBER "11.2.b"
+ :NAME "Slide Verbs - Agent"
+ :WORDS (bounce float move roll slide)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "11.2.c"
+ :NAME "Slide Verbs"
+ :WORDS (bounce float move roll slide)
+ :NON_LEVIN_WORDS (migrate route)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "11.3"
+ :NAME "Bring and Take Verbs"
+ :WORDS (bring take)
+ :NON_LEVIN_WORDS (import)
+ :COLLOCATIONS ("from" "to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "11.4.i"
+ :NAME "Carry Verbs"
+ :WORDS (carry drag haul heave heft hoist kick lug pull push schlep shove tote tow tug)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "11.4.ii"
+ :NAME "Carry Verbs"
+ :WORDS (carry drag haul heave heft hoist kick lug pull push schlep shove tote tow tug)
+ :NON_LEVIN_WORDS (underrun)
+ :COLLOCATIONS ("from" "to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "11.5"
+ :NAME "Drive Verbs"
+ :WORDS (barge bus cart drive ferry fly row shuttle truck wheel wire)
+ :COLLOCATIONS ("from" "to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "12.a.i"
+ :NAME "Verbs of Exerting Force : Push/Pull Verbs - Locational"
+ :WORDS (draw heave jerk press pull push shove thrust tug yank)
+ :MISSING_WORDS (jostle rend)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "12.a.ii"
+ :NAME "Verbs of Exerting Force : Push/Pull Verbs - Locational"
+ :WORDS (draw heave jerk press pull push shove thrust tug yank)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "12.b"
+ :NAME "Verbs of Exerting Force : Push/Pull Verbs  - Locational / -at"
+ :WORDS (draw heave jerk press pull push shove thrust tug yank)
+ :COLLOCATIONS ("at" "on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.1.a.i"
+ :NAME "Give - No Exchange - Sort of Atelic"
+ :WORDS (lend loan rent)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.1.a.ii"
+ :NAME "Give - No Exchange"
+ :WORDS (feed give pass pay peddle refund render repay serve)
+ :NON_LEVIN_WORDS (apply deal finance mortgage overpay prepay rent requite spend tender)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.1.b.i"
+ :NAME "Give - Exchange"
+ :WORDS (lease rent)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.1.b.ii"
+ :NAME "Give - Exchange"
+ :WORDS (sell trade)
+ :NON_LEVIN_WORDS (hock pawn rent)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.2"
+ :NAME "Contribute Verbs"
+ :WORDS (administer contribute disburse distribute donate extend forfeit proffer refer reimburse relinquish remit restore return sacrifice submit surrender transfer)
+ :NON_LEVIN_WORDS (capitulate disclaim disown disseminate lose miscarry recapitulate release resign subscribe succumb waive)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.3"
+ :NAME "Verbs of Future Having"
+ :WORDS (advance allocate allot assign award bequeath cede concede extend grant guarantee issue leave offer owe promise vote will yield)
+ :NON_LEVIN_WORDS (apportion ascribe attribute augur bestow delegate impute portion ration subdivide vaticinate)
+ :COLLOCATIONS ("for" "among" "to" "upon")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.4.1.a"
+ :NAME "Verbs of Fulfilling - Possessional / -to"
+ :WORDS (credit entrust furnish issue leave present provide serve supply trust)
+ :NON_LEVIN_WORDS (afford cater commit dedicate devote dispose endear)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.4.1.b"
+ :NAME "Verbs of Fulfilling - Change of State / -with"
+ :WORDS (credit entrust furnish issue leave present provide serve supply trust)
+ :NON_LEVIN_WORDS (discount discredit fulfil fulfill proportion)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.4.2"
+ :NAME "Equip Verbs"
+ :WORDS (arm burden charge compensate equip invest ply regale reward saddle)
+ :NON_LEVIN_WORDS (aid armor arraign assist fund help overburden rearm redress reinforce succor weight)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.5.1.a"
+ :NAME "Get - No Exchange"
+ :WORDS (book call cash catch charter choose fetch find gain gather get hire keep leave order phone pick pluck pull reach reserve save shoot slaughter steal vote)
+ :NON_LEVIN_WORDS (accomplish achieve attain benefit conserve earmark find_out let prescribe profit self-perpetuate)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.5.1.b.i"
+ :NAME "Get - Exchange"
+ :WORDS (lease rent)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.5.1.b.ii"
+ :NAME "Get - Exchange"
+ :WORDS (buy earn procure secure win)
+ :NON_LEVIN_WORDS (lay_in)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.5.2.a"
+ :NAME "Obtain - No Exchange (CAUSE)"
+ :WORDS (appropriate borrow cadge collect exact grab recover regain retrieve seize select snatch)
+ :NON_LEVIN_WORDS (accrue ensnare incur stockpile)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.5.2.b"
+ :NAME "Obtain - No Exchange (LET w/ benefactive)"
+ :WORDS (accept acquire obtain)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.5.2.c"
+ :NAME "Obtain - No Exchange (LET w/out benefactive)"
+ :WORDS (accumulate inherit receive)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.5.2.d"
+ :NAME "Obtain - Exchange"
+ :WORDS (purchase)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.6.a"
+ :NAME "Verbs of Exchange"
+ :WORDS (barter change exchange substitute swap)
+ :NON_LEVIN_WORDS (market replace supplant switch)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.6.b"
+ :NAME "Verbs of Exchange"
+ :WORDS (trade)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "13.7"
+ :NAME "Berry Verbs"
+ :WORDS (antique berry birdnest blackberry clam crab fish fowl grouse hay log mushroom nest nut oyster pearl prawn rabbit seal shark shrimp snail snipe sponge whale whelk)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "14.a"
+ :NAME "Learn Verbs / -from"
+ :WORDS (glean learn memorize read study)
+ :NON_LEVIN_WORDS (assimilate browse cram demand practice practise request reread revise)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "14.b"
+ :NAME "Learn Verbs / -of/about"
+ :WORDS (learn read)
+ :MISSING_WORDS (inquire)
+ :COLLOCATIONS ("of" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "14.c"
+ :NAME "Learn Verbs / -for"
+ :WORDS (cram read study)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "15.1.a"
+ :NAME "Hold Verbs / -by"
+ :WORDS (clasp clutch grasp grip handle hold wield)
+ :NON_LEVIN_WORDS (mishandle)
+ :COLLOCATIONS ("by")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "15.1.b"
+ :NAME "Hold Verbs / -in"
+ :WORDS (clasp clutch grasp grip handle hold wield)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "15.2.a"
+ :NAME "Keep Verbs"
+ :WORDS (leave)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "15.2.b"
+ :NAME "Keep Verbs"
+ :WORDS (hoard keep store)
+ :NON_LEVIN_WORDS (garner)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "16"
+ :NAME "Verbs of Concealment"
+ :WORDS (block cloister conceal curtain hide isolate quarantine screen seclude sequester shelter)
+ :NON_LEVIN_WORDS (barricade buoy harbor neglect obstruct repress suppress)
+ :MISSING_WORDS (dissimulate)
+ :COLLOCATIONS ("against")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "17.1"
+ :NAME "Throw Verbs"
+ :WORDS (bash bat bunt case catapult chuck fire flick fling flip hit hurl kick knock lob loft nudge pass pitch punt shoot shove slam slap sling smash tap throw tip toss)
+ :NON_LEVIN_WORDS (discard pass_on)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "17.2.i"
+ :NAME "Pelt Verbs"
+ :MISSING_WORDS (bombard buffet pelt shower stone)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "17.2.ii"
+ :NAME "Pelt Verbs -- stone"
+ :WORDS (stone)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.1.a"
+ :NAME "Hit Verbs - Change of State / -with"
+ :WORDS (bang bash batter beat bump butt dash drum hammer hit kick knock lash pound rap slap smack smash strike tamp tap thump thwack whack)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.1.b"
+ :NAME "Hit Verbs - Change of State"
+ :WORDS (bang bash batter beat bump butt dash drum hammer hit kick knock lash pound rap slap smack smash strike tamp tap thump thwack whack)
+ :COLLOCATIONS ("on" "at")
+ :COMPONENT_OF_MEANING ("ON" "AT") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.1.c"
+ :NAME "Hit Verbs  - Locational / -at/with"
+ :WORDS (bang bash batter beat bump butt dash drum hammer hit kick knock lash pound rap slap smack smash strike tamp tap thump thwack whack)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.1.d"
+ :NAME "Hit Verbs  - Locational / against"
+ :WORDS (bang bash batter beat bump butt dash drum hammer hit kick knock lash pound rap slap smack smash strike tamp tap thump thwack whack)
+ :COLLOCATIONS ("against")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.1.e"
+ :NAME "Hit Verbs  - Change of State / together"
+ :WORDS (bang bash batter beat bump butt dash drum hammer hit kick knock lash pound rap slap smack smash strike tamp tap thump thwack whack)
+ :COLLOCATIONS ("together")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.2.a"
+ :NAME "Swat Verbs"
+ :WORDS (bite claw paw peck punch scratch shoot slug stab swat swipe)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.2.b"
+ :NAME "Swat Verbs  - Locational"
+ :WORDS (bite claw paw peck punch scratch shoot slug stab swat swipe)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.3"
+ :NAME "Spank Verbs"
+ :WORDS (belt birch bludgeon bonk brain cane clobber club conk cosh cudgel cuff flog knife paddle paddywhack pummel sock spank strap thrash truncheon wallop whip whisk)
+ :NON_LEVIN_WORDS (k.o. knock_out stab)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.4.a"
+ :NAME "Nonagentive Verbs of Impact by Contact - Locational"
+ :WORDS (bang brush bump crash hit knock ram slam smash thud)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "18.4.b"
+ :NAME "Nonagentive Verbs of Impact by Contact - Change of State"
+ :WORDS (bang bump crash knock slam smash thud)
+ :COLLOCATIONS ("together")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "19.a.i"
+ :NAME "Poke Verbs"
+ :WORDS (dig jab poke prick stick)
+ :MISSING_WORDS (impale)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "19.a.ii"
+ :NAME "Poke Verbs - Change of State"
+ :WORDS (pierce)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "19.b"
+ :NAME "Poke Verbs - Locational / -through"
+ :WORDS (dig jab pierce poke prick stick)
+ :COLLOCATIONS ("through")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "19.c.i"
+ :NAME "Poke Verbs / -with"
+ :WORDS (dig jab pierce poke prick stick)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "19.c.ii"
+ :NAME "Poke Verbs - Change of State / -with"
+ :WORDS (pierce)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "19.d"
+ :NAME "Poke Verbs - Locational / -with"
+ :WORDS (jab poke)
+ :COLLOCATIONS ("at" "with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "20.a"
+ :NAME "Verbs of Contact : Touch Verbs / -with"
+ :WORDS (caress graze kiss lick nudge pat pinch prod sting stroke tickle touch)
+ :COLLOCATIONS ("on" "with")
+ :COMPONENT_OF_MEANING ("ON" "WITH") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "20.b"
+ :NAME "Verbs of Contact : Touch Verbs / no -with"
+ :WORDS (peck)
+ :NON_LEVIN_WORDS (fondle twinge)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("AT" "ON") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "21.1.a"
+ :NAME "Cut Verbs - Change of State"
+ :WORDS (chip cut saw scrape scratch slash)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "21.1.b"
+ :NAME "Cut Verbs - Change of State / -on"
+ :WORDS (chip clip cut hack hew saw scrape scratch slash snip)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "21.1.c"
+ :NAME "Cut Verbs - Change of State / -on/with"
+ :WORDS (chip clip cut hack hew saw scrape scratch slash snip)
+ :COLLOCATIONS ("on" "with")
+ :COMPONENT_OF_MEANING ("ON" "WITH") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "21.1.d"
+ :NAME "Cut Verbs - Locational"
+ :WORDS (chip clip cut hack hew snip)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "21.1.e"
+ :NAME "Cut Verbs - Locational / -at"
+ :WORDS (chip clip cut hack hew saw scrape scratch slash snip)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "21.2.a"
+ :NAME "Carve Verbs - Change of State / -with"
+ :WORDS (bore bruise carve chip chop crop crush cube dent dice drill file fillet gash gouge grate grind mangle mash mince mow nick notch perforate prune pulverize punch shred slice slit spear squash squish)
+ :NON_LEVIN_WORDS (fell lance mill trample tread)
+ :COLLOCATIONS ("on" "with")
+ :COMPONENT_OF_MEANING ("ON" "WITH") ;; OVERLAP <NON-SPATIAL>
+) 
+(
+ :NUMBER "21.2.b"
+ :NAME "Carve Verbs - Change of State / Theme and Instrument"
+ :WORDS (bore bruise carve chip chop crop crush cube dent dice drill file fillet gash gouge grate grind mangle mash mince mow nick notch perforate prune pulverize punch shred slice slit spear squash squish)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "21.2.c"
+ :NAME "Carve Verbs - Change of State / Instrument Only"
+ :WORDS (bore carve chip chop cube dice drill file gouge grate grind mash mince mow prune pulverize punch shred slice spear squash squish)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "22.1.a"
+ :NAME "Mix Verbs - Change of State / -together"
+ :WORDS (add blend combine commingle concatenate connect cream fuse join link merge mingle mix network pool)
+ :MISSING_WORDS (align alloy ally coordinate couple earth pair)
+ :COLLOCATIONS ("together")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "22.1.b"
+ :NAME "Mix Verbs - Locational / -with"
+ :WORDS (blend combine commingle concatenate connect cream fuse join link merge mingle mix pool)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "22.1.c"
+ :NAME "Mix Verbs - Locational / -into"
+ :WORDS (blend cream mix)
+ :COLLOCATIONS ("into")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "22.1.d"
+ :NAME "Mix Verbs - Locational / -to"
+ :WORDS (add connect join link network)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "22.2.a"
+ :NAME "Amalgamate Verbs - Change of State"
+ :WORDS (affiliate alternate amalgamate associate coalesce coincide compare confederate confuse conjoin consolidate contrast correlate criss-cross entangle entwine harmonize incorporate integrate interchange interconnect interlace interlink interlock intermingle interrelate intersperse intertwine interweave mate muddle oppose pair rhyme team total unify unite)
+ :NON_LEVIN_WORDS (breed couple match overlap reconcile resolve second share supplement twine)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "22.2.b"
+ :NAME "Amalgamate Verbs - Locational / -to"
+ :WORDS (engage introduce marry wed)
+ :NON_LEVIN_WORDS (liken match oppose subject subordinate)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "22.2.c"
+ :NAME "Amalgamate Verbs - Change of State"
+ :WORDS (affiliate alternate amalgamate associate coalesce coincide compare confederate confuse conjoin consolidate contrast correlate criss-cross entangle entwine harmonize incorporate integrate interchange interconnect interlace interlink interlock intermingle interrelate intersperse intertwine interweave mate muddle oppose pair rhyme team total unify unite)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "22.3.a.i"
+ :NAME "Shake Verbs - Locational / -with"
+ :WORDS (band cluster gather group herd mass pair roll shake stir)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "22.3.a.ii"
+ :NAME "Shake Verbs - Locational / -with"
+ :WORDS (band beat bundle cluster collate gather glom group herd jumble lump mass package pair roll scramble shake shuffle stir whip whisk)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "22.3.b.i"
+ :NAME "Shake Verbs - Locational / -into"
+ :WORDS (beat shake stir swirl whip whisk)
+ :COLLOCATIONS ("into")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "22.3.b.ii"
+ :NAME "Shake Verbs - Locational / -into"
+ :WORDS (beat collect scramble shake shuffle splice stir swirl whip whisk)
+ :COLLOCATIONS ("into")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "22.3.c.i"
+ :NAME "Shake Verbs - Locational / -to"
+ :WORDS (stick)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "22.3.c.ii"
+ :NAME "Shake Verbs - Locational / -to"
+ :WORDS (append attach baste bind bond fasten fuse graft moor sew splice stick weld)
+ :NON_LEVIN_WORDS (affix apply gird hem quilt transplant)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "22.3.d.i"
+ :NAME "Shake Verbs - Change of State / -together"
+ :WORDS (band mass stick)
+ :COLLOCATIONS ("together")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "22.3.d.ii"
+ :NAME "Shake Verbs - Change of State / -together"
+ :WORDS (append attach band baste beat bind bond bundle cluster collate collect fasten fuse gather glom graft group herd jumble lump mass moor package pair roll scramble sew shake shuffle splice stick stir swirl weld whip whisk)
+ :COLLOCATIONS ("together")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "22.4.a"
+ :NAME "Tape Verbs - Locational / -with"
+ :WORDS (anchor band belt bolt bracket buckle button cement chain clamp clasp clip epoxy fetter glue gum handcuff harness hinge hitch hook knot lace lash lasso latch leash link lock loop manacle moor muzzle nail padlock paste peg pin plaster rivet rope screw seal shackle skewer solder staple stitch strap string tack tape tether thumbtack tie trammel wire yoke zip)
+ :NON_LEVIN_WORDS (thread)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING ("ROUND" "AROUND" "ABOUT") ;; OVERLAP <<SPATIAL>>
+) 
+(
+ :NUMBER "22.4.b"
+ :NAME "Tape Verbs - Change of State / -together"
+ :WORDS (anchor band belt bolt bracket buckle button cement chain clamp clasp clip epoxy fetter glue gum handcuff harness hinge hitch hook knot lace lash lasso latch leash link lock loop manacle moor muzzle nail padlock paste peg pin plaster rivet rope screw seal shackle skewer solder staple stitch strap string tack tape tether thumbtack tie trammel wire yoke zip)
+ :NON_LEVIN_WORDS (thread)
+ :COLLOCATIONS ("together")
+ :COMPONENT_OF_MEANING ("ROUND" "AROUND" "ABOUT") ;; OVERLAP <<SPATIAL>>
+) 
+(
+ :NUMBER "22.5.a"
+ :NAME "Cling Verbs - Locational"
+ :WORDS (adhere cleave cling)
+ :NON_LEVIN_WORDS (cohere converge)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "22.5.b"
+ :NAME "Cling Verbs - Change of State / -together"
+ :WORDS (adhere cleave cling)
+ :COLLOCATIONS ("together")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "23.1.a"
+ :NAME "Separate Verbs - Locational / -from"
+ :WORDS (decouple differentiate disconnect disentangle dissociate distinguish divide divorce part segregate separate sever)
+ :NON_LEVIN_WORDS (disassociate disjoint dismember retreat uncoil)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "23.1.b"
+ :NAME "Separate Verbs - Change of State"
+ :WORDS (decouple differentiate disconnect disentangle dissociate distinguish divide divorce part segregate separate sever)
+ :NON_LEVIN_WORDS (disarticulate ramify)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; INTRANS <<SPATIAL>>
+) 
+(
+ :NUMBER "23.2.a"
+ :NAME "Split Verbs - Locational / -off (of)"
+ :WORDS (blow break cut draw hack hew kick knock pry pull push rip roll saw shove slip split tear tug yank)
+ :COLLOCATIONS ("off of" "of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "23.2.b"
+ :NAME "Split Verbs - Change of State / -apart"
+ :WORDS (blow break cut draw hack hew kick knock pry pull push rip roll saw shove slip split tear tug yank)
+ :NON_LEVIN_WORDS (fritter)
+ :COLLOCATIONS ("away" "apart")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "23.3.a"
+ :NAME "Disassemble Verbs - Locational / -from"
+ :WORDS (detach disassemble disconnect partition sift sunder unbolt unbuckle unbutton unchain unclamp unclasp unclip unfasten unglue unhinge unhitch unhook unlace unlatch unleash unlock unpeg unpin unscrew unshackle unstaple unstitch untie unzip)
+ :NON_LEVIN_WORDS (dismantle dismount)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "23.3.b"
+ :NAME "Disassemble Verbs - Change of State"
+ :WORDS (detach disassemble disconnect partition sift sunder unbolt unbuckle unbutton unchain unclamp unclasp unclip unfasten unglue unhinge unhitch unhook unlace unlatch unleash unlock unpeg unpin unscrew unshackle unstaple unstitch untie unzip)
+ :NON_LEVIN_WORDS (unfix)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "23.4.a"
+ :NAME "Differ Verbs - Locational / -from"
+ :WORDS (differ diverge)
+ :NON_LEVIN_WORDS (branch deviate secede)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "23.4.b"
+ :NAME "Differ Verbs - Change of State"
+ :WORDS (differ diverge)
+ :NON_LEVIN_WORDS (branch)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "24"
+ :NAME "Verbs of Coloring"
+ :WORDS (color distemper dye enamel glaze japan lacquer paint shellac spraypaint stain tint varnish)
+ :NON_LEVIN_WORDS (repaint)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "25.1.a"
+ :NAME "Verbs of Image Impression - Locational"
+ :WORDS (applique emboss embroider engrave etch imprint incise inscribe mark paint set sign stamp tattoo)
+ :NON_LEVIN_WORDS (indent mark_again ratify)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "25.1.b"
+ :NAME "Verbs of Image Impression - Change of State"
+ :WORDS (applique emboss embroider engrave etch imprint incise inscribe mark paint set sign stamp tattoo)
+ :NON_LEVIN_WORDS (annotate commemorate scar)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "25.2"
+ :NAME "Scribble Verbs"
+ :WORDS (carve chalk charcoal copy crayon doodle draw forge ink paint pencil plot print scratch scrawl scribble sketch spraypaint stencil trace type write)
+ :NON_LEVIN_WORDS (misspell spell)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "25.3"
+ :NAME "Illustrate Verbs"
+ :WORDS (address adorn autograph brand date decorate embellish endorse illuminate illustrate initial label letter monogram ornament tag)
+ :NON_LEVIN_WORDS (gild)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "25.4"
+ :NAME "Transcribe Verbs"
+ :WORDS (copy film forge microfilm photocopy photograph record tape televise transcribe type)
+ :NON_LEVIN_WORDS (chronicle counterfeit emulate fake falsify imitate mirror photo simulate tally tally_up)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.1.a"
+ :NAME "Build Verbs / -for"
+ :WORDS (arrange assemble bake blow build carve cast chisel churn compile cook crochet cut develop embroider fashion fold forge grind grow hack hammer hatch knit make mold pound roll sculpt sew shape spin stitch weave whittle)
+ :NON_LEVIN_WORDS (cook_up cup dissect erect farm formulate sculpture)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.1.b"
+ :NAME "Build Verbs / -into"
+ :WORDS (arrange assemble bake blow build carve cast chisel churn compile cook crochet cut develop embroider fashion fold forge grind grow hack hammer hatch knit make mold pound roll sculpt sew shape spin stitch weave whittle)
+ :COLLOCATIONS ("into")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.2.a.i"
+ :NAME "Grow Verbs / -from"
+ :WORDS (evolve grow)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.2.a.ii"
+ :NAME "Grow Verbs / -from"
+ :WORDS (develop evolve grow hatch mature)
+ :NON_LEVIN_WORDS (raise)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.2.b"
+ :NAME "Grow Verbs / -into"
+ :WORDS (develop evolve grow hatch mature)
+ :NON_LEVIN_WORDS (breed)
+ :COLLOCATIONS ("into")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.3"
+ :NAME "Verbs of Preparing"
+ :WORDS (bake blend boil brew clean clear cook fix fry grill hardboil iron light mix poach pour prepare roast roll run scramble set softboil toast toss wash)
+ :NON_LEVIN_WORDS (cook_up overbake ready rehearse)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.4"
+ :NAME "Create Verbs"
+ :WORDS (coin compose compute concoct construct create derive design dig fabricate form invent manufacture mint model organize produce recreate style synthesize)
+ :NON_LEVIN_WORDS (carry_out conjure contrive cook_up devise evoke implement induce plan program publish rearrange reconstitute reorganize schedule stage)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.5.a.i"
+ :NAME "Knead Verbs"
+ :WORDS (beat freeze knead shake squeeze twirl twist wad whip wind work)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.5.a.ii"
+ :NAME "Knead Verbs"
+ :WORDS (bend coil collect compress fold freeze melt squash squish wind)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.5.b"
+ :NAME "Knead Verbs"
+ :WORDS (beat bend coil collect compress fold freeze knead melt shake squash squeeze squish twirl twist wad whip wind work)
+ :MISSING_WORDS (contort curve distort edit massage pervert till)
+ :COLLOCATIONS ("into")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.6"
+ :NAME "Turn Verbs"
+ :WORDS (alter change convert metamorphose transform transmute turn)
+ :NON_LEVIN_WORDS (deform innovate mutate reduce renew resurrect resuscitate translate)
+ :COLLOCATIONS ("from" "into")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.7.i"
+ :NAME "Performance Verbs"
+ :WORDS (chant choreograph compose dance direct draw hum intone paint perform play produce recite silkscreen sing spin whistle write)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "26.7.ii"
+ :NAME "Performance Verbs"
+ :WORDS (chant choreograph compose dance direct draw hum intone paint perform play produce recite silkscreen sing spin take whistle write)
+ :NON_LEVIN_WORDS (debut declaim enact improvise)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "27"
+ :NAME "Engender Verbs"
+ :WORDS (beget cause create engender generate shape spawn)
+ :NON_LEVIN_WORDS (bring_about sire)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "28"
+ :NAME "Calve Verbs"
+ :WORDS (calve cub fawn foal kitten lamb litter pup spawn whelp)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.1.a"
+ :NAME "Appoint Verbs  / -as"
+ :WORDS (acknowledge consider deem esteem imagine need rate reckon want)
+ :NON_LEVIN_WORDS (adopt appoint commission crown denote designate elect mark nominate ordain proclaim promote report upgrade)
+ :MISSING_WORDS (conceive)
+ :COLLOCATIONS ("as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.1.b"
+ :NAME "Appoint Verbs / -S"
+ :WORDS (acknowledge consider deem esteem imagine need rate reckon want)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.1.c"
+ :NAME "Appoint Verbs  / -as"
+ :WORDS (adopt appoint crown designate elect mark nominate ordain proclaim report)
+ :COLLOCATIONS ("as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.1.d"
+ :NAME "Appoint Verbs  / -NP"
+ :WORDS (adopt appoint crown designate elect mark nominate ordain proclaim report)
+ :NON_LEVIN_WORDS (acknowledge consider deem esteem imagine rate reckon reelect want wish)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.1.e"
+ :NAME "Appoint Verbs / -S"
+ :WORDS (adopt appoint crown designate elect mark nominate ordain proclaim report)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.2.a"
+ :NAME "Characterize Verbs / -as"
+ :WORDS (accept appreciate employ envisage esteem honor imagine intend regard reject remember represent repudiate see value view)
+ :NON_LEVIN_WORDS (abjure classify count define embody envision forswear herald license oppose personify qualify use utilize visualize)
+ :MISSING_WORDS (opt)
+ :COLLOCATIONS ("as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.2.b"
+ :NAME "Characterize Verbs / -S"
+ :WORDS (accept appreciate employ envisage esteem honor imagine intend regard reject remember represent repudiate see value view)
+ :NON_LEVIN_WORDS (defy entitle envision found interpret license picture specify uncover undertake)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.2.b.p"
+ :NAME "Panacea Characterize Verbs / -S"
+ :WORDS ()
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.2.c"
+ :NAME "Characterize Verbs / -as"
+ :WORDS (address bill cast certify characterize choose cite class classify confirm count define describe diagnose disguise employ engage enlist enroll enter envisage establish esteem hail herald hire honor identify imagine incorporate induct intend lampoon offer oppose paint portray praise qualify rank recollect recommend regard reinstate reject remember represent repudiate reveal salute select stigmatize take train treat use value visualize)
+ :NON_LEVIN_WORDS (constitute contest contradict corroborate decant defy depict detail dignify disavow disobey divulge educate embody enumerate envision exploit forswear found grade ignore ill-use institute interpret license list misrepresent mistreat number outline overpraise perjure personify rebuff rebuild rebut recast reconstruct redraw refute reify renounce resist retain see specify stipulate substantiate sustain utilize verify view)
+ :COLLOCATIONS ("as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
+
+(
+ :NUMBER "29.2.d"
+ :NAME "Characterize Verbs / -S"
+ :WORDS (accept address appreciate bill cast certify characterize choose cite class classify confirm count define describe diagnose disguise employ engage enlist enroll enter envisage establish esteem hail herald hire honor identify imagine incorporate induct intend lampoon offer oppose paint portray praise qualify rank recollect recommend regard reinstate reject remember represent repudiate reveal salute select stigmatize take train treat use value visualize)
+ :NON_LEVIN_WORDS (ascertain catalogue constitute contest_a_right contradict defy depict disobey divulge educate embody entitle enumerate envision exploit found govern interpret license number_off numerate picture renumerate see thwart view)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
+(
+ :NUMBER "29.3"
+ :NAME "Dub Verbs"
+ :WORDS (anoint baptize brand call christen consecrate crown decree dub label make name nickname pronounce rule stamp style term vote)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.4.a"
+ :NAME "Declare Verbs"
+ :WORDS (assume believe fancy presume suppose think)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.4.b"
+ :NAME "Declare Verbs / -to be"
+ :WORDS (assume believe fancy presume suppose think)
+ :MISSING_WORDS (sentence)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.4.c"
+ :NAME "Declare Verbs / -of/about"
+ :WORDS (think)
+ :COLLOCATIONS ("of" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.4.d"
+ :NAME "Declare Verbs / -that"
+ :WORDS (assume believe fancy presume suppose think)
+ :MISSING_WORDS (imply presuppose testify)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.4.e"
+ :NAME "Declare Verbs"
+ :WORDS (adjudge adjudicate avow confess declare find judge profess prove warrant)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.4.f"
+ :NAME "Declare Verbs / -to be"
+ :WORDS (adjudge adjudicate avow confess declare find judge profess prove warrant)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.4.g"
+ :NAME "Declare Verbs / -that"
+ :WORDS (adjudge adjudicate avow confess declare find judge profess prove warrant)
+ :NON_LEVIN_WORDS (confirm find_out)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.5.a"
+ :NAME "Conjecture Verbs / -to be"
+ :WORDS (desire doubt expect feel hold know maintain mean recognize suspect)
+ :NON_LEVIN_WORDS (anticipate let require)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.5.b"
+ :NAME "Conjecture Verbs / -that"
+ :WORDS (doubt expect feel hold know maintain mean recognize suspect)
+ :NON_LEVIN_WORDS (anticipate desire realize require)
+ :MISSING_WORDS (forebode)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.5.c"
+ :NAME "Conjecture Verbs / -of/about"
+ :WORDS (know)
+ :COLLOCATIONS ("of" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.5.d"
+ :NAME "Conjecture Verbs / -to be"
+ :WORDS (admit allow assert conjecture deny discover figure grant guarantee guess observe repute show suspect)
+ :NON_LEVIN_WORDS (allege confute determine disprove predict surmise swear underestimate)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.5.e"
+ :NAME "Conjecture Verbs / -that"
+ :WORDS (admit allow assert conjecture deny discover figure grant guarantee guess observe repute show suspect)
+ :NON_LEVIN_WORDS (allege confute determine display disprove fate forecast foreknow foreordain foresee foretell necessitate predict prophesy speculate surmise swear vaticinate)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.6.a"
+ :NAME "Masquerade Verbs / Bare predicate"
+ :WORDS (act behave)
+ :NON_LEVIN_WORDS (be feign pretend)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.6.b"
+ :NAME "Masquerade Verbs / -as"
+ :WORDS (act behave camouflage count masquerade officiate pose qualify rank rate serve)
+ :MISSING_WORDS (appear function malfunction minister seem)
+ :COLLOCATIONS ("as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.7"
+ :NAME "Orphan Verbs"
+ :WORDS (apprentice canonize cripple cuckold knight martyr orphan outlaw pauper recruit widow)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.7.p"
+ :NAME "Panacea Orphan Verbs"
+ :WORDS (cripple martyr orphan outlaw pauper widow)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.8.a"
+ :NAME "Captain Verbs / Beneficiary"
+ :WORDS (boss bully butcher butler caddy captain champion chaperone chauffeur clerk coach cox crew doctor emcee escort guard host model mother nurse partner pilot pioneer police referee shepherd skipper sponsor star tailor tutor umpire understudy usher valet volunteer witness)
+ :MISSING_WORDS (prostitute)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.8.a.p"
+ :NAME "Panacea Captain Verbs / Beneficiary"
+ :WORDS (boss bully butcher)
+ :MISSING_WORDS (prostitute)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "29.8.b"
+ :NAME "Captain Verbs / Agent"
+ :WORDS (boss bully butcher butler caddy captain champion chaperone chauffeur clerk coach cox crew doctor emcee escort guard host model mother nurse partner pilot pioneer police referee shepherd skipper sponsor star tailor tutor umpire understudy usher valet volunteer witness)
+ :NON_LEVIN_WORDS (master)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.1.a.i"
+ :NAME "See Verbs / Bare NP"
+ :WORDS (feel hear see sense smell taste)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.1.a.ii"
+ :NAME "See Verbs / Bare NP"
+ :WORDS (detect discern notice)
+ :NON_LEVIN_WORDS (heed proofread reconnoiter)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.1.b"
+ :NAME "See Verbs / -that"
+ :WORDS (detect discern feel hear notice see sense)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.1.c"
+ :NAME "See Verbs / Bare S"
+ :WORDS (feel hear notice see smell taste)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.1.d"
+ :NAME "See Verbs / Progressive S"
+ :WORDS (detect discern feel hear notice see sense smell taste)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.1.e"
+ :NAME "See Verbs / -in"
+ :WORDS (detect discern feel hear notice see sense smell taste)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.1.f"
+ :NAME "See Verbs / -of/about"
+ :WORDS (hear)
+ :COLLOCATIONS ("of" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.2.a.i"
+ :NAME "Sight Verbs / Bare NP"
+ :WORDS (examine eye glimpse inspect investigate note observe overhear perceive regard savor scan scent scrutinize study survey view watch witness)
+ :NON_LEVIN_WORDS (cross-examine experience peruse spy)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.2.a.i.p"
+ :NAME "Panacea Sight Verbs / Bare NP"
+ :WORDS (cancel check click confirm connect consider contact contain contains copy copy-and-paste delete deliver download examine execute eye find glimpse help highlight inspect investigate look note notify observe open overhear paste pay perceive provide read receive refer register reply request reset respond review rsvp savor scan scent scrutinize see send share start study submit support survey take test try type unsubscribe update view visit watch witness)
+ :NON_LEVIN_WORDS (cross-examine experience peruse spy)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.2.a.ii"
+ :NAME "Sight Verbs / Bare NP"
+ :WORDS (descry discover espy examine eye glimpse inspect investigate note observe overhear perceive recognize regard savor scan scent scrutinize sight spot spy study survey view watch witness)
+ :NON_LEVIN_WORDS (card comprehend disqualify disregard make_out overlook ponder read research sample score sight-read solve undergo understand)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.2.b"
+ :NAME "Sight Verbs / -that"
+ :WORDS (discover note observe overhear perceive recognize)
+ :NON_LEVIN_WORDS (acknowledge)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.2.c"
+ :NAME "Sight Verbs / Progressive S"
+ :WORDS (discover espy glimpse investigate observe overhear perceive scrutinize spot study view watch witness)
+ :NON_LEVIN_WORDS (spy)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.3.a"
+ :NAME "Peer Verbs / -at"
+ :WORDS (gape gawk gaze glance glare goggle leer look ogle peek peep peer sniff squint stare)
+ :NON_LEVIN_WORDS (look_back take_a_look)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.3.b"
+ :NAME "Peer Verbs / Path"
+ :WORDS (gape gawk gaze glance glare goggle leer look ogle peek peep peer sniff squint stare)
+ :MISSING_WORDS (take_a_look)
+ :COLLOCATIONS ("around" "through" "into")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.3.c"
+ :NAME "Peer Verbs / -to"
+ :WORDS (listen)
+ :NON_LEVIN_WORDS (obey)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.3.d"
+ :NAME "Peer Verbs / -on"
+ :WORDS (check snoop)
+ :NON_LEVIN_WORDS (eavesdrop err)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "30.4"
+ :NAME "Stimulus Subject Perception Verbs"
+ :WORDS (feel look smell sound taste)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.1.a"
+ :NAME "Amuse Verbs / -with"
+ :WORDS (abash affect afflict affront aggravate agitate agonize alarm alienate amaze amuse anger annoy antagonize appal appease arouse assuage astonish astound awe baffle beguile bewilder bewitch boggle bore bother bug calm captivate chagrin charm cheer chill comfort concern confound confuse console content convince cow crush cut daunt daze dazzle deject delight demolish demoralize depress devastate disappoint disarm discombobulate discomfit discompose disconcert discourage disgrace disgruntle disgust dishearten disillusion dismay dispirit displease disquiet dissatisfy distract distress disturb dumbfound elate electrify embarass embolden enchant encourage engage engross enlighten enliven enrage enrapture entertain enthrall enthuse entice entrance exasperate excite exhaust exhilarate fascinate faze flabbergast flatter floor fluster frighten frustrate gall galvanize gladden gratify grieve harass haunt hearten horrify humble humiliate hurt hypnotize impress incense infuriate inspire insult interest intimidate intoxicate intrigue invigorate irk irritate jar jollify jolt lull madden mesmerize miff mollify mortify move muddle mystify nauseate nettle numb obsess offend outrage overawe overwhelm pacify pain peeve perplex perturb pique placate plague please preoccupy provoke puzzle rankle reassure refresh relax relieve repel repulse revitalize revolt rile ruffle sadden satisfy scandalize scare shake shame shock sicken sober solace soothe spellbind spook stagger startle stimulate sting stir strike stump stun stupefy surprise tantalize tease tempt terrify terrorize threaten thrill throw tickle tire titillate torment touch transport trouble try unnerve unsettle uplift upset vex weary worry wound wow)
+ :NON_LEVIN_WORDS (acquaint adulate aggrieve allay alleviate appall befuddle beset budge busy clinch debase disserve divert embarrass endanger enervate ensure exhort familiarize fatigue foil fool harm impair imperil inconvenience infatuate inflame influence innervate instigate jade manipulate menace mitigate molest occupy overpower overrule palpate pester pestle prejudice preserve propitiate quench ravish recharge rejuvenate satiate spur_on suffice taste taunt torture transfix transgress violate)
+ :COLLOCATIONS ("in" "with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
+(
+ :NUMBER "31.1.a.p"
+ :NAME "Panacea Amuse Verbs / -with"
+ :WORDS (abash afflict affront aggravate agitate agonize alarm alienate anger annoy antagonize appal assuage baffle beguile bewilder bewitch boggle bore bother bug confound confuse crush cut daunt deject demolish demoralize depress devastate disappoint disarm discombobulate discomfit discompose disconcert discourage disgrace disgruntle disgust dishearten disillusion dismay dispirit displease disquiet dissatisfy distract distress disturb embarass enrage exasperate exhaust flabbergast fluster frighten frustrate grieve harass haunt horrify humiliate hurt hypnotize infuriate insult intimidate intoxicate irk irritate madden mollify mortify muddle nauseate obsess offend outrage overawe overwhelm pain perplex perturb plague preoccupy provoke puzzle rankle repel repulse revolt ruffle sadden scandalize scare shake shame shock sicken spook stagger sting stir strike stump stun stupefy tantalize tease terrify terrorize threaten thrill throw tire torment trouble try unnerve unsettle uplift upset vex weary worry wound)
+ :NON_LEVIN_WORDS (adulate aggrieve alleviate befuddle budge clinch debase disserve divert embarrass endanger enervate exhort fatigue foil fool harm impair imperil inconvenience infatuate inflame innervate instigate jade manipulate menace mitigate molest overpower overrule palpate pester pestle propitiate quench taunt torture transfix transgress violate)
+ :COLLOCATIONS ("in" "with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
+(
+ :NUMBER "31.1.b"
+ :NAME "Amuse Verbs / -that"
+ :WORDS (abash affect afflict affront aggravate agitate agonize alarm alienate amaze amuse anger annoy antagonize appal appease arouse assuage astonish astound awe baffle beguile bewilder bewitch boggle bore bother bug calm captivate chagrin charm cheer chill comfort concern confound confuse console content convince cow crush cut daunt daze dazzle deject delight demolish demoralize depress devastate disappoint disarm discombobulate discomfit discompose disconcert discourage disgrace disgruntle disgust dishearten disillusion dismay dispirit displease disquiet dissatisfy distract distress disturb dumbfound elate electrify embarass embolden enchant encourage engage engross enlighten enliven enrage enrapture entertain enthrall enthuse entice entrance exasperate excite exhaust exhilarate fascinate faze flabbergast flatter floor fluster frighten frustrate gall galvanize gladden gratify grieve harass haunt hearten horrify humble humiliate hurt hypnotize impress incense infuriate inspire insult interest intimidate intoxicate intrigue invigorate irk irritate jar jollify jolt lull madden mesmerize miff mollify mortify move muddle mystify nauseate nettle numb obsess offend outrage overawe overwhelm pacify pain peeve perplex perturb pique placate plague please preoccupy provoke puzzle rankle reassure refresh relax relieve repel repulse revitalize revolt rile ruffle sadden satisfy scandalize scare shake shame shock sicken sober solace soothe spellbind spook stagger startle stimulate sting stir strike stump stun stupefy surprise tantalize tease tempt terrify terrorize threaten thrill throw tickle tire titillate torment touch transport trouble try unnerve unsettle uplift upset vex weary worry wound wow)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
+(
+ :NUMBER "31.1.c"
+ :NAME "Amuse Verbs / Bare Experiencer"
+ :WORDS (aggravate agitate agonize alarm amuse anger annoy arouse assuage astonish baffle bewilder boggle bore calm captivate cheer chill comfort confuse console content daze delight depress devastate disappoint discourage disgrace dishearten disillusion dismay dispirit displease disquiet distract embarass enchant engage engross enthuse entice entrance exasperate excite exhaust fascinate faze flabbergast fluster frighten frustrate gladden grieve hearten humble hurt hypnotize intimidate intoxicate intrigue invigorate irk irritate jar jollify jolt lull madden mesmerize miff mortify move nauseate nettle numb obsess pacify perturb placate please puzzle rankle relax revitalize ruffle sadden scare shake shame shock sicken sober solace soothe spook stagger startle stir stupefy surprise tempt terrify thrill tickle tire torment trouble weary worry wound wow)
+ :MISSING_WORDS (embarrass)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
+(
+ :NUMBER "31.2.a"
+ :NAME "Admire Verbs - Positive / -for/as"
+ :WORDS (admire adore appreciate cherish enjoy esteem exalt fancy favor idolize like love miss prize relish respect revere savor stand support tolerate treasure trust value venerate worship)
+ :NON_LEVIN_WORDS (abhor advocate back bear bewail deify deplore despise detest disbelieve disdain dislike distrust dread envy execrate fail fear grudge hate importune lack lament loathe mourn pity prefer regret resent rue)
+ :MISSING_WORDS (depend rely)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.b"
+ :NAME "Admire Verbs - Positive / -in"
+ :WORDS (admire adore appreciate cherish enjoy esteem exalt fancy favor idolize like love miss prize relish respect revere savor stand support tolerate treasure trust value venerate worship)
+ :NON_LEVIN_WORDS (abhor affirm deplore despise detest disdain dislike distrust dread envy execrate fear hate implicate indulge invoke involve lament loathe mourn pamper pity reaffirm regret resent revenge rue vindicate)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.b.p"
+ :NAME "Panacea Admire Verbs - Positive / -in"
+ :WORDS ()
+ :NON_LEVIN_WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate implicate indulge lament loathe mourn pity regret resent revenge rue vindicate)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.c"
+ :NAME "Admire Verbs - Positive / -that"
+ :WORDS (admire adore appreciate enjoy fancy favor like love miss respect savor tolerate treasure trust value)
+ :NON_LEVIN_WORDS (abhor deplore despise detest dislike distrust dread envy execrate fear hate lament loathe mourn pity regret resent rue)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.d"
+ :NAME "Admire Verbs - Negative / -for/as"
+ :WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate lament loathe mourn pity regret resent rue)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.d.p"
+ :NAME "Admire Verbs - Negative / -for/as"
+ :WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate lament loathe mourn pity regret resent rue)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.e"
+ :NAME "Admire Verbs - Negative / -in"
+ :WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate lament loathe mourn pity regret resent rue)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.f"
+ :NAME "Admire Verbs - Negative / -that"
+ :WORDS (abhor deplore despise detest dislike distrust dread envy execrate fear hate lament loathe mourn pity regret resent rue)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.2.g"
+ :NAME "Admire Verbs - ing"
+ :WORDS (admire adore appreciate cherish enjoy esteem exalt fancy favor idolize like love miss prize relish respect revere savor stand support tolerate treasure trust value venerate worship)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.a.i"
+ :NAME "Marvel Verbs / -about"
+ :WORDS (care mind worry)
+ :NON_LEVIN_WORDS (contemplate dream fib generalize grovel hallucinate)
+ :COLLOCATIONS ("about" "of" "before")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.a.ii"
+ :NAME "Marvel Verbs / -about"
+ :WORDS (bother fret moon rage rejoice rhapsodize)
+ :NON_LEVIN_WORDS (forget unlearn)
+ :COLLOCATIONS ("about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.b"
+ :NAME "Marvel Verbs / -at"
+ :WORDS (cheer cringe enthuse exult fume gladden madden marvel rage rejoice sadden sicken swoon thrill wonder)
+ :NON_LEVIN_WORDS (panic)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.c"
+ :NAME "Marvel Verbs / -for"
+ :WORDS (bleed care cry fear feel grieve mourn weep)
+ :NON_LEVIN_WORDS (repent)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.c.p"
+ :NAME "Panacea Marvel Verbs / -for"
+ :WORDS (bleed care cry fear grieve mourn weep)
+ :NON_LEVIN_WORDS (repent)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.d"
+ :NAME "Marvel Verbs / -from"
+ :WORDS (ache hurt suffer)
+ :NON_LEVIN_WORDS (recover recuperate)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.d.p"
+ :NAME "Panacea Marvel Verbs / -from"
+ :WORDS (ache hurt suffer)
+ :NON_LEVIN_WORDS ()
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.e"
+ :NAME "Marvel Verbs / -in"
+ :WORDS (bask believe delight exult glory luxuriate rejoice revel wallow)
+ :NON_LEVIN_WORDS (engage major)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.f"
+ :NAME "Marvel Verbs / -of"
+ :WORDS (approve beware despair disapprove sicken tire weary)
+ :MISSING_WORDS (repent sanction)
+ :COLLOCATIONS ("of")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.f.p"
+ :NAME "Panacea Marvel Verbs / -of"
+ :WORDS (beware despair disapprove sicken tire weary)
+ :MISSING_WORDS (repent)
+ :COLLOCATIONS ("of")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.g"
+ :NAME "Marvel Verbs / -on"
+ :WORDS (groove)
+ :NON_LEVIN_WORDS (concentrate focus reflect)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.h"
+ :NAME "Marvel Verbs / -over"
+ :WORDS (anger anguish delight enthuse exult fret fume gloat grieve gush hunger marvel moon mope mourn obsess puzzle rage rave rejoice rhapsodize salivate seethe sorrow wonder worry)
+ :NON_LEVIN_WORDS (meditate muse ruminate triumph)
+ :COLLOCATIONS ("over")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.h.p"
+ :NAME "Panacea Marvel Verbs / -over"
+ :WORDS (anger anguish exult fret fume gloat grieve gush hunger marvel mope mourn obsess puzzle rage rave rhapsodize salivate seethe sorrow wonder worry)
+ :NON_LEVIN_WORDS (ruminate)
+ :COLLOCATIONS ("over")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.3.i"
+ :NAME "Marvel Verbs / -to"
+ :WORDS (react thrill)
+ :NON_LEVIN_WORDS (acclimate acclimatize accustom adapt attest condescend conform consent habituate square)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.4.a"
+ :NAME "Appeal Verbs / -at"
+ :WORDS (niggle)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.4.b"
+ :NAME "Appeal Verbs / -on"
+ :WORDS (grate jar)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "31.4.c"
+ :NAME "Appeal Verbs / -to"
+ :WORDS (appeal matter)
+ :NON_LEVIN_WORDS (attract)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "32.1"
+ :NAME "Want Verbs"
+ :WORDS (covet crave desire fancy need want)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "32.2.a"
+ :NAME "Long Verbs / -after"
+ :NON_LEVIN_WORDS (anticipate await)
+ :MISSING_WORDS (apologize atone beg clamor dangle hanker inquire lust petition plead scrimp strive supplicate thirst vouch vow yearn)
+ :COLLOCATIONS ("after")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "32.2.b"
+ :NAME "Long Verbs  / -for"
+ :WORDS (ache crave fall hanker hope hunger itch long lust pine pray thirst wish yearn)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "33.a.i"
+ :NAME "Judgment Verbs - Positive / -for/as"
+ :WORDS (acclaim applaud bless celebrate commend compliment congratulate eulogize extol felicitate greet hail honor laud praise reward salute thank toast)
+ :NON_LEVIN_WORDS (condone forgive glorify interview)
+ :MISSING_WORDS (rally)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "33.a.ii"
+ :NAME "Judgment Verbs - Positive / -for/as"
+ :WORDS (believe compensate excuse forgive pardon recompense remunerate repay welcome)
+ :NON_LEVIN_WORDS (reward single_out)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "33.b"
+ :NAME "Judgment Verbs - Negative / -for/as"
+ :WORDS (abuse backbite calumniate castigate censure chasten chastise chide condemn criticize decry defame denigrate denounce deprecate deride disparage fault fine impeach insult lambaste malign mock penalize persecute prosecute punish rebuke reprimand reproach reprove revile ridicule scold scorn shame snub upbraid victimize vilify)
+ :NON_LEVIN_WORDS (accurse applaud assail assault attack avenge believe belittle betray blame blaspheme confront curse damn deceive defend degrade discipline dishonor double-cross doubt excoriate excuse felicitate gibe imprecate incriminate indict interrogate oppress overweigh sanction slander stultify trick wrong)
+ :COLLOCATIONS ("for" "as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "34.i"
+ :NAME "Verbs of Assessment"
+ :WORDS (scrutinize study)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "34.ii"
+ :NAME "Verbs of Assessment"
+ :WORDS (analyze assess audit evaluate review)
+ :NON_LEVIN_WORDS (censor)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "35.1.a"
+ :NAME "Hunt Verbs - Locational"
+ :WORDS (dig feel fish hunt mine poach scrounge)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "35.1.b"
+ :NAME "Hunt Verbs - Possessional / -for"
+ :WORDS (dig feel fish hunt mine poach scrounge)
+ :COLLOCATIONS ("for" "in")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "35.1.c"
+ :NAME "Hunt Verbs - Possessional / -for"
+ :WORDS (dig feel fish hunt mine poach scrounge)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "35.2.a"
+ :NAME "Search Verbs"
+ :WORDS (advertise check comb dive drag dredge excavate patrol plumb probe prospect prowl quarry rake rifle scavenge scour scout search shop sift trawl troll watch)
+ :NON_LEVIN_WORDS (control look nosedive)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "35.2.b"
+ :NAME "Search Verbs"
+ :WORDS (advertise check comb dive drag dredge excavate patrol plumb probe prospect prowl quarry rake rifle scavenge scour scout search shop sift trawl troll watch)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "35.3.a"
+ :NAME "Stalk Verbs / Change of State"
+ :WORDS (smell stalk taste track)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "35.3.b"
+ :NAME "Stalk Verbs / Locational -for"
+ :WORDS (smell stalk taste track)
+ :COLLOCATIONS ("for" "in")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "35.4"
+ :NAME "Investigate Verbs"
+ :WORDS (canvass examine explore frisk inspect investigate observe quiz raid ransack riffle scan scrutinize survey tap)
+ :NON_LEVIN_WORDS (experiment monitor test)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING ("AT" "IN") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "35.5"
+ :NAME "Rummage Verbs"
+ :WORDS (bore burrow delve forage fumble grope leaf listen look page paw poke rifle root rummage scrabble scratch snoop thumb tunnel)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING ("INTO" "AT" "IN") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "35.6.i"
+ :NAME "Ferret Verbs - Seek"
+ :MISSING_WORDS (seek)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "35.6.ii"
+ :NAME "Ferret Verbs"
+ :WORDS (ferret nose tease)
+ :COLLOCATIONS ("out of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "36.1.a"
+ :NAME "Correspond Verbs - Locational / -with"
+ :WORDS (coexist)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.1.b"
+ :NAME "Correspond Verbs - Locational / -with"
+ :WORDS (coexist)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.1.c"
+ :NAME "Correspond Verbs - Locational / -with"
+ :WORDS (agree argue banter bargain bicker brawl clash collaborate collide combat commiserate communicate compete concur confabulate conflict consort cooperate correspond dicker differ disagree dispute dissent duel elope feud flirt haggle hobnob jest joke joust mate mingle mix neck negotiate pair plot quarrel quibble rendezvous scuffle skirmish spar spat spoon squabble struggle tilt tussle vie war wrangle wrestle)
+ :NON_LEVIN_WORDS (accommodate administrate clown collude comply compromise contact contend contravene deal equal fornicate gesticulate interact interblend intercede interfere intermix intervene juggle litigate manage meddle mediate mismanage motion oversee parley participate reconcile side supervise sympathize tamper transact)
+ :COLLOCATIONS ("with" "between")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.1.d"
+ :NAME "Correspond Verbs - Locational"
+ :WORDS (agree argue banter bargain bicker brawl clash collaborate collide combat commiserate communicate compete concur confabulate conflict consort cooperate correspond dicker differ disagree dispute dissent duel elope feud flirt haggle hobnob jest joke joust mate mingle mix neck negotiate pair plot quarrel quibble rendezvous scuffle skirmish spar spat spoon squabble struggle tilt tussle vie war wrangle wrestle)
+ :NON_LEVIN_WORDS (clown collude comply compromise contend contravene deal gesticulate intercede interfere intervene juggle meddle motion parley participate side sympathize tamper transact)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.2.a.i"
+ :NAME "Marry Verbs - Locational"
+ :WORDS (court cuddle date embrace hug kiss nuzzle pet)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.2.a.ii"
+ :NAME "Marry Verbs - Locational"
+ :WORDS (divorce marry pass)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.2.b.i"
+ :NAME "Marry Verbs - Change of State"
+ :WORDS (court cuddle date embrace hug kiss nuzzle pet)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.2.b.ii"
+ :NAME "Marry Verbs - Change of State"
+ :WORDS (divorce marry pass)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.3.a"
+ :NAME "Meet Verbs - Locational / -with"
+ :WORDS (battle box consult debate fight meet play visit)
+ :NON_LEVIN_WORDS (marry tackle)
+ :MISSING_WORDS (attack challenge deliberate encounter rape remonstrate reunite strafe)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING ("AT") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "36.3.b"
+ :NAME "Meet Verbs - Change of State"
+ :WORDS (battle box consult debate fight meet play visit)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("AT") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.1.a"
+ :NAME "Verbs of Transfer of a Message"
+ :WORDS (ask dictate preach quote read show teach write)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.1.b"
+ :NAME "Verbs of Transfer of a Message / -to"
+ :WORDS (cite demonstrate dictate explain explicate narrate pose preach quote read recite relay show teach write)
+ :NON_LEVIN_WORDS (ask clarify elaborate elucidate impart invite justify lecture)
+ :MISSING_WORDS (expound)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.1.c"
+ :NAME "Verbs of Transfer of a Message / -that/to"
+ :WORDS (demonstrate explain explicate narrate preach quote read recite relay show teach write)
+ :COLLOCATIONS ("that" "to")
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.1.d"
+ :NAME "Verbs of Transfer of a Message / -that/to"
+ :WORDS (show teach write)
+ :COLLOCATIONS ("that" "to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.1.e"
+ :NAME "Verbs of Transfer of a Message / -that/to"
+ :WORDS (ask)
+ :NON_LEVIN_WORDS (demand)
+ :COLLOCATIONS ("that" "to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.2.a"
+ :NAME "Tell Verbs"
+ :WORDS (tell)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.2.b"
+ :NAME "Tell Verbs / -of/about"
+ :WORDS (tell)
+ :COLLOCATIONS ("of" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.2.d"
+ :NAME "Tell Verbs / -that/to"
+ :WORDS (tell)
+ :COLLOCATIONS ("that" "to")
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.3.a"
+ :NAME "Verbs of Manner of Speaking / -to/that/about"
+ :WORDS (babble bark bawl bellow bleat boom bray burble cackle call carol chant chatter chirp cluck coo croak croon crow cry drawl drone gabble gibber groan growl grumble grunt hiss holler hoot howl jabber lilt lisp moan mumble murmur mutter purr rage rasp roar rumble scream screech shout shriek sing snap snarl snuffle splutter squall squawk squeak squeal stammer stutter thunder tisk trill trumpet twitter wail warble wheeze whimper whine whisper whistle whoop yammer yap yell yelp yodel)
+ :MISSING_WORDS (prattle quaver stemmer vociferate)
+ :COLLOCATIONS ("to" "that" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "37.3.b"
+ :NAME "Verbs of Manner of Speaking / -at"
+ :WORDS (babble bark bawl bellow bleat boom bray burble cackle call carol chant chatter chirp cluck coo croak croon crow cry drawl drone gabble gibber groan growl grumble grunt hiss holler hoot howl jabber lilt lisp moan mumble murmur mutter purr rage rasp roar rumble scream screech shout shriek sing snap snarl snuffle splutter squall squawk squeak squeal stammer stutter thunder tisk trill trumpet twitter wail warble wheeze whimper whine whisper whistle whoop yammer yap yell yelp yodel)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "37.3.c"
+ :NAME "Verbs of Manner of Speaking / -for"
+ :WORDS (babble bark bawl bellow bleat boom bray burble cackle call carol chant chatter chirp cluck coo croak croon crow cry drawl drone gabble gibber groan growl grumble grunt hiss holler hoot howl jabber lilt lisp moan mumble murmur mutter purr rage rasp roar rumble scream screech shout shriek sing snap snarl snuffle splutter squall squawk squeak squeal stammer stutter thunder tisk trill trumpet twitter wail warble wheeze whimper whine whisper whistle whoop yammer yap yell yelp yodel)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "37.4.a"
+ :NAME "Verbs of Instrument of Communication"
+ :WORDS (cable e-mail fax modem netmail phone radio relay satellite semaphore sign signal telecast telegraph telephone telex wire wireless)
+ :MISSING_WORDS (broadcast rebroadcast)
+ :COLLOCATIONS ("that" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.4.b"
+ :NAME "Verbs of Instrument of Communication / -for"
+ :WORDS (cable e-mail fax modem netmail phone radio relay satellite semaphore sign signal telecast telegraph telephone telex wire wireless)
+ :MISSING_WORDS (undersign)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.5.a"
+ :NAME "Talk Verbs / -to/about"
+ :WORDS (speak talk)
+ :COLLOCATIONS ("about")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.5.b"
+ :NAME "Talk Verbs / -with/about"
+ :WORDS (speak talk)
+ :NON_LEVIN_WORDS (discuss)
+ :COLLOCATIONS ("with" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.5.c"
+ :NAME "Talk Verbs - Change of State / -to/with/about"
+ :WORDS (speak talk)
+ :COLLOCATIONS ("to" "with" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.6.a"
+ :NAME "Chitchat Verbs / -with/about"
+ :MISSING_WORDS (argue chat chatter chitchat confer converse gab gossip rap schmooze yak)
+ :COLLOCATIONS ("with" "about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.6.b"
+ :NAME "Chitchat Verbs - Change of State"
+ :WORDS (argue chat chatter chitchat confer converse gab gossip rap schmooze yak)
+ :MISSING_WORDS (drivel)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.7.a"
+ :NAME "Say Verbs / that-to"
+ :WORDS (announce articulate blab blurt claim confess confide convey declare mention note observe proclaim propose recount reiterate relate remark repeat report reveal say state suggest)
+ :NON_LEVIN_WORDS (advert answer comment counter disclose exclaim indicate insinuate insist intimate reply respond retort signify)
+ :COLLOCATIONS ("that")
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.7.b"
+ :NAME "Say Verbs / -to"
+ :WORDS (announce articulate blab blurt claim confess confide convey declare mention note observe proclaim propose recount reiterate relate remark repeat report reveal say state suggest)
+ :NON_LEVIN_WORDS (mispronounce promulgate utter voice)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.8.a"
+ :NAME "Complain Verbs / -that/to"
+ :WORDS (crab gripe grouch grumble)
+ :MISSING_WORDS (boast brag complain grouse kvetch object)
+ :COLLOCATIONS ("that" "to")
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.8.b"
+ :NAME "Complain Verbs / -about/to"
+ :MISSING_WORDS (boast brag complain crab gripe grouch grouse grumble kvetch object vaunt)
+ :COLLOCATIONS ("about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.8.c"
+ :NAME "Complain Verbs / -at"
+ :WORDS (crab gripe grouch grumble)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.9.a"
+ :NAME "Advise Verbs / -that/to"
+ :WORDS (admonish advise alert caution instruct warn)
+ :NON_LEVIN_WORDS (assure brief counsel ensure guarantee inform notify)
+ :COLLOCATIONS ("that" "to")
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.9.b"
+ :NAME "Advise Verbs / -against"
+ :WORDS (admonish advise alert caution counsel instruct warn)
+ :MISSING_WORDS (defend insure protect safeguard shield)
+ :COLLOCATIONS ("against")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.9.c"
+ :NAME "Advise Verbs / -about"
+ :WORDS (admonish advise alert caution counsel instruct warn)
+ :NON_LEVIN_WORDS (inform notify question remind)
+ :COLLOCATIONS ("about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.9.d.i"
+ :NAME "Advise Verbs"
+ :WORDS (counsel)
+ :NON_LEVIN_WORDS (question)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "37.9.d.ii"
+ :NAME "Advise Verbs / to"
+ :WORDS (counsel)
+ :NON_LEVIN_WORDS (adjure beseech remind)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "38"
+ :NAME "Verbs of Sounds Made by Animals"
+ :WORDS (baa bark bay bellow blat bleat bray buzz cackle call caw chatter cheep chirp chirrup chitter cluck coo croak crow cuckoo drone gobble growl grunt hee-haw hiss honk hoot howl low meow mew moo neigh oink peep pipe purr quack roar scrawk scream screech sing snap snarl snort snuffle squawk squeak squeal stridulate trill tweet twitter wail warble whimper whinny whistle woof yap yell yelp yip yowl)
+ :NON_LEVIN_WORDS (miaow)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; INTRANS <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.1.i"
+ :NAME "Eat Verbs"
+ :WORDS (drink eat)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.1.ii"
+ :NAME "Eat Verbs"
+ :WORDS (drink eat)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.2.a"
+ :NAME "Chew Verbs"
+ :WORDS (chew chomp crunch gnaw lick munch nibble peck pick sip slurp suck)
+ :NON_LEVIN_WORDS (digest masticate stomach)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.2.b"
+ :NAME "Chew Verbs - at"
+ :WORDS (gnaw lick nibble peck pick sip slurp suck)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.2.c"
+ :NAME "Chew Verbs - on"
+ :WORDS (chew chomp crunch gnaw lick munch nibble peck pick suck)
+ :MISSING_WORDS (teethe)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.3.a.i"
+ :NAME "Gobble Verbs"
+ :WORDS (bolt gobble gulp guzzle quaff swig wolf)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.3.a.ii"
+ :NAME "Gobble Verbs"
+ :WORDS (swallow)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.3.b"
+ :NAME "Gobble Verbs / -down"
+ :WORDS (bolt gobble gulp guzzle quaff swallow swig wolf)
+ :COLLOCATIONS ("down")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.4"
+ :NAME "Devour Verbs"
+ :WORDS (consume devour imbibe ingest swill)
+ :NON_LEVIN_WORDS (take)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.5.a"
+ :NAME "Dine Verbs"
+ :WORDS (banquet breakfast brunch dine feast graze lunch luncheon nosh picnic snack sup)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.5.b"
+ :NAME "Dine (on) Verbs"
+ :WORDS (breakfast dine feast graze lunch snack sup)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.6.a"
+ :NAME "Gorge Verbs - Locational"
+ :WORDS (feed gorge)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.6.b"
+ :NAME "Gorge Verbs - Existential"
+ :WORDS (exist flourish live prosper survive thrive)
+ :NON_LEVIN_WORDS (stand subsist withstand)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "39.7"
+ :NAME "Verbs of Feeding"
+ :WORDS (bottlefeed breastfeed feed forcefeed handfeed spoonfeed)
+ :NON_LEVIN_WORDS (breast-feed suckle)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.1.1"
+ :NAME "Hiccup Verbs"
+ :MISSING_WORDS (belch blush burp eruct fart flush hiccup pant sneeze sniffle snore snuff snuffle swallow wheeze yawn)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.1.2"
+ :NAME "Breathe Verbs"
+ :MISSING_WORDS (bleed breathe copulate cough cry defecate dribble drool expectorate puke retch slobber spit sweat urinate vomit weep)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; OVERLAP <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.1.3.a"
+ :NAME "Exhale Verbs / Agent = Source"
+ :WORDS (exhale)
+ :MISSING_WORDS (perspire)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.1.3.b"
+ :NAME "Exhale Verbs / Agent = Goal"
+ :WORDS (inhale)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("ON" "AT" "INTO") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.1.3.c"
+ :NAME "Exhale Verbs / Agent = Source"
+ :WORDS (perspire)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.2.a"
+ :NAME "Verbs of Nonverbal Expression - Locational / -at"
+ :MISSING_WORDS (beam cackle chortle chuckle cough cry frown gape gasp gawk giggle glare glower goggle grimace grin groan growl guffaw howl jeer laugh moan pout scowl sigh simper smile smirk sneeze snicker sniff snigger snivel snore snort sob titter weep whistle yawn)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.2.b"
+ :NAME "Verbs of Nonverbal Expression - Psyche / -at"
+ :MISSING_WORDS (beam cackle chortle chuckle cough cry frown gape gasp gawk giggle glare glower goggle grimace grin groan growl guffaw howl jeer laugh moan pout scoff scowl sigh simper smile smirk sneer sneeze snicker sniff snigger snivel snore snort sob sulk titter weep whistle yawn)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.3.1.i"
+ :NAME "Wink Verbs / -at"
+ :WORDS (blink clap nod point shrug squint wave wink)
+ :NON_LEVIN_WORDS (gesture)
+ :MISSING_WORDS (aim beckon)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING ("AT") ;; OVERLAP <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.3.1.ii"
+ :NAME "Wink Verbs / -at"
+ :WORDS (blink clap nod point shrug squint wave wink)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING ("AT") ;; OVERLAP <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.3.2"
+ :NAME "Crane Verbs"
+ :WORDS (arch bare bat beat blow clench click close cock crane crook cross drum flap flash flex flick flutter fold gnash grind hang hunch knit open pucker purse raise roll rub shake show shuffle smack snap stamp stretch toss turn twiddle twitch wag waggle wiggle wring wrinkle)
+ :NON_LEVIN_WORDS (shake_one)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING ("AT") ;; OVERLAP <NON-SPATIAL>
+)
+(
+ :NUMBER "40.3.3.a"
+ :NAME "Curtsey Verbs"
+ :WORDS (bob bow curtsey genuflect kneel salaam)
+ :MISSING_WORDS (salute)
+ :COLLOCATIONS ("before")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.3.3.b"
+ :NAME "Curtsey Verbs"
+ :WORDS (balk cower cringe flinch recoil shrink wince)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.4"
+ :NAME "Snooze Verbs"
+ :WORDS (catnap doze drowse nap sleep slumber snooze)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.5"
+ :NAME "Flinch Verbs"
+ :WORDS (balk cower cringe flinch recoil shrink wince)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.6"
+ :NAME "Verbs of Body-Internal States of Existence"
+ :MISSING_WORDS (convulse cower quake quiver shake shiver shudder tremble writhe)
+ :COLLOCATIONS ("at" "from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.7.i"
+ :NAME "Suffocate Verbs"
+ :WORDS (asphyxiate choke stifle)
+ :NON_LEVIN_WORDS (starve)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; INTRANS <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.7.ii"
+ :NAME "Suffocate Verbs"
+ :WORDS (asphyxiate choke drown stifle suffocate)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; INTRANS <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.8.1"
+ :NAME "Pain Verbs"
+ :MISSING_WORDS (ache bother hurt itch pain)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.8.2"
+ :NAME "Tingle Verbs"
+ :WORDS (burn hum pound prickle pucker reel smart spin split sting swim throb tickle tingle)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.8.3"
+ :NAME "Hurt Verbs"
+ :WORDS (bark bite break bruise bump burn chip cut fracture hurt injure nick prick pull rupture scald scratch skin split sprain strain stub turn twist)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "40.8.4"
+ :NAME "Verbs of Change of Bodily State"
+ :MISSING_WORDS (blanch faint sicken swoon)
+ :COLLOCATIONS ("at" "from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.1.1.i"
+ :NAME "Dress Verbs"
+ :WORDS (bathe exercise shower wash)
+ :NON_LEVIN_WORDS (sunbathe)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.1.1.ii"
+ :NAME "Dress Verbs"
+ :WORDS (bathe change disrobe dress exercise preen primp shave shower strip undress wash)
+ :NON_LEVIN_WORDS (array clothe)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.1.1.iii"
+ :NAME "Dress Verbs"
+ :WORDS (bathe change disrobe dress preen primp shave shower strip undress wash)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.1.2"
+ :NAME "Groom Verbs"
+ :WORDS (curry groom)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.2.1"
+ :NAME "Floss Verbs"
+ :WORDS (brush floss shave wash)
+ :NON_LEVIN_WORDS (gargle)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.2.2"
+ :NAME "Braid Verbs"
+ :WORDS (bob braid brush clip coldcream comb condition crimp crop curl cut dye file henna lather manicure part perm plait pluck powder rinse rouge set shampoo soap talc tease towel trim wave)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.3.1.a"
+ :NAME "Simple Verbs of Dressing - Subject is Goal"
+ :WORDS (don)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("ONTO") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.3.1.b"
+ :NAME "Simple Verbs of Dressing - Subject is Source"
+ :WORDS (doff)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("OFF OF" "OFF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.3.1.c"
+ :NAME "Simple Verbs of Dressing - Subject is Location"
+ :WORDS (wear)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UPON" "ON" "AT") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.3.2.a"
+ :NAME "Verbs of Dressing Well / Agent only"
+ :WORDS (doll dress spruce tog)
+ :COLLOCATIONS ("up")
+ :COMPONENT_OF_MEANING ("UPON" "ON") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.3.2.b"
+ :NAME "Verbs of Dressing Well / Agent only"
+ :MISSING_WORDS (doll dress spruce tog)
+ :COLLOCATIONS ("up")
+ :COMPONENT_OF_MEANING ("UPON" "ON") ;; OVERLAP <NON-SPATIAL>
+) 
+(
+ :NUMBER "41.3.3"
+ :NAME "Verbs of Being Dressed"
+ :MISSING_WORDS (attire clad garb robe)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING ("ON" "AT") ;; OVERLAP <NON-SPATIAL>
+) 
+(
+ :NUMBER "42.1.a"
+ :NAME "Murder Verbs - Kill"
+ :WORDS (kill)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "42.1.b"
+ :NAME "Murder Verbs - Kill / -with"
+ :WORDS (kill)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "42.1.c"
+ :NAME "Murder Verbs - General"
+ :WORDS (assassinate butcher dispatch eliminate execute immolate liquidate massacre murder slaughter slay)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "42.2"
+ :NAME "Poison Verbs"
+ :WORDS (crucify electrocute garrotte hang knife poison shoot smother stab strangle)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.1.a"
+ :NAME "Verbs of Light Emission / Locative Modifier"
+ :WORDS (beam blaze blink burn flame flare flash flicker glare gleam glimmer glint glisten glitter glow incandesce scintillate shimmer shine sparkle twinkle)
+ :NON_LEVIN_WORDS (fluoresce gore)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.1.b"
+ :NAME "Verbs of Light Emission / With Modifier"
+ :WORDS (beam blaze blink burn flame flare flash flicker glare gleam glimmer glint glisten glitter glow incandesce scintillate shimmer shine sparkle twinkle)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.1.c"
+ :NAME "Verbs of Light Emission / Agent"
+ :WORDS (blink burn flash shine)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.2.a"
+ :NAME "Verbs of Sound Emission / Locative Modifier"
+ :WORDS (babble bang beat beep bellow blare blast blat boom bubble burble burr buzz chatter chime chink chir chitter chug clack clang clank clap clash clatter click cling clink clomp clump clunk crack crackle crash creak crepitate crunch cry ding dong explode fizz fizzle groan growl gurgle hiss hoot howl hum jangle jingle knell knock lilt moan murmur patter peal ping pink pipe plink plonk plop plunk pop purr putter rap rasp rattle ring roar roll rumble rustle scream screech shriek shrill sing sizzle snap splash splutter sputter squawk squeak squeal squelch strike swish swoosh thrum thud thump thunder thunk tick ting tinkle toll toot tootle trill trumpet twang ululate vroom wail wheeze whine whir whish whistle whoosh whump zing)
+ :MISSING_WORDS (swoop)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.2.b"
+ :NAME "Verbs of Sound Emission / Path (goal)"
+ :WORDS (babble bang beat beep bellow blare blast blat boom bubble burble burr buzz chatter chime chink chir chitter chug clack clang clank clap clash clatter click cling clink clomp clump clunk crack crackle crash creak crepitate crunch cry ding dong explode fizz fizzle groan growl gurgle hiss hoot howl hum jangle jingle knell knock lilt moan murmur patter peal ping pink pipe plink plonk plop plunk pop purr putter rap rasp rattle ring roar roll rumble rustle scream screech shriek shrill sing sizzle snap splash splutter sputter squawk squeak squeal squelch strike swish swoosh thrum thud thump thunder thunk tick ting tinkle toll toot tootle trill trumpet twang ululate vroom wail wheeze whine whir whish whistle whoosh whump zing)
+ :COLLOCATIONS ("through")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.2.c"
+ :NAME "Verbs of Sound Emission / With Modifier"
+ :WORDS (babble bellow bubble buzz chatter chime chug clack clang clank clap clatter click clink clunk crack crackle crash creak explode groan gurgle hiss howl hum moan pop purr rattle roar rumble rustle sing sizzle snap splash splutter sputter squawk squeak thump thunder whir)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.2.d"
+ :NAME "Verbs of Sound Emission / Agent"
+ :WORDS (bang beat beep bellow blare blast buzz clang clank click clink clunk crack crackle crunch ding explode jangle jingle ping pop rattle ring roll rustle snap splash strike tinkle toll toot whish)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.3"
+ :NAME "Verbs of Smell Emission"
+ :MISSING_WORDS (reek smell stink)
+ :COLLOCATIONS ("of")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.4.a"
+ :NAME "Verbs of Substance Emission / Path (goal)"
+ :MISSING_WORDS (belch bleed bubble dribble drip drool emanate exude foam gush leak ooze pour puff radiate seep shed slop spew spill spout sprout spurt squirt steam stream sweat)
+ :COLLOCATIONS ("through")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.4.b"
+ :NAME "Verbs of Substance Emission / With Modifier"
+ :WORDS (bubble dribble drip foam gush ooze puff spout sprout spurt steam stream sweat)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.4.c"
+ :NAME "Verbs of Substance Emission / explicit -from"
+ :WORDS (belch bleed bubble dribble drip drool emanate exude foam gush leak ooze pour puff radiate seep shed slop spew spill spout sprout spurt squirt steam stream sweat)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.4.d"
+ :NAME "Verbs of Substance Emission / implicit -from"
+ :WORDS (belch bleed bubble dribble drip drool emanate exude foam gush leak ooze pour puff radiate seep shed slop spew spill spout sprout spurt squirt steam stream sweat)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "43.4.e"
+ :NAME "Verbs of Substance Emission - Change of State"
+ :WORDS (bleed pour puff shed slop spill spurt squirt)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "44.a"
+ :NAME "Destroy Verbs / -with"
+ :WORDS (annihilate blitz decimate demolish destroy devastate exterminate extirpate obliterate ravage raze ruin waste wreck)
+ :NON_LEVIN_WORDS (damage desecrate disfigure efface maim mutilate squander subvert undo)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "44.b"
+ :NAME "Destroy Verbs / Instrument Subject"
+ :WORDS (annihilate blitz decimate demolish destroy devastate exterminate extirpate obliterate ravage raze ruin waste wreck)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "45.1.a"
+ :NAME "Break Verbs / -with"
+ :WORDS (break chip crack crash crush fracture rip shatter smash snap splinter split tear)
+ :NON_LEVIN_WORDS (lacerate puncture)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "45.1.b"
+ :NAME "Break Verbs / Instrument Subject"
+ :WORDS (break chip crack crash crush fracture rip shatter smash snap splinter split tear)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "45.1.c"
+ :NAME "Break Verbs / Theme Only"
+ :WORDS (break chip crack crash crush fracture rip shatter smash snap splinter split tear)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "45.2.a"
+ :NAME "Bend Verbs / -with"
+ :WORDS (bend crease crinkle crumple fold rumple wrinkle)
+ :NON_LEVIN_WORDS (furrow)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "45.2.b"
+ :NAME "Bend Verbs / Instrument Subject"
+ :WORDS (bend crease crinkle crumple fold rumple wrinkle)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "45.2.c"
+ :NAME "Bend Verbs / Theme Only"
+ :WORDS (bend crease crinkle crumple fold rumple wrinkle)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "45.3.a"
+ :NAME "Cooking Verbs"
+ :WORDS (bake barbecue blanch boil braise broil brown charbroil charcoal-broil coddle cook crisp deep-fry french_fry fry grill hardboil heat microwave oven-fry oven-poach overcook pan-broil pan-fry parboil parch percolate perk plank poach pot-roast rissole roast saute scald scallop shirr simmer softboil steam steam-bake stew stir-fry toast)
+ :NON_LEVIN_WORDS (overheat reheat)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "45.3.b"
+ :NAME "Cooking Verbs / Instrument Subject"
+ :WORDS (bake barbecue blanch boil braise broil brown charbroil charcoal-broil coddle cook crisp deep-fry french_fry fry grill hardboil heat microwave oven-fry oven-poach overcook pan-broil pan-fry parboil parch percolate perk plank poach pot-roast rissole roast saute scald scallop shirr simmer softboil steam steam-bake stew stir-fry toast)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "45.3.c"
+ :NAME "Cooking Verbs / Theme Only"
+ :WORDS (bake barbecue blanch boil braise broil brown charbroil charcoal-broil coddle cook crisp deep-fry french_fry fry grill hardboil heat microwave oven-fry oven-poach overcook pan-broil pan-fry parboil parch percolate perk plank poach pot-roast rissole roast saute scald scallop shirr simmer softboil steam steam-bake stew stir-fry toast)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "45.4.a"
+ :NAME "Other Change of State Verbs / -with"
+ :WORDS (abate accelerate acetify acidify advance age agglomerate air alkalify alter ameliorate americanize atrophy attenuate awake awaken balance blacken blast blunt blur brighten broaden brown burn burst calcify capsize caramelize carbonify carbonize change char cheapen chill clean clear clog close coagulate coarsen collapse collect compress condense contract cool corrode crimson crisp crumble crystallize dampen darken decelerate decentralize decompose decrease deepen deescalate deflate defrost degenerate degrade dehumidify demagnetize democratize depressurize desiccate destabilize deteriorate detonate dim diminish dirty disintegrate dissipate dissolve distend divide double drain dry dull ease empty emulsify energize enlarge equalize evaporate even expand explode fade fatten federate fill firm flatten flood fossilize fray freeze freshen frost fructify fuse gasify gelatinize gladden glutenize granulate gray green grow halt harden harmonize hasten heal heat heighten humidify hush hybridize ignite improve increase incubate inflate intensify iodize ionize kindle lengthen lessen level levitate light lighten lignify liquefy loop loose loosen macerate magnetize magnify mature mellow melt moisten muddy multiply narrow neaten neutralize nitrify open operate ossify overturn oxidize pale petrify polarize pop proliferate propagate pulverize purify purple putrefy quadruple quicken quiet quieten redden regularize rekindle reopen reproduce ripen roughen round rupture scorch sear sharpen short short-circuit shorten shrink shrivel shut sicken silicify silver singe sink slack slacken slim slow smarten smooth soak sober soften solidify sour splay sprout stabilize steady steep steepen stiffen straighten stratify strengthen stretch submerge subside sweeten tame tan taper tauten tense thaw thicken thin tighten tilt tire topple toughen triple ulcerate unfold unionize vaporize vary vibrate vitrify volatilize waken warm warp weaken westernize whiten widen worsen yellow)
+ :NON_LEVIN_WORDS (abase abbreviate abrade abridge absorb accentuate activate adjust adulterate aestivate africanize amplify amputate anesthetize anglicize animate apostatize arabicize atomize augment authenticate authorize ballast beatify beautify bedew befriend bifurcate bisect bleach blind bloody bolshevize botanize botch brutalize bungle burglarize capacitate castrate categorize catholicize cauterize centralize chlorinate christianize cicatrize circulate circumcise civilize clouded coke colonize commercialize complicate compound concentrate conciliate constrict constringe contextualize correct corrugate corrupt counteract cremate cross-pollinate curdle darn deafen debilitate dehydrate demarcate demobilize deputize desalinate devalue diffract diffuse dilute dislocate disorganize disperse domesticate eclipse economize effectuate effeminate elegize emaciate emasculate embalm embitter embrocate emphasize empower enhance enslave entitle equilibrate eternalize europeanize evangelize exaggerate extemporate extemporize facilitate fame famish fan fanaticize feminize fertilize fictionalize finalize focus foliate foment foreshadow fortify foster fraternize fumigate germanize gradate hebraize hellenize highlight hospitalize hydrogenate immobilize immunize impoverish inaugurate incapacitate incinerate index individualize industrialize inebriate infiltrate innoculate intellectualize invert irrigate kipper laminate legalize macadamize mechanize mend metabolize mineralize mobilize moderate modernize modify modulate monopolize moroccanize motorize muffle mute narcoticize narcotize nasalize nationalize naturalize normalize nourish nurture obfuscate objectify objectivate obscure overhaul overshadow overthrow overwork paginate palliate palpitate paralyze pasteurize pendulate people perfect philosophize pickle pollinate polymerize popularize populate preserve procreate publicize rarefy rationalize reanimate rear rectify reduce refine reform refract refrigerate regionalize regulate renovate repair replicate reshape resurface resurge retard retouch reupholster reverse revive revolutionize saponify satirize scarp secularize self-eternalize service silence simplify slur smelt sovietize specialize standardize sterilize submerse sudanize sulfurize summarize sunburn symbolize sympathize temporize tidy tousle tranquilize transpose treble tune turkify typify tyrannize underline undermine unfurl uniform unroll unwind urbanize valorize variegate ventilate versify vocalize vulcanize wake wet)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING ("UP" "THROUGH" "THROUGH OUT" "IN"  "FROM" "AT") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "45.4.b"
+ :NAME "Other Change of State Verbs / Instrument Subject"
+ :WORDS (abate accelerate acetify acidify advance age agglomerate air alkalify alter ameliorate americanize atrophy attenuate awake awaken balance blacken blast blunt blur brighten broaden brown burn burst calcify capsize caramelize carbonify carbonize change char cheapen chill clean clear clog close coagulate coarsen collapse collect compress condense contract cool corrode crimson crisp crumble crystallize dampen darken decelerate decentralize decompose decrease deepen deescalate deflate defrost degenerate degrade dehumidify demagnetize democratize depressurize desiccate destabilize deteriorate detonate dim diminish dirty disintegrate dissipate dissolve distend divide double drain dry dull ease empty emulsify energize enlarge equalize evaporate even expand explode fade fatten federate fill firm flatten flood fossilize fray freeze freshen frost fructify fuse gasify gelatinize gladden glutenize granulate gray green grow halt harden harmonize hasten heal heat heighten humidify hush hybridize ignite improve increase incubate inflate intensify iodize ionize kindle lengthen lessen level levitate light lighten lignify liquefy loop loose loosen macerate magnetize magnify mature mellow melt moisten muddy multiply narrow neaten neutralize nitrify open operate ossify overturn oxidize pale petrify polarize pop proliferate propagate pulverize purify purple putrefy quadruple quicken quiet quieten redden regularize rekindle reopen reproduce ripen roughen round rupture scorch sear sharpen short short-circuit shorten shrink shrivel shut sicken silicify silver singe sink slack slacken slim slow smarten smooth soak sober soften solidify sour splay sprout stabilize steady steep steepen stiffen straighten stratify strengthen stretch submerge subside sweeten tame tan taper tauten tense thaw thicken thin tighten tilt tire topple toughen triple ulcerate unfold unionize vaporize vary vibrate vitrify volatilize waken warm warp weaken westernize whiten widen worsen yellow)
+ :NON_LEVIN_WORDS (absorb assimulate centralize devalue)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UP" "THROUGH" "THROUGH OUT" "IN"  "FROM" "AT") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "45.4.c"
+ :NAME "Other Change of State Verbs / Theme Only"
+ :WORDS (abate accelerate acetify acidify advance age agglomerate air alkalify alter ameliorate americanize atrophy attenuate awake awaken balance blacken blast blunt blur brighten broaden brown burn burst calcify capsize caramelize carbonify carbonize change char cheapen chill clean clear clog close coagulate coarsen collapse collect compress condense contract cool corrode crimson crisp crumble crystallize dampen darken decelerate decentralize decompose decrease deepen deescalate deflate defrost degenerate degrade dehumidify demagnetize democratize depressurize desiccate destabilize deteriorate detonate dim diminish dirty disintegrate dissipate dissolve distend divide double drain dry dull ease empty emulsify energize enlarge equalize evaporate even expand explode fade fatten federate fill firm flatten flood fossilize fray freeze freshen frost fructify fuse gasify gelatinize gladden glutenize granulate gray green grow halt harden harmonize hasten heal heat heighten humidify hush hybridize ignite improve increase incubate inflate intensify iodize ionize kindle lengthen lessen level levitate light lighten lignify liquefy loop loose loosen macerate magnetize magnify mature mellow melt moisten muddy multiply narrow neaten neutralize nitrify open operate ossify overturn oxidize pale petrify polarize pop proliferate propagate pulverize purify purple putrefy quadruple quicken quiet quieten redden regularize rekindle reopen reproduce ripen roughen round rupture scorch sear sharpen short short-circuit shorten shrink shrivel shut sicken silicify silver singe sink slack slacken slim slow smarten smooth soak sober soften solidify sour splay sprout stabilize steady steep steepen stiffen straighten stratify strengthen stretch submerge subside sweeten tame tan taper tauten tense thaw thicken thin tighten tilt tire topple toughen triple ulcerate unfold unionize vaporize vary vibrate vitrify volatilize waken warm warp weaken westernize whiten widen worsen yellow)
+ :NON_LEVIN_WORDS (calm centralize congeal convalesce diversify dwindle elapse escalate exfoliate hibernate masturbate menstruate oxygenate phosphoresce progress pustulate relapse retrogress)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UP" "THROUGH" "THROUGH OUT" "IN"  "FROM" "AT") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "45.5"
+ :NAME "Verbs of Entity-Specific Change of State"
+ :WORDS (blister bloom blossom burn corrode decay deteriorate erode ferment flower germinate molder molt rot rust sprout stagnate swell tarnish wilt wither)
+ :NON_LEVIN_WORDS (bud burgeon spoil wane)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "45.6"
+ :NAME "Verbs of Calibratable Changes of State"
+ :WORDS (appreciate balloon climb decline decrease depreciate differ diminish drop fall fluctuate gain grow increase jump mushroom plummet plunge rise rocket skyrocket soar surge tumble vary)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UP TO" "UP" "DOWN TO" "DOWN") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "46.a"
+ :NAME "Lodge Verbs"
+ :WORDS (dwell live reside stay stop)
+ :NON_LEVIN_WORDS (canton inhabit occupy)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "46.b"
+ :NAME "Lodge Verbs - Agentive"
+ :WORDS (bivouac board camp lodge settle shelter)
+ :NON_LEVIN_WORDS (quarter)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <NON-SPATIAL>
+) 
+(
+ :NUMBER "47.1"
+ :NAME "Exist Verbs"
+ :WORDS (coexist dwell endure exist extend flourish languish linger live loom lurk overspread persist predominate prevail prosper remain reside shelter stay survive thrive tower wait)
+ :NON_LEVIN_WORDS (co-exist cohabit persevere preponderate preside)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("OVER" "ABOVE") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "47.2.a.i"
+ :NAME "Verbs of Entity-Specific Modes of Being / Grow"
+ :WORDS (billow bloom blossom blow breathe bristle bulge cascade effervesce flow flower foam froth grow propagate rage ripple roil seethe spread stream sweep trickle)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "OUT OF" "INTO") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "47.2.a.ii"
+ :NAME "Verbs of Entity-Specific Modes of Being / Grow"
+ :WORDS (bloom blossom flower germinate sprout)
+ :NON_LEVIN_WORDS (respire suppurate)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "OUT OF" "INTO") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "47.2.b"
+ :NAME "Verbs of Entity-Specific Modes of Being / Decay"
+ :WORDS (burn corrode decay decompose erode ferment fester fizz moult rot rust smoke smolder stagnate tarnish wilt wither)
+ :NON_LEVIN_WORDS (leaven)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "47.2.c"
+ :NAME "Verbs of Entity-Specific Modes of Being / -with"
+ :WORDS (bloom blossom blow bristle bulge burn corrode decay ferment fester flower foam froth rage rust seethe smoke sprout tarnish)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "47.3.a"
+ :NAME "Verbs of Modes of Being Involving Motion / Theme Only"
+ :WORDS (bob bow creep dance drift eddy flap float flutter hover jiggle joggle oscillate pulsate quake quiver revolve rock rotate shake stir sway swirl teeter throb totter tremble undulate vibrate waft wave waver wiggle wobble writhe)
+ :NON_LEVIN_WORDS (falter vacillate)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "47.3.b"
+ :NAME "Verbs of Modes of Being Involving Motion / Agent and Theme"
+ :WORDS (bob flap float jiggle joggle revolve rock rotate shake stir swirl vibrate wave wiggle)
+ :MISSING_WORDS (gyrate)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.4.a"
+ :NAME "Verbs of Sound Existence - Locational"
+ :WORDS (din echo resonate resound reverberate sound)
+ :COLLOCATIONS ("through" "in")
+ :COMPONENT_OF_MEANING ("UP" "THROUGH" "THROUGH OUT" "IN"  "FROM" "AT") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.4.b"
+ :NAME "Verbs of Sound Existence / -with"
+ :MISSING_WORDS (din echo resonate resound reverberate sound)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING ("UP" "THROUGH" "THROUGH OUT" "IN"  "FROM" "AT") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.5.1.a"
+ :NAME "Swarm Verbs / Locational"
+ :WORDS (abound bustle crawl creep hop run swarm swim teem throng)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("ROUND" "AROUND" "ABOUT") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.5.1.b"
+ :NAME "Swarm Verbs / Locational"
+ :WORDS (abound bustle crawl creep hop run swarm swim teem throng)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.5.1.c"
+ :NAME "Swarm Verbs / -with"
+ :WORDS (abound bustle crawl creep hop run swarm swim teem throng)
+ :NON_LEVIN_WORDS (tally)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.5.2"
+ :NAME "Herd Verbs"
+ :WORDS (accumulate aggregate amass assemble cluster collect congregate convene flock gather group herd huddle mass)
+ :NON_LEVIN_WORDS (adsorb pool sum)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "47.6.a"
+ :NAME "Verbs of Spatial Configuration / Theme Only"
+ :WORDS (balance bend bow crouch dangle flop fly hang hover jut kneel lean lie loll loom lounge nestle open perch plop project protrude recline rest rise roost sag sit slope slouch slump sprawl squat stand stoop straddle swing tilt tower)
+ :NON_LEVIN_WORDS (be consist droop repose slant)
+ :COLLOCATIONS ("in")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "47.6.b"
+ :NAME "Verbs of Spatial Configuration / Agent and Theme"
+ :WORDS (balance flop fly hover lie nestle open plop project recline rise swing tilt)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "47.7.a"
+ :NAME "Meander Verbs / -to/from"
+ :WORDS (cascade climb crawl cut drop go meander plunge run straggle stretch sweep tumble turn twist wander weave wind)
+ :NON_LEVIN_WORDS (range swerve veer)
+ :COLLOCATIONS ("to" "from")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.7.b"
+ :NAME "Meander Verbs / Path (goal)"
+ :WORDS (cascade climb crawl cut drop go meander plunge run straggle stretch sweep tumble turn twist wander weave wind)
+ :NON_LEVIN_WORDS (lead)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.a"
+ :NAME "Verbs of Contiguous Location - Identificational"
+ :WORDS (abut adjoin cross hug intersect meet touch)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UP" "THROUGH" "THROUGH OUT" "IN"  "FROM" "AT" "NEXT TO" "BESIDE" "ACROSS") ;; FILL-OBLIG <<SPATIAL>>
+)
+(
+ :NUMBER "47.8.b"
+ :NAME "Verbs of Contiguous Location - Subject is Location / IN"
+ :WORDS (contain enclose)
+ :NON_LEVIN_WORDS (belong comprise confine consist encompass engulf include pertain restrict)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING ("IN") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.c"
+ :NAME "Verbs of Contiguous Location / IN"
+ :WORDS (fill)
+ :NON_LEVIN_WORDS (antecede attend be besiege bound circle constrain corner delimit forego frequent have limit overcast overflow own possess prefix shade siege subjugate succeed supersede traverse uphold)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("IN") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.d"
+ :NAME "Verbs of Contiguous Location / AROUND"
+ :WORDS (bound bracket encircle fence frame hug ring skirt surround)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("ROUND" "AROUND" "ABOUT") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.e"
+ :NAME "Verbs of Contiguous Location / NEXT"
+ :WORDS (abut adjoin border edge flank)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("NEXT TO" "BESIDE") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.f"
+ :NAME "Verbs of Contiguous Location / AT"
+ :WORDS (bridge cross hit intersect line meet span straddle touch)
+ :NON_LEVIN_WORDS (bestride)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UP" "THROUGH" "THROUGH OUT" "IN"  "FROM" "AT" "ACROSS") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.g"
+ :NAME "Verbs of Contiguous Location / NOT_AT"
+ :WORDS (miss)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.h"
+ :NAME "Verbs of Contiguous Location / UNDER"
+ :WORDS (support underlie)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UNDERNEATH" "UNDER" "BENEATH" "BELOW") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.i"
+ :NAME "Verbs of Contiguous Location / ABOVE"
+ :WORDS (dominate overhang surmount)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("OVER" "ABOVE") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.j"
+ :NAME "Verbs of Contiguous Location / ON"
+ :WORDS (blanket cap cover rim top)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("ON" "UPON") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.k"
+ :NAME "Verbs of Contiguous Location / BEFORE"
+ :WORDS (head precede)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("BEFORE") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "47.8.l"
+ :NAME "Verbs of Contiguous Location / AFTER"
+ :WORDS (follow)
+ :COLLOCATIONS ("after" "behind")
+ :COMPONENT_OF_MEANING ("AFTER" "BEHIND") ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "48.1.1.a"
+ :NAME "Appear Verbs"
+ :WORDS (appear arise awake awaken break burst come dawn derive develop emanate emerge erupt evolve exude flow form grow gush issue materialize open plop result rise spill spread steal stem stream supervene surge wax)
+ :MISSING_WORDS (originate pop re-emerge reappear show spring turn)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING ("FROM") ;; OVERLAP <<SPATIAL>>
+) 
+(
+ :NUMBER "48.1.1.b"
+ :NAME "Appear Verbs / -up"
+ :NON_LEVIN_WORDS (pop_up show_up turn_up)
+ :COLLOCATIONS ("on")
+ :COMPONENT_OF_MEANING ("FROM") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "48.1.2"
+ :NAME "Reflexive Verbs of Appearance"
+ :WORDS (assert declare define express form intrude manifest offer pose present proffer recommend shape show suggest)
+ :NON_LEVIN_WORDS (exhibit expose flaunt)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "48.2"
+ :NAME "Verbs of Disappearance"
+ :WORDS (die disappear expire lapse perish vanish)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "48.3.a"
+ :NAME "Verbs of Occurrence"
+ :WORDS (ensue eventuate occur recur transpire)
+ :NON_LEVIN_WORDS (be)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "48.3.b"
+ :NAME "Verbs of Occurrence"
+ :NON_LEVIN_WORDS (befall)
+ :MISSING_WORDS (happen)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "49.a.i"
+ :NAME "Verbs of Body-Internal Movement / Agent Only"
+ :WORDS (buck fidget flap gyrate kick rock squirm sway teeter totter twitch waggle wiggle wobble wriggle)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "49.a.ii"
+ :NAME "Verbs of Body-Internal Movement / Agent Only"
+ :WORDS (buck fidget flap gyrate kick rock squirm sway teeter totter twitch waggle wiggle wobble wriggle)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; INTRANS <<SPATIAL>>
+) 
+(
+ :NUMBER "49.b"
+ :NAME "Verbs of Body-Internal Movement / Agent and Theme"
+ :WORDS (buck flap gyrate kick rock squirm wiggle wobble wriggle)
+ :NON_LEVIN_WORDS (implement overdo undertake)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "51.1.a"
+ :NAME "Verbs Inherently Directed Motion / -from/to"
+ :WORDS (advance arrive ascend climb come depart descend enter escape exit fall flee go leave plunge recede return rise tumble)
+ :NON_LEVIN_WORDS (approach come! defect head)
+ :COLLOCATIONS ("from" "to" "towards")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF" "UP TO" "UP" "BEFORE" "INTO" "TO") ;; OVERLAP <<SPATIAL>>
+ )
+ (
+ :NUMBER "51.1.b"
+ :NAME "Verbs of Inherently Directed Motion / -down"
+ :WORDS (fall plunge tumble)
+ :COLLOCATIONS ("down")
+ :COMPONENT_OF_MEANING ("DOWN" "DOWN TO") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.1.c"
+ :NAME "Verbs of Inherently Directed Motion / -up"
+ :MISSING_WORDS (advance climb rise)
+ :COLLOCATIONS ("up")
+ :COMPONENT_OF_MEANING ("UP" "UP TO" "FORWARD") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.1.d"
+ :NAME "Verbs of Inherently Directed Motion / AWAY_FROM-AT"
+ :WORDS (depart escape exit flee leave)
+ :NON_LEVIN_WORDS (abdicate disembark ebb vacate)
+ :MISSING_WORDS (alight emigrate graduate gravitate retire)
+ :COLLOCATIONS ("from" "away from" "out of")
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.1.e"
+ :NAME "Verbs of Inherently Directed Motion / TOWARD-UP"
+ :WORDS (ascend climb)
+ :NON_LEVIN_WORDS (mount)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("UP TO") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.1.f"
+ :NAME "Verbs of Inherently Directed Motion / AWAY_FROM-UP"
+ :WORDS (descend)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("DOWN TO") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.1.g"
+ :NAME "Verbs of Inherently Directed Motion / TOWARD-IN"
+ :NON_LEVIN_WORDS (infest invade)
+ :MISSING_WORDS (encroach enter infringe)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("INTO") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.1.h"
+ :NAME "Verbs of Inherently Directed Motion / TOWARD-ACROSS"
+ :WORDS (cross)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("ACROSS") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.2"
+ :NAME "Leave Verbs"
+ :WORDS (abandon desert)
+ :NON_LEVIN_WORDS (forsake)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("FROM" "AWAY FROM" "OUT OF") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.1.a.i"
+ :NAME "Roll Verbs"
+ :WORDS (drift drop glide swing)
+ :NON_LEVIN_WORDS (roll)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.1.a.ii"
+ :NAME "Roll Verbs"
+ :WORDS (drift drop glide swing)
+ :NON_LEVIN_WORDS (roll spring)
+ :COLLOCATIONS ("into" "out of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.1.b"
+ :NAME "Roll Verbs / -down"
+ :WORDS (drop)
+ :COLLOCATIONS ("down")
+ :COMPONENT_OF_MEANING ("DOWN") ;; OVERLAP <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.1.c"
+ :NAME "Roll Verbs -  Motion Around an Axis :"
+ :WORDS (revolve rotate turn)
+ :COLLOCATIONS ("around")
+ :COMPONENT_OF_MEANING ("AROUND") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.2.a.i"
+ :NAME "Run Verbs - Locational / Theme Only"
+ :WORDS (amble backpack bolt bounce bound bowl canter carom cavort charge clamber climb clump coast crawl creep dart dash dodder drift file flit float fly frolic gallop gambol glide goosestep hasten hike hobble hop hurry hurtle inch jog journey jump leap limp lollop lope lumber lurch march meander mince mosey nip pad parade perambulate plod prance promenade prowl race ramble roam roll romp rove run rush sashay saunter scamper scoot scram scramble scud scurry scutter scuttle shamble shuffle sidle skeddadle skip skitter skulk sleepwalk slide slink slither slog slouch sneak somersault speed stagger stomp stray streak stride stroll strut stumble stump swagger sweep swim tack tear tiptoe toddle totter traipse tramp travel trek troop trot trudge trundle vault waddle wade walk wander whiz zigzag zoom)
+ :NON_LEVIN_WORDS (caper dandle digress hopple muck_about pounce reel step toil tour venture)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.2.a.ii"
+ :NAME "Run Verbs - Locational / Theme Only"
+ :WORDS (amble backpack bolt bounce bound bowl canter carom cavort charge clamber climb clump coast crawl creep dart dash dodder drift file flit float fly frolic gallop gambol glide goosestep hasten hike hobble hop hurry hurtle inch jog journey jump leap limp lollop lope lumber lurch march meander mince mosey nip pad parade perambulate plod prance promenade prowl race ramble roam roll romp rove run rush sashay saunter scamper scoot scram scramble scud scurry scutter scuttle shamble shuffle sidle skeddadle skip skitter skulk sleepwalk slide slink slither slog slouch sneak somersault speed stagger stomp stray streak stride stroll strut stumble stump swagger sweep swim tack tear tiptoe toddle totter traipse tramp travel trek troop trot trudge trundle vault waddle wade walk wander whiz zigzag zoom)
+ :NON_LEVIN_WORDS (caper dandle digress hopple muck_about pounce reel step take_a_step toil tour venture)
+ :COLLOCATIONS ("to" "from" "into" "out of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.2.b.i"
+ :NAME "Run Verbs - Locational / Agent and Theme"
+ :WORDS (bounce float fly gallop glide hurry hurtle jump march nip parade race roll shuffle slide sneak stroll stumble troop trot walk whiz zigzag zoom)
+ :NON_LEVIN_WORDS (ramble roam trip wade)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.2.b.ii"
+ :NAME "Run Verbs - Locational / Agent and Theme"
+ :WORDS (bounce float fly gallop glide hurry hurtle jump march nip parade race roll shuffle slide sneak stroll stumble troop trot walk whiz zigzag zoom)
+ :NON_LEVIN_WORDS (pass_through trip)
+ :COLLOCATIONS ("to" "from" "into" "out of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.2.c"
+ :NAME "Run Verbs - Locational / ABOVE"
+ :WORDS (jump)
+ :NON_LEVIN_WORDS (overtake usurp)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("ABOVE") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.3.2.d"
+ :NAME "Run Verbs - Locational / ALONG"
+ :WORDS (fly ramble roam wade)
+ :COLLOCATIONS ("along")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.4.1.a"
+ :NAME "Verbs That Are Vehicle Names - Locational / Agent and Theme"
+ :WORDS (balloon bicycle bike boat bobsled bus cab canoe caravan chariot coach cycle dogsled ferry gondola helicopter jeep jet kayak moped motor motorbike motorcycle parachute punt raft rickshaw rocket skate skateboard ski sled sledge sleigh taxi toboggan tram trolley yacht)
+ :COLLOCATIONS ("to" "from" "into" "out of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "51.4.1.b"
+ :NAME "Verbs That Are Vehicle Names - Locational / Theme Only"
+ :WORDS (balloon bicycle bike boat bobsled bus cab canoe caravan chariot coach cycle dogsled ferry gondola helicopter jeep jet kayak moped motor motorbike motorcycle parachute punt raft rickshaw rocket skate skateboard ski sled sledge sleigh taxi toboggan tram trolley yacht)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.4.2.a.i"
+ :NAME "Verbs That Are Not Vehicle Names - Locational / Agent, AT"
+ :WORDS (cruise drive fly oar paddle pedal ride row sail tack)
+ :NON_LEVIN_WORDS (rally)
+ :COLLOCATIONS ("along")
+ :COMPONENT_OF_MEANING ("ALONG") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.4.2.a.ii"
+ :NAME "Verbs That Are Not Vehicle Names - Locational / Agent,"
+ :WORDS (cruise drive fly oar paddle pedal ride row sail tack)
+ :NON_LEVIN_WORDS (navigate train voyage)
+ :COLLOCATIONS ("to" "from" "into" "out of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "51.4.2.b"
+ :NAME "Verbs That Are Not Vehicle Names - Locational / Agent, ALONG"
+ :WORDS (cruise drive fly oar paddle pedal ride row sail tack)
+ :COLLOCATIONS ("along")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "51.4.2.c"
+ :NAME "Verbs Not Vehicle Names - Locational / Theme, ALONG"
+ :WORDS (cruise drive sail)
+ :MISSING_WORDS (embark)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.5.a.i"
+ :NAME "Waltz Verbs - Locational / Agent, AT"
+ :WORDS (boogie bop cancan clog conga dance foxtrot jig jitterbug jive pirouette polka quickstep rumba samba shuffle squaredance tango tapdance waltz)
+ :COLLOCATIONS ("along")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.5.a.ii"
+ :NAME "Waltz Verbs - Locational / Agent, AT"
+ :WORDS (boogie bop cancan clog conga dance foxtrot jig jitterbug jive pirouette polka quickstep rumba samba shuffle squaredance tango tapdance waltz)
+ :COLLOCATIONS ("to" "from" "into" "out of")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "51.5.b"
+ :NAME "Waltz Verbs - Locational / Agent, ALONG"
+ :WORDS (boogie bop cancan clog conga dance foxtrot jig jitterbug jive pirouette polka quickstep rumba samba shuffle squaredance tango tapdance waltz)
+ :COLLOCATIONS ("along")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.6.a"
+ :NAME "Chase Verbs"
+ :WORDS (chase follow pursue shadow tail track trail)
+ :COLLOCATIONS ("down")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.6.b"
+ :NAME "Chase Verbs / -after"
+ :WORDS (chase trail)
+ :COLLOCATIONS ("after")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "51.7.i"
+ :NAME "Accompany Verbs"
+ :WORDS (accompany conduct escort guide lead shepherd)
+ :NON_LEVIN_WORDS (effect execute fulfill maneuver steer)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "51.7.ii"
+ :NAME "Accompany Verbs"
+ :WORDS (accompany conduct escort guide lead shepherd)
+ :NON_LEVIN_WORDS (effect execute fulfill maneuver steer)
+ :COLLOCATIONS ("down")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "52.a"
+ :NAME "Avoid Verbs / NP is being avoided"
+ :WORDS (avoid boycott dodge duck elude evade shun sidestep)
+ :NON_LEVIN_WORDS (avert circumvent eschew)
+ :MISSING_WORDS (shirk)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "52.b"
+ :NAME "Avoid Verbs / Event is being avoided"
+ :WORDS (avoid dodge duck elude evade shun sidestep)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "53.1"
+ :NAME "Verbs of Lingering"
+ :WORDS (dally dawdle delay dither hesitate linger loiter tarry)
+ :NON_LEVIN_WORDS (defer equivocate idle loaf pause postpone potter procrastinate stall still)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "53.2.a.i"
+ :NAME "Verbs of Rushing - Locational / Agent"
+ :WORDS (hasten hurry rush)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "53.2.a.ii"
+ :NAME "Verbs of Rushing - Locational / Agent"
+ :WORDS (hasten hurry rush)
+ :NON_LEVIN_WORDS (expedite)
+ :COLLOCATIONS ("through")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "53.2.b"
+ :NAME "Verbs of Rushing - Locational / Agent"
+ :WORDS (hasten hurry rush)
+ :NON_LEVIN_WORDS (delay hinder)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "53.2.c"
+ :NAME "Verbs of Rushing - Locational / Theme, -with"
+ :WORDS (hasten hurry rush)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "54.1.a"
+ :NAME "Register Verbs - Possessional"
+ :WORDS (measure read register total weigh)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "54.1.b"
+ :NAME "Register Verbs - Identificational"
+ :WORDS (measure read register total weigh)
+ :NON_LEVIN_WORDS (amount quantify remeasure reweigh)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "54.2"
+ :NAME "Cost Verbs"
+ :WORDS (carry cost last take)
+ :NON_LEVIN_WORDS (be_worth deserve merit)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "54.3.a"
+ :NAME "Fit Verbs - Possessional"
+ :WORDS (carry contain feed fit hold house seat serve sleep store take use)
+ :NON_LEVIN_WORDS (bear size suffice suit)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING ("IN") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "54.3.b"
+ :NAME "Fit Verbs - Locational"
+ :WORDS (carry contain feed fit hold house seat serve sleep store take use)
+ :NON_LEVIN_WORDS (size)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING ("IN") ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "54.4"
+ :NAME "Price Verbs"
+ :WORDS (appraise assess estimate fix peg price rate value)
+ :NON_LEVIN_WORDS (approximate calculate calibrate gauge interpolate itemize rough^out)
+ :COLLOCATIONS ("at")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "54.5.a"
+ :NAME "Bill Verbs"
+ :WORDS (bet bill charge fine mulct overcharge tax wager)
+ :NON_LEVIN_WORDS (invoice scrimp spend)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "54.5.b"
+ :NAME "Bill Verbs"
+ :WORDS (save spare tip undercharge wager)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <NON-SPATIAL>
+) 
+(
+ :NUMBER "55.1.a"
+ :NAME "Begin Verbs / NP"
+ :WORDS (begin cease commence continue end finish halt keep proceed repeat resume start stop terminate)
+ :NON_LEVIN_WORDS (adjourn bring_about carry_on conclude curtail extinguish fast interrupt perpetuate reassume recommence undertake wind_up)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; N/A <<SPATIAL>>
+) 
+(
+ :NUMBER "55.1.b"
+ :NAME "Begin Verbs / Progressive S"
+ :WORDS (begin cease commence continue end finish halt keep proceed repeat resume start stop terminate)
+ :NON_LEVIN_WORDS (abstain adjourn bring_about conclude curtail desist extinguish fast interrupt perpetuate portend reassume recommence refrain set_about wind_up)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "55.1.c"
+ :NAME "Begin Verbs / -to"
+ :WORDS (begin cease commence continue proceed start)
+ :NON_LEVIN_WORDS (fail happen plan plot pretend scheme set_about succeed undertake)
+ :COLLOCATIONS ("to")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "55.2.a"
+ :NAME "Complete Verbs / NP"
+ :WORDS (complete discontinue quit)
+ :NON_LEVIN_WORDS (abolish abort abrogate ban complement forbid perpetrate prohibit)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "55.2.b"
+ :NAME "Complete Verbs / Progressive S"
+ :WORDS (complete discontinue quit)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "55.2.c"
+ :NAME "Complete Verbs"
+ :WORDS (initiate)
+ :NON_LEVIN_WORDS (complement launch perpetrate wage)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <<SPATIAL>>
+) 
+(
+ :NUMBER "56.a"
+ :NAME "Weekend Verbs"
+ :WORDS (sojourn)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "56.b"
+ :NAME "Weekend Verbs"
+ :WORDS (holiday honeymoon overnight summer vacation weekend winter)
+ :NON_LEVIN_WORDS (december)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "57.a"
+ :NAME "Weather Verbs - Expletive"
+ :WORDS (drizzle fog hail lightning mist mizzle rain sleet snow spit spot sprinkle storm thunder)
+ :COLLOCATIONS ()
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+) 
+(
+ :NUMBER "57.b"
+ :NAME "Weather Verbs - Expletive / -with"
+ :WORDS (blow gust howl pelt pour precipitate roar shower swelter teem)
+ :COLLOCATIONS ("with")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
