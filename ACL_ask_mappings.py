@@ -1202,10 +1202,10 @@ tomeks_ask_types = {
     "44.a Destroy Verbs / -with",
     "48.2 Verbs of Disappearance",
     "51.2 Leave Verbs"
-    #added these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all!
-    #added (cripple martyr orphan outlaw) from "29.7 Orphan Verbs" to "10.5 Verbs of Possessional Deprivation : Steal Verbs"
-    #added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc
-    #moved additionally added verbs in 10.5 to a new category called "10.5.1.a Panacea Lose related Verbs"
+    #added these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all! -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #added (cripple martyr orphan outlaw) from "29.7 Orphan Verbs" to "10.5 Verbs of Possessional Deprivation : Steal Verbs" -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #moved additionally added verbs in 10.5 to a new category called "10.5.1.a Panacea Lose related Verbs" -- Now the category is called 10.5.p Panacea Lose related Verbs (after further changes)
            
   ],
   "GAIN": [
