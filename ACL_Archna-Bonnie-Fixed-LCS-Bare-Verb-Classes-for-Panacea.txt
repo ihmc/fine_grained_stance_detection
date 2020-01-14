@@ -257,7 +257,7 @@
 (
  :NUMBER "10.5.p"
  :NAME "Panacea Lose related Verbs"
- :WORDS (doubt suspect forebode lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn cripple martyr orphan outlaw butcher bully)
+ :WORDS (ache anguish bully butcher cripple deny disown doubt forebode forfeit grieve hurt lose martyr mourn orphan outlaw relinquish sacrifice suffer surrender suspect)
  :NON_LEVIN_WORDS ()
  :COLLOCATIONS ()
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
