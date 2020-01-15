@@ -24,7 +24,9 @@ from nltk.corpus import wordnet as wn
 #nltk.download('averaged_perceptron_tagger')
 
 from load_resources import preprocess_rules_in_order, catvar_dict, lcs_dict
-from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
+#TODO Fix the variables imported from this line once it's sorted out.
+#from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
+from ACL_ask_mappings import sashank_categories, Panacea_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
 from catvar_v_alternates import v_alternates
 
 
@@ -358,8 +360,9 @@ def getTAskType(ask):
 							#TODO Ask if this break should be there or if I should get a type for each alternate
 							break
 
+	#TODO Clean up tonmek ask types, name is changed to Panacea_ask_types
 	for vb_type in verb_types:
-		for tomek_ask_type, types in tomeks_ask_types.items():
+		for tomek_ask_type, types in Panacea_ask_types.items():
 				if vb_type in types and tomek_ask_type not in t_ask_types:
 					t_ask_types.append(tomek_ask_type)
 
@@ -377,7 +380,7 @@ def appendListNoDuplicates(list_to_append, original_list):
 def getNLPParse(sentence):
 	annotators = '/?annotators=ssplit,tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
-	coreNLP_ased = 'http://corenlp:9000'
+	coreNLP_ased = 'http://asedcorenlp:9000'
 	url = coreNLP_ased + annotators
 
 	return requests.post(url, data=sentence.encode(encoding='UTF-8',errors='ignore'))
@@ -601,7 +604,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	if arg2:
 		arg2 = ' '.join(arg2)
 
-	for ask_type, keywords in sashank_categories_sensitive.items():
+	for ask_type, keywords in sashank_categories.items():
 		for keyword in keywords:
 			if ask_type not in s_ask_types:
 				left_boundary_regex = r'\b' + keyword + ' '
@@ -635,10 +638,13 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 				s_ask_types.append(ask_type)
 			'''
 
+	#TODO Clean up alan_ask_types
+	'''
 	for s_ask_type in s_ask_types:
 		for alan_ask_type, types in alan_ask_types.items():
 			if s_ask_type in types and alan_ask_type not in a_ask_types:
 				a_ask_types.append(alan_ask_type)
+	'''
 
 	if 'PERFORM' in t_ask_types:
 		if link_exists:
@@ -679,10 +685,12 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 							link_exists = True
 			
 
+	'''
 	for t_ask_type in t_ask_types:
 		for alan_ask_type, types in alan_ask_types.items():
 			if t_ask_type in types and alan_ask_type not in a_ask_types:
 				a_ask_types.append(alan_ask_type)
+	'''
 
 	#TODO Need to check on this and make sure this is actually what we wish to do.
 	if ask_negation or ask_negation_dep_based:
@@ -764,7 +772,7 @@ def parseModality(sentence):
 	s_ask_types = []
 	words = getLemmaWords(sentence)
 	for word in words:
-		for ask_type, keywords in sashank_categories_sensitive.items():
+		for ask_type, keywords in sashank_categories.items():
 			if word in keywords and ask_type not in s_ask_types:
 				s_ask_types.append(ask_type)	
 		if word in lexical_items:
