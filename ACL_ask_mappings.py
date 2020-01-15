@@ -1078,7 +1078,10 @@ Panacea_ask_types = {
     "48.2 Verbs of Disappearance",
     "51.2 Leave Verbs"
     #10.5.p was constructed as follows: (1) Included some verbs from 29.5.b Conjecture ([doubt, suspect, forebode]); (2) Included some verbs from 29.7 Orphan (cripple martyr orphan outlaw); (3) Added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc; (4) Included some verbs from 10.5.
-           
+    #added these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all! -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #added (cripple martyr orphan outlaw) from "29.7 Orphan Verbs" to "10.5 Verbs of Possessional Deprivation : Steal Verbs" -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #moved additionally added verbs in 10.5 to a new category called "10.5.1.a Panacea Lose related Verbs" -- Now the category is called 10.5.p Panacea Lose related Verbs (after further changes)
   ],
   "GAIN": [
     "13.5.1.a Get - No Exchange",

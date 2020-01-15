@@ -257,7 +257,7 @@
 (
  :NUMBER "10.5.p"
  :NAME "Panacea Lose related Verbs"
- :WORDS (doubt suspect forebode lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn cripple martyr orphan outlaw butcher bully)
+ :WORDS (ache anguish bully butcher cripple deny disown doubt forebode forfeit grieve hurt lose martyr mourn orphan outlaw relinquish sacrifice suffer surrender suspect)
  :NON_LEVIN_WORDS ()
  :COLLOCATIONS ()
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
@@ -1225,13 +1225,6 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "29.2.b.p"
- :NAME "Panacea Characterize Verbs / -S"
- :WORDS ()
- :COLLOCATIONS ("to")
- :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
-) 
-(
  :NUMBER "29.2.c"
  :NAME "Characterize Verbs / -as"
  :WORDS (address bill cast certify characterize choose cite class classify confirm count define describe diagnose disguise employ engage enlist enroll enter envisage establish esteem hail herald hire honor identify imagine incorporate induct intend lampoon offer oppose paint portray praise qualify rank recollect recommend regard reinstate reject remember represent repudiate reveal salute select stigmatize take train treat use value visualize)
@@ -1579,14 +1572,6 @@
  :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.2.b.p"
- :NAME "Panacea Admire Verbs - Positive / -in"
- :WORDS ()
- :NON_LEVIN_WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate implicate indulge lament loathe mourn pity regret resent revenge rue vindicate)
- :COLLOCATIONS ("in")
- :COMPONENT_OF_MEANING ("TOWARD") ;; FILL-OBLIG <NON-SPATIAL>
-) 
-(
  :NUMBER "31.2.c"
  :NAME "Admire Verbs - Positive / -that"
  :WORDS (admire adore appreciate enjoy fancy favor like love miss respect savor tolerate treasure trust value)
@@ -1596,13 +1581,6 @@
 ) 
 (
  :NUMBER "31.2.d"
- :NAME "Admire Verbs - Negative / -for/as"
- :WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate lament loathe mourn pity regret resent rue)
- :COLLOCATIONS ("for" "as")
- :COMPONENT_OF_MEANING ("AWAY FROM") ;; FILL-OBLIG <NON-SPATIAL>
-) 
-(
- :NUMBER "31.2.d.p"
  :NAME "Admire Verbs - Negative / -for/as"
  :WORDS (abhor deplore despise detest disdain dislike distrust dread envy execrate fear hate lament loathe mourn pity regret resent rue)
  :COLLOCATIONS ("for" "as")
@@ -1674,14 +1652,6 @@
  :NAME "Marvel Verbs / -from"
  :WORDS (ache hurt suffer)
  :NON_LEVIN_WORDS (recover recuperate)
- :COLLOCATIONS ("from")
- :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
-) 
-(
- :NUMBER "31.3.d.p"
- :NAME "Panacea Marvel Verbs / -from"
- :WORDS (ache hurt suffer)
- :NON_LEVIN_WORDS ()
  :COLLOCATIONS ("from")
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
