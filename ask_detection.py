@@ -26,7 +26,7 @@ from nltk.corpus import wordnet as wn
 from load_resources import preprocess_rules_in_order, catvar_dict, lcs_dict
 #TODO Fix the variables imported from this line once it's sorted out.
 #from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
-from ACL_ask_mappings import sashank_categories, Panacea_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
+from ask_mappings import sashank_categories, Panacea_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
 from catvar_v_alternates import v_alternates
 
 
@@ -380,7 +380,7 @@ def appendListNoDuplicates(list_to_append, original_list):
 def getNLPParse(sentence):
 	annotators = '/?annotators=ssplit,tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
-	coreNLP_ased = 'http://asedcorenlp:9000'
+	coreNLP_ased = 'http://corenlp:9000'
 	url = coreNLP_ased + annotators
 
 	return requests.post(url, data=sentence.encode(encoding='UTF-8',errors='ignore'))
