@@ -4,3 +4,4 @@ Flask-BasicAuth
 gunicorn
 requests
 allennlp
+docutils<0.16,>=0.10
