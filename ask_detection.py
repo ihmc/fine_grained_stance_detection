@@ -267,12 +267,6 @@ def extractTrigsAndTargs(tree):
 		# TODO keeping this for now as it parses out the trigger and target
 		# with their corresponding part of speech
 		# May not be needed later on.
-		'''
-		trig_string = ' '.join(entire_match.split())
-		trig_string = re.sub('Trig\w+', '', trig_string)
-		targ_string = ' '.join(targ_match[index][0].split())
-		targ_string = re.sub('Targ\w+', '', targ_string)
-		'''
 		modality = modality.replace('Trig', '')
 		ask = targ_match[index][2]
 		trig_word = trig
@@ -337,29 +331,6 @@ def getAskTypes(ask, word_pos):
 	else:
 		catvar_word = ''
 
-		'''
-		for verb_type, words in lcs_dict.items():
-			if catvar_word in words:
-				verb_types.append(verb_type)
-			else:
-				catvar_word_alternates = catvar_alternates_dict.get(ask)
-				if catvar_word_alternates:
-					for alternate in catvar_word_alternates:
-						if alternate in words:
-							verb_types.append(verb_type)
-							#TODO Ask if this break should be there or if I should get a type for each alternate
-							break
-				
-		
-		for vb_type in verb_types:
-			for sashank_ask_type, types in sashanks_ask_types.items():
-				if vb_type in types and sashank_ask_type not in s_ask_types:
-					s_ask_types.append(sashank_ask_type)
-
-			for tomek_ask_type, types in tomeks_ask_types.items():
-				if vb_type in types and tomek_ask_type not in t_ask_types:
-					t_ask_types.append(tomek_ask_type)
-		'''
 	if catvar_word in perform_verbs:
 		return(s_ask_types, ['PERFORM'])
 	else:
@@ -442,24 +413,6 @@ def getOrigAskTypes(ask, word_pos):
 					return(s_ask_types, ['GAIN'])
 
 	return (s_ask_types, t_ask_types)
-
-'''
-def oldTAskNoCatvar(word):
-	verb_types = []
-	t_ask_types = []
-	s_ask_types = []
-
-	for verb_type, words in lcs_dict.items():
-		if word in words:
-			verb_types.append(verb_type)
-	
-	for vb_type in verb_types:
-		for tomek_ask_type, types in original_lcs_ask_types.items():
-			if vb_type in types and tomek_ask_type not in t_ask_types:
-				t_ask_types.append(tomek_ask_type)
-
-	return (s_ask_types, t_ask_types)
-'''
 
 
 def getOrigTAskNoCatvar(word):
@@ -830,14 +783,6 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 				s_ask_types.append(ask_type)
 			'''
 
-	#TODO Clean up alan_ask_types
-	'''
-	for s_ask_type in s_ask_types:
-		for alan_ask_type, types in alan_ask_types.items():
-			if s_ask_type in types and alan_ask_type not in a_ask_types:
-				a_ask_types.append(alan_ask_type)
-	'''
-
 
 	#NOTE only for case 2b original
 	'''
@@ -895,14 +840,6 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 							link_exists = True
 	'''
 			
-
-	'''
-	for t_ask_type in t_ask_types:
-		for alan_ask_type, types in alan_ask_types.items():
-			if t_ask_type in types and alan_ask_type not in a_ask_types:
-				a_ask_types.append(alan_ask_type)
-	'''
-
 	#TODO Need to check on this and make sure this is actually what we wish to do.
 	if ask_negation or ask_negation_dep_based:
 		ask_negation = True
