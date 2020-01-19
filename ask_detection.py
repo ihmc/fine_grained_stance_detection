@@ -11,10 +11,11 @@ import csv
 import os
 import re
 import subprocess
+import health
 
 # This library allows python to make requests out.
 # NOTE: There is a difference between this and the built in request variable  
-# that FLASK provides do  not confuse the two.
+# that FLASK provides do not confuse the two.
 import requests
 
 #nltk.download('wordnet')
@@ -59,22 +60,6 @@ tsurgeon_class = 'edu.stanford.nlp.trees.tregex.tsurgeon.Tsurgeon'
 
 # Id for emails for the csv file for each email run through the system
 email_id = 0
-
-def getModality(text):
-	sentence_modalities = []
-	text = unicodedata.normalize('NFKC',text)
-
-	# Split input text into sentences
-	sentences = nltk.sent_tokenize(text)
-	sentence_modalities = []
-
-	for sentence in sentences:
-		constituency_parse = parseModality(sentence)
-		
-		sentence_modalities.append({"sentence": sentence, "matches": constituency_parse})
-
-
-	return sentence_modalities
 
 def getSrl(text, links):
 	global email_id 
@@ -130,7 +115,7 @@ def getSrl(text, links):
 	#with open('./case5b.csv', 'r') as case5b:
 	#with open('./case1.csv', 'r') as case5b:
 	#with open('./case4.csv', 'r') as case5b:
-	#with open('./testEmls.csv', 'r') as case5b:
+	with open('./testEmls.csv', 'r') as case5b:
 	#with open('./case1b.csv', 'r') as case5b:
 	#with open('./case4b.csv', 'r') as case5b:
 	#with open('./case2.csv', 'r') as case5b:
@@ -139,7 +124,11 @@ def getSrl(text, links):
 	#with open('./case5anew.csv', 'r') as case5b:
 	#with open('./case4new.csv', 'r') as case5b:
 	#with open('./case4bnew.csv', 'r') as case5b:
-	with open('./case2boriginal.csv', 'r') as case5b:
+	#with open('./case2boriginal.csv', 'r') as case5b:
+	#with open('./case6.csv', 'r') as case5b:
+	#with open('./case7orig.csv', 'r') as case5b:
+	#with open('./case7.csv', 'r') as case5b:
+	#with open('./case8.csv', 'r') as case5b:
 		rows_to_write = []
 		rows_to_append = []
 		highest_ask_scores = {}
@@ -157,7 +146,7 @@ def getSrl(text, links):
 		#with open('./case5bSecond.csv', 'w') as second_pass:
 		#with open('./case1Second.csv', 'w') as second_pass:
 		#with open('./case4Second.csv', 'w') as second_pass:
-		#with open('./testEmlsSecond.csv', 'w') as second_pass:
+		with open('./testEmlsSecond.csv', 'w') as second_pass:
 		#with open('./case1bSecond.csv', 'w') as second_pass:
 		#with open('./case4bSecond.csv', 'w') as second_pass:
 		#with open('./case2Second.csv', 'w') as second_pass:
@@ -166,7 +155,11 @@ def getSrl(text, links):
 		#with open('./case5anewSecond.csv', 'w') as second_pass:
 		#with open('./case4newSecond.csv', 'w') as second_pass:
 		#with open('./case4bnewSecond.csv', 'w') as second_pass:
-		with open('./case2boriginalSecond.csv', 'w') as second_pass:
+		#with open('./case2boriginalSecond.csv', 'w') as second_pass:
+		#with open('./case6Second.csv', 'w') as second_pass:
+		#with open('./case7origSecond.csv', 'w') as second_pass:
+		#with open('./case7Second.csv', 'w') as second_pass:
+		#with open('./case8Second.csv', 'w') as second_pass:
 			for row in data:
 				writer = csv.writer(second_pass, delimiter=',', quotechar='"')
 				if row[5] == highest_ask_scores.get(row[0]) and row[6] in ['PERFORM', 'GIVE']:
@@ -178,6 +171,7 @@ def getSrl(text, links):
 	sorted_framing = sorted(framing_matches, key = lambda k: k['is_ask_confidence'] , reverse=True)
 	sorted_asks = sorted(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches), key = lambda k: k['is_ask_confidence'], reverse=True)
 
+	'''
 	with open('./basicUrlCounts.csv', 'a') as basicUrl:
 		basicUrl_writer = csv.writer(basicUrl, delimiter=',', quotechar='"')
 		for index, ask in enumerate(sorted_asks):
@@ -192,23 +186,11 @@ def getSrl(text, links):
 			t_types = ','.join(ask['t_ask_type'])
 			ask_url_total = len(ask['url'])
 			basicUrl_writer.writerow([email_id, sentence, verb, arg1, s_types, t_types, ask_url_total, eml_total_urls])
+	'''
 			
 
 	return {'email': text, 'framing': sorted_framing, 'asks': sorted_asks}
 
-def readLocalFiles():
-	path = os.path.abspath(os.path.dirname(__file__))
-	input_path  = path + input_directory
-	output_path = path + output_directory
-
-	for filename in os.listdir(input_path):
-		with open(input_path + filename, 'r') as input_file:
-			text = input_file.read()
-			with open(output_path + 'ouput' + filename + '.json', 'w') as output_file:
-				json_modality = getModality(text)
-				output_file.write(json.dumps(json_modality, indent=4, sort_keys=False))
-
-	return 
 
 def morphRoot(word):
 	wlem = WordNetLemmatizer()
@@ -413,6 +395,54 @@ def getAskTypes(ask, word_pos):
 
 	return (s_ask_types, t_ask_types)
 
+def getOrigAskTypes(ask, word_pos):
+	verb_types = []
+	s_ask_types = []
+	t_ask_types = []
+	catvar_object = catvar_dict.get(ask)
+
+	if catvar_object != None:
+		catvar_word = catvar_object['catvar_value']
+	elif word_pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
+		catvar_word = ask	
+	else:
+		catvar_word = ''
+
+	if catvar_word in orig_perform:
+		return(s_ask_types, ['PERFORM'])
+	else:
+		catvar_word_alternates = catvar_alternates_dict.get(ask)
+		if catvar_word_alternates:
+			for alternate in catvar_word_alternates:
+				if alternate in orig_perform:
+					return(s_ask_types, ['PERFORM'])
+	if catvar_word in orig_give:
+		return(s_ask_types, ['GIVE'])
+	else:
+		catvar_word_alternates = catvar_alternates_dict.get(ask)
+		if catvar_word_alternates:
+			for alternate in catvar_word_alternates:
+				if alternate in orig_give:
+					return(s_ask_types, ['GIVE'])
+	if catvar_word in orig_lose:
+		return(s_ask_types, ['LOSE'])
+	else:
+		catvar_word_alternates = catvar_alternates_dict.get(ask)
+		if catvar_word_alternates:
+			for alternate in catvar_word_alternates:
+				if alternate in orig_lose:
+					return(s_ask_types, ['LOSE'])
+	if catvar_word in orig_gain:
+		return(s_ask_types, ['GAIN'])
+	else:
+		catvar_word_alternates = catvar_alternates_dict.get(ask)
+		if catvar_word_alternates:
+			for alternate in catvar_word_alternates:
+				if alternate in orig_gain:
+					return(s_ask_types, ['GAIN'])
+
+	return (s_ask_types, t_ask_types)
+
 '''
 def oldTAskNoCatvar(word):
 	verb_types = []
@@ -463,13 +493,13 @@ def getTAskNoCatvar(word):
 def getBaseTAsk(word):
 	s_ask_types = []
 	t_ask_types = []
-	if word in base_perform:
+	if word in thesaurus_perform:
 		return(s_ask_types, ['PERFORM'])
-	if word in base_give:
+	if word in thesaurus_give:
 		return(s_ask_types, ['GIVE'])
-	if word in base_lose:
+	if word in thesaurus_lose:
 		return(s_ask_types, ['LOSE'])
-	if word in base_gain:
+	if word in thesaurus_gain:
 		return(s_ask_types, ['GAIN'])
 
 	return (s_ask_types, t_ask_types)
@@ -719,8 +749,12 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	arg2 = ''
 	word = word.lower()
 	lem_word = morphRoot(word)
-	#(additional_s_ask_types, t_ask_types) = getAskTypes(word, word_pos)
-	#(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_word, word_pos)
+	(additional_s_ask_types, t_ask_types) = getAskTypes(word, word_pos)
+	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_word, word_pos)
+
+	#NOTE Case 7orig use LCS original lists to get ask types with catvar
+	#(additional_s_ask_types, t_ask_types) = getOrigAskTypes(word, word_pos)
+	#(additional_lem_s_ask_types, lem_t_ask_types) = getOrigAskTypes(lem_word, word_pos)
 
 
 	#NOTE This is in order to do case 1 of a spreadsheet that eliminates the use of catvar and LCS
@@ -735,8 +769,8 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 
 
 	#NOTE This is only for case 2b original
-	(additional_s_ask_types, t_ask_types) = getOrigTAskNoCatvar(word)
-	(additional_lem_s_ask_types, lem_t_ask_types) = getOrigTAskNoCatvar(lem_word)
+	#(additional_s_ask_types, t_ask_types) = getOrigTAskNoCatvar(word)
+	#(additional_lem_s_ask_types, lem_t_ask_types) = getOrigTAskNoCatvar(lem_word)
 
 	#NOTE This is only for case 2b original
 	#(additional_s_ask_types, t_ask_types) = oldTAskNoCatvar(word)
@@ -750,13 +784,11 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	if not ask_action:
 		(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
 
-	#NOTE This should only be commented out when running case 1b 2b and 4b
-	'''
+	#NOTE This should only be commented out when running NO VB
 	if word_pos in ['VBD', 'VBN', 'VBG']:
 		is_past_tense = True
 		# 8/13/19 Bonnie said for now we can ignore past tense and leave it out of asks, may change later
 		#return
-	'''
 
 
 	if arg2:
@@ -878,7 +910,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	#with open('./case5b.csv', 'a') as case5b:
 	#with open('./case1.csv', 'a') as case5b:
 	#with open('./case4.csv', 'a') as case5b:
-	#with open('./testEmls.csv', 'a') as case5b:
+	with open('./testEmls.csv', 'a') as case5b:
 	#with open('./case1b.csv', 'a') as case5b:
 	#with open('./case4b.csv', 'a') as case5b:
 	#with open('./case2.csv', 'a') as case5b:
@@ -887,7 +919,11 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	#with open('./case5anew.csv', 'a') as case5b:
 	#with open('./case4new.csv', 'a') as case5b:
 	#with open('./case4bnew.csv', 'a') as case5b:
-	with open('./case2boriginal.csv', 'a') as case5b:
+	#with open('./case2boriginal.csv', 'a') as case5b:
+	#with open('./case6.csv', 'a') as case5b:
+	#with open('./case7orig.csv', 'a') as case5b:
+	#with open('./case7.csv', 'a') as case5b:
+	#with open('./case8.csv', 'a') as case5b:
 		if t_ask_types:
 			t_type = t_ask_types[0]
 		else:
@@ -915,7 +951,6 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 		elif not t_ask_types:
 			is_ask_confidence = ''
 			case5b_writer.writerow([email_id, sentence, word, ask, arg2, is_ask_confidence, ','.join(t_ask_types), '', ask_rep, '', ','.join(s_ask_types)])
-
 	
 
 	if t_ask_types and ask:
@@ -978,78 +1013,6 @@ def combineVerbAndPosListsNoDups(base_words, base_word_dependents, parse_verbs, 
 
 	return verbs_and_pos
 
-def parseModality(sentence):
-	parse = []
-	trigger_string = ''
-	target_string = ''
-	trigger_modality = ''
-	response = getNLPParse(sentence)
-	parse_tree = response.json()['sentences'][0]['parse']
-	preprocessed_tree = preprocessSentence(parse_tree)
-
-	# Get all words for the sentence and morph them to their root word.
-	# Then check each word in the sentence to see if it is in the lexicon and
-	# build a list of all the generalized rules that should be tried on the sentence tree
-	subsets_per_word = []
-	s_ask_types = []
-	words = getLemmaWords(sentence)
-	for word in words:
-		for ask_type, keywords in sashank_categories.items():
-			if word in keywords and ask_type not in s_ask_types:
-				s_ask_types.append(ask_type)	
-		if word in lexical_items:
-			subset = list(filter(lambda rule: rule['lexical_item'] == word, lexical_specific_rules))
-			if subset:
-				subsets_per_word.append(subset)
-
-	for s_ask_type in s_ask_types:
-		for alan_ask_type, types in alan_ask_types.items():
-			if s_ask_type in types and alan_ask_type not in a_ask_types:
-				a_ask_types.append(alan_ask_type)
-	
-		
-
-	# If there are not words from the sentence found in the lexicon then we need to check the 
-	# preprocessed tree from and triggers
-	if len(subsets_per_word) == 0:
-		if "Trig" in preprocessed_tree:
-			trigs_and_targs = extractTrigsAndTargs(preprocessed_tree)
-			if trigs_and_targs == None:
-				return None
-			for trig_and_targ in trigs_and_targs:
-				# TODO store the portions of the tuple in meaningful names
-				(trigger, target, modality, ask, trig_word) = trig_and_targ
-				(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
-				parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '',  '', '', '', s_ask_types, t_ask_types, '', '', additional_s_ask_types, target, 'preprocessed rules', 'preprocess rules'))
-
-			return parse
-	# Here we loop through each set of generalized rules that were gathered above and 
-	# try all of them for each word of the sentence that was found in the lexicon until 
-	# one of the generalized rules produces a match via tsurgeon	
-	for rule_subset in subsets_per_word:
-		for rule in rule_subset:
-			# Tsurgeon is a part of the stanford corenlp tool set. It must be rune on a file as it will not 
-			# aceept just a string. NOTE There may be a way to do just a string that I have not discovered yet.
-			# Tsurgeon will edit the parse tree and add trigger and target labels according to the rules that match.
-			result = subprocess.run(['java', '-mx100m', '-cp', project_path + tregex_directory + 'stanford-tregex.jar:$CLASSPATH', tsurgeon_class, '-treeFile', 'tree.txt', '.' + lexical_item_rule_directory + rule['rule_name'] + '.txt'], stdout = subprocess.PIPE, text=True)
-
-			# TODO make this more accurate. Currently it is unlikely but still possible that a preprocess rule
-			# could have added a Trig with the same modality as a generalized rule. And if the generalized rule 
-			# does not match then the Trig from the preprocessed will fire the extracting of triggers when it 
-			# should attempt more generalized rules
-			if 'Trig' + rule['modality'] in result.stdout:
-				trigs_and_targs = extractTrigsAndTargs(result.stdout)
-				if trigs_and_targs == None:
-					return None
-				for trig_and_targ in trigs_and_targs: 
-					(trigger, target, modality, ask, trig_word) = trig_and_targ
-					(additional_s_ask_types, t_ask_types) = getAskTypes(trig_word)
-					parse.append(buildParseDict(trigger, target, modality, '', ask, '', '', '', '', '', '', '', s_ask_types, t_ask_types, '', '', additional_s_ask_types, target, rule['rule'], rule['rule_name']))
-
-				return parse
-
-
-
 def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_ask_index):
 	line_framing_matches = []
 	line_ask_matches = []
@@ -1099,6 +1062,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			
 
 		srl = predictor.predict(sentence=rebuilt_sentence)
+		print(srl)
 		small_root = ''
 		root_dependent_gloss = ''
 		aux_dependent = ''
@@ -1206,7 +1170,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 
 			ask_negation = isVerbNegated(verb, dependencies)
 
-			'''
 			for index, link_offset in enumerate(link_offsets):
 
 				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index] in rebuilt_sentence:
@@ -1233,7 +1196,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 								link_id.append(link_ids[index])
 								link_exists = True
 								break
-			'''
 
 			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl)
 			if ask_details:
@@ -1245,7 +1207,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 				elif 'GAIN' in ask_details['t_ask_type'] or 'LOSE' in ask_details['t_ask_type']:
 					line_framing_matches.append(ask_details)
 
-		'''
 		if not line_ask_matches and link_in_sentence and last_ask and last_ask['is_ask_confidence'] != 0:
 			last_ask['is_ask_confidence'] = evaluateAskConfidence(False, True, '', '', '')
 			#TODO IMPORTANT I am just joining all sentence_link_ids at the bottom look into sentence_link_ids to find out why it has duplicate numbers
@@ -1259,7 +1220,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"][0]}[{last_ask["ask_action"]}[{last_ask["ask_target"]}({",".join(sentence_link_ids)}){last_ask["s_ask_type"]}]]>'
 
 			asks_to_update.append((last_ask, last_ask_index))
-		'''
 
 	if line_framing_matches or line_ask_matches or asks_to_update:
 		return (line_framing_matches, line_ask_matches, asks_to_update, last_ask, last_ask_index)
