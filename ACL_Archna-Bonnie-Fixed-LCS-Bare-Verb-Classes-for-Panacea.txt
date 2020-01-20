@@ -469,6 +469,14 @@
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
 ) 
 (
+ :NUMBER "13.5.1.a.p"
+ :NAME "Panacea Get - No Exchange"
+ :WORDS (book call cash catch charter choose fetch get order phone reserve text vote)
+ :NON_LEVIN_WORDS (accomplish achieve attain benefit conserve earmark find_out let prescribe profit self-perpetuate)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
  :NUMBER "13.5.1.b.i"
  :NAME "Get - Exchange"
  :WORDS (lease rent)
@@ -484,9 +492,25 @@
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
 ) 
 (
+ :NUMBER "13.5.1.b.ii.p"
+ :NAME "Panacea Get - Exchange"
+ :WORDS (buy claim subscribe)
+ :NON_LEVIN_WORDS (lay_in)
+ :COLLOCATIONS ("for")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
  :NUMBER "13.5.2.a"
  :NAME "Obtain - No Exchange (CAUSE)"
  :WORDS (appropriate borrow cadge collect exact grab recover regain retrieve seize select snatch)
+ :NON_LEVIN_WORDS (accrue ensnare incur stockpile)
+ :COLLOCATIONS ("from")
+ :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
+) 
+(
+ :NUMBER "13.5.2.a.p"
+ :NAME "Panacea Obtain - No Exchange (CAUSE)"
+ :WORDS (borrow collect grab recover retreive seize select)
  :NON_LEVIN_WORDS (accrue ensnare incur stockpile)
  :COLLOCATIONS ("from")
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
