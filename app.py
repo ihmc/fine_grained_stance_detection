@@ -6,6 +6,11 @@ from flask_basicauth import BasicAuth
 # This is IHMC ask detction code
 import ask_detection
 import json
+from spacy.lang.en import English # updated
+from spacy.matcher import Matcher
+
+nlp = English()
+nlp.add_pipe(nlp.create_pipe('sentencizer')) # updated
 
 
 app = Flask(__name__)
@@ -30,30 +35,59 @@ def healthCheck():
 def hello():
 	return "Hello World Brodie"
 
-@app.route("/modality/email", methods = ['POST','GET'])
-@basic_auth.required
-def handleModality():
-	payload = request.get_json()
-
-
-	sentence_modalities = ask_detection.getModality(payload['text'])
-
-	return json.dumps(sentence_modalities)
 
 @app.route("/srl/email", methods = ['POST','GET'])
 @basic_auth.required
-def handleSrl():
+def handleEmail():
 	payload = request.get_json();
 
 	sentence_srls = ask_detection.getSrl(payload['text'], payload['links'])
 
 	return json.dumps(sentence_srls)
 
-@app.route("/local", methods = ['POST', 'GET'])
-def handleLocalRead():
-	ask_detection.readLocalFiles()
+@app.route("/srl/sms", methods = ['POST','GET'])
+@basic_auth.required
+def handleSMS():
+	payload = request.get_json();
 
-	return "Finished. What's finsihed? Who knows, just finsihed"
+	sentence_srls = ask_detection.getSrl(*preprocess_text(payload["text"]))
+
+	return json.dumps(sentence_srls)
+
+@app.route("/srl/linkedin", methods = ['POST','GET'])
+@basic_auth.required
+def handleLinkedin():
+	payload = request.get_json();
+
+	sentence_srls = ask_detection.getSrl(*preprocess_text(payload["text"]))
+
+	return json.dumps(sentence_srls)
+
+def preprocess_text(text):
+	url_token_indices = []
+	sentences_array = []
+	text_to_process = ""
+	ask_dict = {}
+	ask_id = 0
+	tag = "ASKMARKER1234"
+
+	doc = nlp(text)
+
+	for sent in doc.sents:
+		sentence_pieces = []
+		for token in sent:
+			if (token.like_url or token.like_email) and tag not in token.text:
+				ask_dict[ask_id] = token.text	
+				sentence_pieces.append(f'[[[{tag}-{ask_id}-{tag}]]]{token.text}/[[[{tag}-{ask_id}-{tag}]]]{token.whitespace_}')
+			else:
+				sentence_pieces.append(token.text_with_ws)
+		sentences_array.append(sentence_pieces)
+
+	for sent in sentences_array:
+		sentence = ''.join(sent)
+		text_to_process += sentence
+
+	return(text_to_process, ask_dict)
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
