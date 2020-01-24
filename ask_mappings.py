@@ -1040,7 +1040,7 @@ sashank_categories = {
    ]
 }
 
-Panacea_ask_types = {
+panacea_ask_types = {
   "LOSE": [ #verbs may need to be used differently in their passive (victim in subject) vs active form (victim in DO) for this class but not focused on that for now
     "10.5.p Panacea Lose related Verbs",
     "10.5 Verbs of Possessional Deprivation : Steal Verbs", # <--- don't include this!!

@@ -26,7 +26,7 @@ from nltk.corpus import wordnet as wn
 from load_resources import preprocess_rules_in_order, catvar_dict, lcs_dict
 #TODO Fix the variables imported from this line once it's sorted out.
 #from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
-from ask_mappings import sashank_categories, Panacea_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
+from ask_mappings import sashank_categories, panacea_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
 from catvar_v_alternates import v_alternates
 
 
@@ -237,9 +237,9 @@ def buildParseDict(sentence, trigger, target, modality, ask_who, ask, ask_recipi
 		parse_dict['target'] = target
 		parse_dict['trigger_modality'] = modality
 	if ask_negation:
-		parse_dict['ask_rep'] = f'<{t_ask_types[0]}[NOT {ask_action}[{ask}({link_id}){s_ask_types}]]>'
+		parse_dict['ask_rep'] = f'<{t_ask_types[0]}[NOT {ask_action}[{ask}({",".join(link_id)}){s_ask_types}]]>'
 	else:
-		parse_dict['ask_rep'] = f'<{t_ask_types[0]}[{ask_action}[{ask}({link_id}){s_ask_types}]]>'
+		parse_dict['ask_rep'] = f'<{t_ask_types[0]}[{ask_action}[{ask}({",".join(link_id)}){s_ask_types}]]>'
 	parse_dict['evidence'] = sentence
 	#parse_dict['base_word'] = base_word
 	#parse_dict['ask_who'] = ask_who
@@ -250,10 +250,10 @@ def buildParseDict(sentence, trigger, target, modality, ask_who, ask, ask_recipi
 	parse_dict['ask_negation'] = ask_negation
 	parse_dict['is_ask_confidence'] = is_ask_confidence
 	parse_dict['link_id'] = link_id
-	if link_id:
-		parse_dict['url'] = {link_id: links.get(link_id)}
-	else:
-		parse_dict['url'] = {}
+	parse_dict['url'] = {}
+	for link in link_id:
+		if link:
+			parse_dict['url'].update({link: links.get(link)})
 	#parse_dict['ask_negation_dep_based'] = ask_negation_dep_based
 	#parse_dict['ask_info_confidence'] = confidence
 	parse_dict['t_ask_type'] = t_ask_types
@@ -362,7 +362,7 @@ def getTAskType(ask):
 
 	#TODO Clean up tonmek ask types, name is changed to Panacea_ask_types
 	for vb_type in verb_types:
-		for tomek_ask_type, types in Panacea_ask_types.items():
+		for tomek_ask_type, types in panacea_ask_types.items():
 				if vb_type in types and tomek_ask_type not in t_ask_types:
 					t_ask_types.append(tomek_ask_type)
 
@@ -661,6 +661,8 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 			t_ask_types = ['PERFORM']
 	'''
 
+	#TODO if this gets uncommented and used work our link_id as it will probably need to be an array
+	'''
 	if t_ask_types == ['PERFORM'] and link_in_sentence and not link_exists and ask and word_number:
 		for index, link_string in enumerate(link_strings):
 			if ask == link_string.lower():
@@ -683,6 +685,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 						if dependency['dependentGloss'].lower() in link_string.lower():
 							link_id = link_ids[index]
 							link_exists = True
+	'''
 			
 
 	'''
@@ -832,13 +835,14 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 	line_framing_matches = []
 	line_ask_matches = []
 	asks_to_update = []
+	link_id = []
 	ask_negation = False
 	base_word = ''
 	conj_base_word = ''
 	dep_base_word = ''
 	ccomp_base_word = ''
 	xcomp_base_word = ''
-	link_id = ''
+	
 	
 	response = getNLPParse(line)
 	core_nlp_sentences = response.json()['sentences']
@@ -852,6 +856,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 		rebuilt_sentence = []
 		parse_verbs_pos = []
 		parse_verbs = []
+		sentence_link_ids = []
 
 		#TODO Investigate if this is needed
 		#words = getLemmaWords(sentence)
@@ -975,7 +980,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			# 8/13/19 Bonnie said for now we can ignore VBG and leave it out of asks, may change later
 			#if pos == 'VBG':
 			#	continue
-			link_id = ''
+			link_id = []
 			link_exists = False
 			ask_negation = False
 
@@ -984,10 +989,11 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			for index, link_offset in enumerate(link_offsets):
 
 				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index] in rebuilt_sentence:
+					sentence_link_ids.append(link_ids[index])
 					link_in_sentence = True
 
 					if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index]:
-						link_id = link_ids[index]
+						link_id.append(link_ids[index])
 						link_exists = True
 						break
 
@@ -1003,7 +1009,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 					for child_dependent_num in child_dependent_nums:
 						for dependency in dependencies:
 							if child_dependent_num == dependency['governor'] and dependency['dependentGloss'] in link_strings[index]:
-								link_id = link_ids[index]
+								link_id.append(link_ids[index])
 								link_exists = True
 								break
 
@@ -1011,19 +1017,24 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			if ask_details:
 				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
 					line_ask_matches.append(ask_details)
-					last_ask = ask_details
-					last_ask_index += 1
+					if ask_details['is_ask_confidence'] != 0:
+						last_ask = ask_details
+						last_ask_index += 1
 				elif 'GAIN' in ask_details['t_ask_type'] or 'LOSE' in ask_details['t_ask_type']:
 					line_framing_matches.append(ask_details)
 
 		if not line_ask_matches and link_in_sentence and last_ask and last_ask['is_ask_confidence'] != 0:
 			last_ask['is_ask_confidence'] = evaluateAskConfidence(False, True, '', '', '')
-			last_ask['link_id'] = link_ids[0]
-			last_ask['url'] = { link_ids[0]: links.get(link_ids[0])}
+			#TODO IMPORTANT I am just joining all sentence_link_ids at the bottom look into sentence_link_ids to find out why it has duplicate numbers
+			for sentence_link_id in sentence_link_ids:
+				last_ask['link_id'].append(sentence_link_id)	
+				last_ask['url'].update({sentence_link_id: links.get(sentence_link_id)})
+			#last_ask['link_id'] = link_ids[0]
+			#last_ask['url']
 			if last_ask['ask_negation']:
-				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"][0]}[NOT {last_ask["ask_action"]}[{last_ask["ask_target"]}({link_ids[0]}){last_ask["s_ask_type"]}]]>'
+				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"][0]}[NOT {last_ask["ask_action"]}[{last_ask["ask_target"]}({",".join(sentence_link_ids)}){last_ask["s_ask_type"]}]]>'
 			else:
-				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"][0]}[{last_ask["ask_action"]}[{last_ask["ask_target"]}({link_ids[0]}){last_ask["s_ask_type"]}]]>'
+				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"][0]}[{last_ask["ask_action"]}[{last_ask["ask_target"]}({",".join(sentence_link_ids)}){last_ask["s_ask_type"]}]]>'
 
 			asks_to_update.append((last_ask, last_ask_index))
 

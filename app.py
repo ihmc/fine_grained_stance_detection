@@ -77,8 +77,9 @@ def preprocess_text(text):
 		sentence_pieces = []
 		for token in sent:
 			if (token.like_url or token.like_email) and tag not in token.text:
-				ask_dict[ask_id] = token.text	
-				sentence_pieces.append(f'[[[{tag}-{ask_id}-{tag}]]]{token.text}/[[[{tag}-{ask_id}-{tag}]]]{token.whitespace_}')
+				ask_dict[str(ask_id)] = token.text	
+				sentence_pieces.append(f'[[[{tag}-{ask_id}-{tag}{token.text}/{tag}-{ask_id}-{tag}]]]{token.whitespace_}')
+				ask_id += 1
 			else:
 				sentence_pieces.append(token.text_with_ws)
 		sentences_array.append(sentence_pieces)
