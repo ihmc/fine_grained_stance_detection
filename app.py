@@ -85,8 +85,7 @@ def preprocess_text(text):
 		sentences_array.append(sentence_pieces)
 
 	for sent in sentences_array:
-		sentence = ''.join(sent)
-		text_to_process += sentence
+		text_to_process += f'{"".join(sent)}\n'
 
 	return(text_to_process, ask_dict)
 

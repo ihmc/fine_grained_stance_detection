@@ -906,6 +906,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl)
 			if ask_details:
 				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
+					#TODO Check and see if this line should be in the if condition below. As one of the conditions for advanced url
+					#processing is that line ask matches is empty.
 					line_ask_matches.append(ask_details)
 					if ask_details['is_ask_confidence'] != 0:
 						last_ask = ask_details
