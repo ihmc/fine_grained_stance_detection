@@ -101,7 +101,9 @@ def getSrl(text, links):
 			if framings: 
 				framing_matches.extend(framings)
 			if asks:	
-				ask_matches.extend(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, asks))
+				#TODO Turn this back on apple
+				#ask_matches.extend(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, asks))
+				ask_matches.extend(asks)
 
 			# If parseSrl determines that the last ask needs to be update then it will update the appropriate ask
 			# in ask_matches with the new information that was altered in last_ask inside parseSrl
@@ -169,7 +171,10 @@ def getSrl(text, links):
 
 	#filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches)
 	sorted_framing = sorted(framing_matches, key = lambda k: k['is_ask_confidence'] , reverse=True)
-	sorted_asks = sorted(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches), key = lambda k: k['is_ask_confidence'], reverse=True)
+	#TODO apple
+	#sorted_asks = sorted(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches), key = lambda k: k['is_ask_confidence'], reverse=True)
+	sorted_asks = sorted(ask_matches, key = lambda k: k['is_ask_confidence'], reverse=True)
+
 
 	'''
 	with open('./basicUrlCounts.csv', 'a') as basicUrl:
@@ -888,15 +893,23 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 		elif not t_ask_types:
 			is_ask_confidence = ''
 			case5b_writer.writerow([email_id, sentence, word, ask, arg2, is_ask_confidence, ','.join(t_ask_types), '', ask_rep, '', ','.join(s_ask_types)])
-	
 
+	#TODO add this condition back in and delete the one below. Also indent return statement to match with this if. apple
+	'''
 	if t_ask_types and ask:
 		if 'GIVE' in t_ask_types or 'PERFORM' in t_ask_types:
 			is_ask_confidence = evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_types)
 		elif 'GAIN' in t_ask_types or 'LOSE' in t_ask_types:
 			is_ask_confidence = 0.9
+	'''
 
-		return buildParseDict(sentence, '', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '', link_id, links)
+	if 'GAIN' in t_ask_types or 'LOSE' in t_ask_types:
+		is_ask_confidence = 0.9
+	else:
+		is_ask_confidence = evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_types)
+		
+	return buildParseDict(sentence, '', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '', link_id, links)
+
 
 def evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_types):
 	confidence_score = 0
@@ -964,6 +977,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 	
 	
 	response = getNLPParse(line)
+	print("Just checking")
+	print(response.json())
 	core_nlp_sentences = response.json()['sentences']
 
 	for nlp_sentence in core_nlp_sentences:
@@ -999,7 +1014,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			
 
 		srl = predictor.predict(sentence=rebuilt_sentence)
-		print(srl)
+		#print(srl)
 		small_root = ''
 		root_dependent_gloss = ''
 		aux_dependent = ''
