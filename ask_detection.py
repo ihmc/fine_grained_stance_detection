@@ -101,9 +101,7 @@ def getSrl(text, links):
 			if framings: 
 				framing_matches.extend(framings)
 			if asks:	
-				#TODO Turn this back on apple
-				#ask_matches.extend(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, asks))
-				ask_matches.extend(asks)
+				ask_matches.extend(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, asks))
 
 			# If parseSrl determines that the last ask needs to be update then it will update the appropriate ask
 			# in ask_matches with the new information that was altered in last_ask inside parseSrl
@@ -114,85 +112,9 @@ def getSrl(text, links):
 				last_ask = asks_to_update[-1][0]
 				last_ask_index = asks_to_update[-1][1]
 
-	#with open('./case5b.csv', 'r') as case5b:
-	#with open('./case1.csv', 'r') as case5b:
-	#with open('./case4.csv', 'r') as case5b:
-	with open('./testEmls.csv', 'r') as case5b:
-	#with open('./case1b.csv', 'r') as case5b:
-	#with open('./case4b.csv', 'r') as case5b:
-	#with open('./case2.csv', 'r') as case5b:
-	#with open('./case2b.csv', 'r') as case5b:
-	#with open('./case5c.csv', 'r') as case5b:
-	#with open('./case5anew.csv', 'r') as case5b:
-	#with open('./case4new.csv', 'r') as case5b:
-	#with open('./case4bnew.csv', 'r') as case5b:
-	#with open('./case2boriginal.csv', 'r') as case5b:
-	#with open('./case6.csv', 'r') as case5b:
-	#with open('./case7orig.csv', 'r') as case5b:
-	#with open('./case7.csv', 'r') as case5b:
-	#with open('./case8.csv', 'r') as case5b:
-		rows_to_write = []
-		rows_to_append = []
-		highest_ask_scores = {}
-		reader = csv.reader(case5b, delimiter=',', quotechar='"')
-		data = list(reader)
 
-		for index, row in enumerate(data):
-			if row[0] not in highest_ask_scores:
-				if row[6] in ['PERFORM', 'GIVE']:
-					highest_ask_scores[row[0]] = row[5]
-			else:
-				if row[5] > highest_ask_scores[row[0]] and row[6] in ['PERFORM', 'GIVE']:
-					highest_ask_scores[row[0]] = row[5]
-			
-		#with open('./case5bSecond.csv', 'w') as second_pass:
-		#with open('./case1Second.csv', 'w') as second_pass:
-		#with open('./case4Second.csv', 'w') as second_pass:
-		with open('./testEmlsSecond.csv', 'w') as second_pass:
-		#with open('./case1bSecond.csv', 'w') as second_pass:
-		#with open('./case4bSecond.csv', 'w') as second_pass:
-		#with open('./case2Second.csv', 'w') as second_pass:
-		#with open('./case2bSecond.csv', 'w') as second_pass:
-		#with open('./case5cSecond.csv', 'w') as second_pass:
-		#with open('./case5anewSecond.csv', 'w') as second_pass:
-		#with open('./case4newSecond.csv', 'w') as second_pass:
-		#with open('./case4bnewSecond.csv', 'w') as second_pass:
-		#with open('./case2boriginalSecond.csv', 'w') as second_pass:
-		#with open('./case6Second.csv', 'w') as second_pass:
-		#with open('./case7origSecond.csv', 'w') as second_pass:
-		#with open('./case7Second.csv', 'w') as second_pass:
-		#with open('./case8Second.csv', 'w') as second_pass:
-			for row in data:
-				writer = csv.writer(second_pass, delimiter=',', quotechar='"')
-				if row[5] == highest_ask_scores.get(row[0]) and row[6] in ['PERFORM', 'GIVE']:
-					writer.writerow([row[0],row[1],row[2],row[3],row[4],row[5],row[6],row[7],row[8],'X', row[10]])
-				else:
-					writer.writerow(row)
-
-	#filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches)
 	sorted_framing = sorted(framing_matches, key = lambda k: k['is_ask_confidence'] , reverse=True)
-	#TODO apple
-	#sorted_asks = sorted(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches), key = lambda k: k['is_ask_confidence'], reverse=True)
-	sorted_asks = sorted(ask_matches, key = lambda k: k['is_ask_confidence'], reverse=True)
-
-
-	'''
-	with open('./basicUrlCounts.csv', 'a') as basicUrl:
-		basicUrl_writer = csv.writer(basicUrl, delimiter=',', quotechar='"')
-		for index, ask in enumerate(sorted_asks):
-			if index == 0:
-				eml_total_urls = len(links)
-			else:
-				eml_total_urls = ''
-			sentence = ask['evidence']
-			verb = ask['ask_action']
-			arg1 = ask['ask_target']
-			s_types = ','.join(ask['s_ask_type'])
-			t_types = ','.join(ask['t_ask_type'])
-			ask_url_total = len(ask['url'])
-			basicUrl_writer.writerow([email_id, sentence, verb, arg1, s_types, t_types, ask_url_total, eml_total_urls])
-	'''
-			
+	sorted_asks = sorted(filter(lambda ask: True if ask['is_ask_confidence'] != 0 else False, ask_matches), key = lambda k: k['is_ask_confidence'], reverse=True)
 
 	return {'email': text, 'framing': sorted_framing, 'asks': sorted_asks}
 
@@ -279,7 +201,7 @@ def extractTrigsAndTargs(tree):
 
 	return trigs_and_targs	
 
-def buildParseDict(sentence, trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_type,  base_word, rule, rule_name, link_id, links):
+def buildParseDict(sentence, trigger, target, modality, ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence,  base_word, rule, rule_name, link_id, links):
 	parse_dict = {}
 	if modality:
 		parse_dict['trigger'] = trigger
@@ -309,7 +231,6 @@ def buildParseDict(sentence, trigger, target, modality, ask_who, ask, ask_recipi
 	parse_dict['t_ask_type'] = t_ask_types
 	#parse_dict['t_ask_confidence'] = t_ask_confidence
 	parse_dict['s_ask_type'] = s_ask_types
-	#parse_dict['additional_s_ask_type'] = additional_s_ask_type
 	#parse_dict['a_ask_type'] = a_ask_types
 	#parse_dict['a_ask_procedure'] = ask_procedure
 	#parse_dict['semantic_roles'] = descriptions
@@ -325,7 +246,6 @@ def buildParseDict(sentence, trigger, target, modality, ask_who, ask, ask_recipi
 # mapped to LCS (lexical conceptual structures) and eventually those are mapped to the ask types
 def getAskTypes(ask, word_pos):
 	verb_types = []
-	s_ask_types = []
 	t_ask_types = []
 	catvar_object = catvar_dict.get(ask)
 
@@ -337,131 +257,40 @@ def getAskTypes(ask, word_pos):
 		catvar_word = ''
 
 	if catvar_word in perform_verbs:
-		return(s_ask_types, ['PERFORM'])
+		return(['PERFORM'])
 	else:
 		catvar_word_alternates = catvar_alternates_dict.get(ask)
 		if catvar_word_alternates:
 			for alternate in catvar_word_alternates:
 				if alternate in perform_verbs:
-					return(s_ask_types, ['PERFORM'])
+					return(['PERFORM'])
 	if catvar_word in give_verbs:
-		return(s_ask_types, ['GIVE'])
+		return(['GIVE'])
 	else:
 		catvar_word_alternates = catvar_alternates_dict.get(ask)
 		if catvar_word_alternates:
 			for alternate in catvar_word_alternates:
 				if alternate in give_verbs:
-					return(s_ask_types, ['GIVE'])
+					return(['GIVE'])
 	if catvar_word in lose_verbs:
-		return(s_ask_types, ['LOSE'])
+		return(['LOSE'])
 	else:
 		catvar_word_alternates = catvar_alternates_dict.get(ask)
 		if catvar_word_alternates:
 			for alternate in catvar_word_alternates:
 				if alternate in lose_verbs:
-					return(s_ask_types, ['LOSE'])
+					return(['LOSE'])
 	if catvar_word in gain_verbs:
-		return(s_ask_types, ['GAIN'])
+		return(['GAIN'])
 	else:
 		catvar_word_alternates = catvar_alternates_dict.get(ask)
 		if catvar_word_alternates:
 			for alternate in catvar_word_alternates:
 				if alternate in gain_verbs:
-					return(s_ask_types, ['GAIN'])
+					return(['GAIN'])
 
-	return (s_ask_types, t_ask_types)
+	return t_ask_types
 
-def getOrigAskTypes(ask, word_pos):
-	verb_types = []
-	s_ask_types = []
-	t_ask_types = []
-	catvar_object = catvar_dict.get(ask)
-
-	if catvar_object != None:
-		catvar_word = catvar_object['catvar_value']
-	elif word_pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
-		catvar_word = ask	
-	else:
-		catvar_word = ''
-
-	if catvar_word in orig_perform:
-		return(s_ask_types, ['PERFORM'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in orig_perform:
-					return(s_ask_types, ['PERFORM'])
-	if catvar_word in orig_give:
-		return(s_ask_types, ['GIVE'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in orig_give:
-					return(s_ask_types, ['GIVE'])
-	if catvar_word in orig_lose:
-		return(s_ask_types, ['LOSE'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in orig_lose:
-					return(s_ask_types, ['LOSE'])
-	if catvar_word in orig_gain:
-		return(s_ask_types, ['GAIN'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in orig_gain:
-					return(s_ask_types, ['GAIN'])
-
-	return (s_ask_types, t_ask_types)
-
-
-def getOrigTAskNoCatvar(word):
-	t_ask_types = []
-	s_ask_types = []
-	if word in orig_give:
-		return(s_ask_types, ['GIVE'])
-	if word in orig_perform:
-		return(s_ask_types, ['PERFORM'])
-	if word in orig_lose:
-		return(s_ask_types, ['LOSE'])
-	if word in orig_gain:
-		return(s_ask_types, ['GAIN'])
-
-	return (s_ask_types, t_ask_types)
-
-def getTAskNoCatvar(word):
-	t_ask_types = []
-	s_ask_types = []
-	if word in perform_verbs:
-		return(s_ask_types, ['PERFORM'])
-	if word in give_verbs:
-		return(s_ask_types, ['GIVE'])
-	if word in lose_verbs:
-		return(s_ask_types, ['LOSE'])
-	if word in gain_verbs:
-		return(s_ask_types, ['GAIN'])
-
-	return (s_ask_types, t_ask_types)
-
-def getBaseTAsk(word):
-	s_ask_types = []
-	t_ask_types = []
-	if word in thesaurus_perform:
-		return(s_ask_types, ['PERFORM'])
-	if word in thesaurus_give:
-		return(s_ask_types, ['GIVE'])
-	if word in thesaurus_lose:
-		return(s_ask_types, ['LOSE'])
-	if word in thesaurus_gain:
-		return(s_ask_types, ['GAIN'])
-
-	return (s_ask_types, t_ask_types)
-	
 
 def getTAskType(ask):
 	verb_types = []
@@ -707,34 +536,9 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	arg2 = ''
 	word = word.lower()
 	lem_word = morphRoot(word)
-	(additional_s_ask_types, t_ask_types) = getAskTypes(word, word_pos)
-	(additional_lem_s_ask_types, lem_t_ask_types) = getAskTypes(lem_word, word_pos)
+	t_ask_types = getAskTypes(word, word_pos)
+	lem_t_ask_types = getAskTypes(lem_word, word_pos)
 
-	#NOTE Case 7orig use LCS original lists to get ask types with catvar
-	#(additional_s_ask_types, t_ask_types) = getOrigAskTypes(word, word_pos)
-	#(additional_lem_s_ask_types, lem_t_ask_types) = getOrigAskTypes(lem_word, word_pos)
-
-
-	#NOTE This is in order to do case 1 of a spreadsheet that eliminates the use of catvar and LCS
-	#Make sure to uncomment the same lines above
-	#(additional_s_ask_types, t_ask_types) = getBaseTAsk(word)
-	#(additional_lem_s_ask_types, lem_t_ask_types) = getBaseTAsk(lem_word)
-
-
-	#NOTE This is for getting t_ask_types without catvar but using LCS
-	#(additional_s_ask_types, t_ask_types) = getTAskNoCatvar(word)
-	#(additional_lem_s_ask_types, lem_t_ask_types) = getTAskNoCatvar(lem_word)
-
-
-	#NOTE This is only for case 2b original
-	#(additional_s_ask_types, t_ask_types) = getOrigTAskNoCatvar(word)
-	#(additional_lem_s_ask_types, lem_t_ask_types) = getOrigTAskNoCatvar(lem_word)
-
-	#NOTE This is only for case 2b original
-	#(additional_s_ask_types, t_ask_types) = oldTAskNoCatvar(word)
-	#(additional_lem_s_ask_types, lem_t_ask_types) = oldTAskNoCatvar(lem_word)
-
-	additional_s_ask_types = appendListNoDuplicates(additional_lem_s_ask_types, additional_s_ask_types)
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
 
 	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2) = extractAskFromSrl(sentence, srl, word, t_ask_types)
@@ -849,66 +653,13 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	if ask_negation or ask_negation_dep_based:
 		ask_negation = True
 
-	#with open('./case5b.csv', 'a') as case5b:
-	#with open('./case1.csv', 'a') as case5b:
-	#with open('./case4.csv', 'a') as case5b:
-	with open('./testEmls.csv', 'a') as case5b:
-	#with open('./case1b.csv', 'a') as case5b:
-	#with open('./case4b.csv', 'a') as case5b:
-	#with open('./case2.csv', 'a') as case5b:
-	#with open('./case2b.csv', 'a') as case5b:
-	#with open('./case5c.csv', 'a') as case5b:
-	#with open('./case5anew.csv', 'a') as case5b:
-	#with open('./case4new.csv', 'a') as case5b:
-	#with open('./case4bnew.csv', 'a') as case5b:
-	#with open('./case2boriginal.csv', 'a') as case5b:
-	#with open('./case6.csv', 'a') as case5b:
-	#with open('./case7orig.csv', 'a') as case5b:
-	#with open('./case7.csv', 'a') as case5b:
-	#with open('./case8.csv', 'a') as case5b:
-		if t_ask_types:
-			t_type = t_ask_types[0]
-		else:
-			t_type = ''
-
-		if link_id:
-			l_ids = ','.join(link_id)
-		else:
-			l_ids = ''
-		if ask_negation:
-			ask_rep = f'<{t_type}[NOT {ask_action}[{ask}({l_ids}){s_ask_types}]]>'
-		else:
-			ask_rep = f'<{t_type}[{ask_action}[{ask}({l_ids}){s_ask_types}]]>'
-		case5b_writer = csv.writer(case5b, delimiter=',', quotechar='"')
-		if 'GIVE' in t_ask_types or 'PERFORM' in t_ask_types:
-			#NOTE only use this line when ignoring url items
-			is_ask_confidence = evaluateAskConfidence(is_past_tense, False, ask, s_ask_types, t_ask_types)
-			#is_ask_confidence = evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_types)
-			if not t_ask_types or not ask:
-				is_ask_confidence = 0 
-			case5b_writer.writerow([email_id, sentence, word, ask, arg2, is_ask_confidence, ','.join(t_ask_types), '', ask_rep, '', ','.join(s_ask_types)])
-		elif 'GAIN' in t_ask_types or 'LOSE' in t_ask_types:
-			is_ask_confidence = 0.9
-			case5b_writer.writerow([email_id, sentence, word, ask, arg2, is_ask_confidence, '', ','.join(t_ask_types), ask_rep, '', ','.join(s_ask_types)])
-		elif not t_ask_types:
-			is_ask_confidence = ''
-			case5b_writer.writerow([email_id, sentence, word, ask, arg2, is_ask_confidence, ','.join(t_ask_types), '', ask_rep, '', ','.join(s_ask_types)])
-
-	#TODO add this condition back in and delete the one below. Also indent return statement to match with this if. apple
-	'''
 	if t_ask_types and ask:
 		if 'GIVE' in t_ask_types or 'PERFORM' in t_ask_types:
 			is_ask_confidence = evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_types)
 		elif 'GAIN' in t_ask_types or 'LOSE' in t_ask_types:
 			is_ask_confidence = 0.9
-	'''
 
-	if 'GAIN' in t_ask_types or 'LOSE' in t_ask_types:
-		is_ask_confidence = 0.9
-	else:
-		is_ask_confidence = evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_types)
-		
-	return buildParseDict(sentence, '', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, additional_s_ask_types, word, '', '', link_id, links)
+		return buildParseDict(sentence, '', '', '', ask_who, ask, ask_recipient, ask_when, ask_action, ask_procedure, ask_negation, ask_negation_dep_based, is_ask_confidence, confidence, descriptions, s_ask_types, t_ask_types, a_ask_types, t_ask_confidence, word, '', '', link_id, links)
 
 
 def evaluateAskConfidence(is_past_tense, link_exists, ask, s_ask_types, t_ask_types):
@@ -977,8 +728,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 	
 	
 	response = getNLPParse(line)
-	print("Just checking")
-	print(response.json())
 	core_nlp_sentences = response.json()['sentences']
 
 	for nlp_sentence in core_nlp_sentences:
