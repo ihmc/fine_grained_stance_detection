@@ -623,7 +623,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 			t_ask_types = ['PERFORM']
 	'''
 
-	#TODO if this gets uncommented and used work our link_id as it will probably need to be an array
+	#TODO if this gets uncommented and used work out link_id as it will probably need to be an array
 	'''
 	if t_ask_types == ['PERFORM'] and link_in_sentence and not link_exists and ask and word_number:
 		for index, link_string in enumerate(link_strings):
@@ -874,7 +874,9 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			for index, link_offset in enumerate(link_offsets):
 
 				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index] in rebuilt_sentence:
-					sentence_link_ids.append(link_ids[index])
+					#NOTE This check is needed because we are looping through each verb so this was sometimes adding the same link id more than once
+					if link_ids[index] not in sentence_link_ids:
+						sentence_link_ids.append(link_ids[index])
 					link_in_sentence = True
 
 					if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index]:
@@ -894,8 +896,11 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 					for child_dependent_num in child_dependent_nums:
 						for dependency in dependencies:
 							if child_dependent_num == dependency['governor'] and dependency['dependentGloss'] in link_strings[index]:
-								link_id.append(link_ids[index])
-								link_exists = True
+								#NOTE Had to check if link id is already in list. Cases where the whole sentence is the link 
+								#causes this to easily overproduce link ids
+								if link_ids[index] not in link_id:
+									link_id.append(link_ids[index])
+									link_exists = True
 								break
 
 			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl)
@@ -909,7 +914,6 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 					line_framing_matches.append(ask_details)
 
 		if not line_ask_matches and link_in_sentence and last_ask and last_ask['is_ask_confidence'] != 0:
-			last_ask['is_ask_confidence'] = evaluateAskConfidence(False, True, '', '', '')
 			#TODO IMPORTANT I am just joining all sentence_link_ids at the bottom look into sentence_link_ids to find out why it has duplicate numbers
 			for sentence_link_id in sentence_link_ids:
 				last_ask['link_id'].append(sentence_link_id)	
