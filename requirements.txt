@@ -5,3 +5,4 @@ gunicorn
 requests
 allennlp
 docutils<0.16,>=0.10
+https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.2.5/en_core_web_sm-2.2.5.tar.gz

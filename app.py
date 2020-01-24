@@ -76,7 +76,9 @@ def preprocess_text(text):
 	for sent in doc.sents:
 		sentence_pieces = []
 		for token in sent:
-			if (token.like_url or token.like_email) and tag not in token.text:
+			if token.text.lower() in abbrev_mappings:
+				sentence_pieces.append(f'{abbrev_mappings.get(token.text)}{token.whitespace_}')
+			elif(token.like_url or token.like_email) and tag not in token.text:
 				ask_dict[str(ask_id)] = token.text	
 				sentence_pieces.append(f'[[[{tag}-{ask_id}-{tag}{token.text}/{tag}-{ask_id}-{tag}]]]{token.whitespace_}')
 				ask_id += 1
@@ -88,6 +90,23 @@ def preprocess_text(text):
 		text_to_process += f'{"".join(sent)}\n'
 
 	return(text_to_process, ask_dict)
+
+abbrev_mappings = {
+	"txt": "text",
+	"sms": "text",
+	"msg": "text",
+	"im": "text",
+	"dm": "text",
+	"ansr": "answer",
+	"b4": "before",
+	"2": "to",
+	"l8er": "later",
+	"&": "and",
+	"r": "are",
+	"4fil": "fulfill",
+	"unsub": "unsubscribe",
+	"u": "you"
+}
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', port=5000)
