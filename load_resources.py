@@ -84,6 +84,7 @@ with open('.' + catvar_file) as catvar:
 #print(catvar_dict, 'catvar dicctionary')
 print('catvar dictionary create')
 
+'''
 preprocess_rules_in_order = []
 with open('.' + preprocess_rule_directory + 'ORDER.txt', 'r') as rule_order:
 	for rule in rule_order:
@@ -136,4 +137,5 @@ for rule in word_specific_rules:
 		with open(lexical_specific_rule_file, 'w+') as lexical_rule:
 			lexical_rule.write(filled_in_rule)
 			
+'''
 #print(lexical_specific_rules)

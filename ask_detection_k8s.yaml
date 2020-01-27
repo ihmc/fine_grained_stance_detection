@@ -6,7 +6,7 @@ metadata:
   name: ask-detection
   namespace: ased-k8s-panacea-development
 spec:
-  replicas: 10
+  replicas: 1
   selector:
     matchLabels:
       deployapp: ask-detection
