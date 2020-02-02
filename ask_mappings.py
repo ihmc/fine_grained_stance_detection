@@ -886,7 +886,6 @@ sashank_categories = {
       "phone number",
       "contact info",
       "contact information",
-      "cv",
       "personal",
       "photo",
       "mobile number",
@@ -897,7 +896,8 @@ sashank_categories = {
       "social network",
       "twitter",
       "facebook",
-      "social media"
+      "social media",
+      "volunteer"
    ],
    "personal_sensitive":[
       "ssn",
@@ -961,7 +961,9 @@ sashank_categories = {
       "ased",
       "testbed",
       "eval",
-      "irb"
+      "irb",
+      "tased",
+      "phishing project"
    ],
    "ideology":[
       "human rights",
@@ -992,7 +994,18 @@ sashank_categories = {
       "donate",
       "election",
       "disaster",
-      "relief"
+      "relief",
+      "shooting",
+      "gun control",
+      "gun control",
+      "guns",
+      "child relief",
+      "migrants",
+      "children",
+      "border security",
+      "bushfires",
+      "bush fire",
+      "bushfire"
    ],
    "scam_lottery":[
       "lottery",
@@ -1022,7 +1035,13 @@ sashank_categories = {
       "hackerrank",
       "leetcode",
       "triplebyte",
-      "recruiter"
+      "recruiter",
+      "start up",
+      "startup",
+      "workday",
+      "work day",
+      "recruiting",
+      "job profile"
    ],
    "phishing":[
       "link",
@@ -1040,7 +1059,8 @@ sashank_categories = {
       "surveyshare",
       "survey",
       "eventbrite",
-      "event brite"
+      "event brite",
+      "workday"
    ],
    "work_life":[
       "leave",
