@@ -1256,7 +1256,14 @@
  :COLLOCATIONS ("as")
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 )
-
+(
+ :NUMBER "29.2.c.p"
+ :NAME "Panacea Characterize Verbs / -as"
+ :WORDS (verify)
+ :NON_LEVIN_WORDS (constitute contest contradict corroborate decant defy depict detail dignify disavow disobey divulge educate embody enumerate envision exploit forswear found grade ignore ill-use institute interpret license list misrepresent mistreat number outline overpraise perjure personify rebuff rebuild rebut recast reconstruct redraw refute reify renounce resist retain see specify stipulate substantiate sustain utilize verify view)
+ :COLLOCATIONS ("as")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
 (
  :NUMBER "29.2.d"
  :NAME "Characterize Verbs / -S"

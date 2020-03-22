@@ -737,6 +737,7 @@ perform_verbs = [
    "update",
    "uproot",
    "value",
+   "verify",
    "view",
    "visit",
    "void",
@@ -841,7 +842,7 @@ give_verbs = [
 ]
 
 sashank_categories = {
-   "finance_money":[
+   "finance":[
       "money",
       "cash",
       "bit coin",
@@ -858,9 +859,7 @@ sashank_categories = {
       "$",
       "£",
       "€",
-      "₹"
-   ],
-   "finance_info":[
+      "₹",
       "bank",
       "account",
       "transaction",
@@ -897,9 +896,20 @@ sashank_categories = {
       "twitter",
       "facebook",
       "social media",
-      "volunteer"
-   ],
-   "personal_sensitive":[
+      "volunteer",
+      "leave",
+      "vacation",
+      "sabbatical",
+      "training",
+      "training notice",
+      "notice period",
+      "resignation",
+      "quit",
+      "work from home",
+      "family leave",
+      "temporary work",
+      "temporary work assignment",
+      "sick leave",
       "ssn",
       "social security",
       "birthday",
@@ -1007,22 +1017,12 @@ sashank_categories = {
       "bush fire",
       "bushfire"
    ],
-   "scam_lottery":[
+   "scam":[
       "lottery",
       "lucky draw",
       "winner",
       "prize",
-      "award"
-   ],
-   "scam_gift":[
-      "gift",
-      "present",
-      "gift card",
-      "gifts card",
-      "shop",
-      "store"
-   ],
-   "scam_job":[
+      "award",
       "job",
       "hiring",
       "work experience",
@@ -1041,7 +1041,13 @@ sashank_categories = {
       "workday",
       "work day",
       "recruiting",
-      "job profile"
+      "job profile",
+      "gift",
+      "present",
+      "gift card",
+      "gifts card",
+      "shop",
+      "store"
    ],
    "phishing":[
       "link",
@@ -1061,21 +1067,6 @@ sashank_categories = {
       "eventbrite",
       "event brite",
       "workday"
-   ],
-   "work_life":[
-      "leave",
-      "vacation",
-      "sabbatical",
-      "training",
-      "training notice",
-      "notice period",
-      "resignation",
-      "quit",
-      "work from home",
-      "family leave",
-      "temporary work",
-      "temporary work assignment",
-      "sick leave"
    ]
 }
 
@@ -1157,6 +1148,7 @@ panacea_ask_types = {
     "13.5.2.d Obtain - Exchange",
     "13.5.2.a.p Panacea Obtain - No Exchange (CAUSE)",
     "22.1.a Mix Verbs - Change of State / -together",
+    "29.2.c.p Panacea Characterize Verbs / -as",
     "30.2.a.i.p Panacea Sight Verbs / Bare NP",
     "37.1.e Verbs of Transfer of a Message / -that/to",
     "37.2.a Tell Verbs",
