@@ -916,6 +916,7 @@ sashank_categories = {
       "citizenship",
       "originally from",
       "home address",
+      "address",
       "signature",
       "date of birth",
       "birth date",
