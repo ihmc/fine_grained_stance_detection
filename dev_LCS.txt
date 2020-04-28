@@ -2152,6 +2152,13 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
+ :NUMBER "37.8.b.pan"
+ :NAME "Complain Verbs / -about/to"
+ :WORDS (complain crab gripe grouch grouse grumble kvetch object vaunt)
+ :COLLOCATIONS ("about")
+ :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
+)
+(
  :NUMBER "37.8.c"
  :NAME "Complain Verbs / -at"
  :WORDS (crab gripe grouch grumble)
