@@ -24,10 +24,10 @@ from nltk.corpus import wordnet as wn
 #nltk.download('punkt')
 #nltk.download('averaged_perceptron_tagger')
 
-from load_resources import catvar_dict, lcs_dict
+from load_resources import catvar_dict, lcs_dict, perform_verbs, give_verbs, lose_verbs, gain_verbs
 #TODO Fix the variables imported from this line once it's sorted out.
 #from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
-from ask_mappings import sashank_categories, panacea_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
+from ask_mappings import sashank_categories, panacea_ask_types#, perform_verbs, give_verbs, lose_verbs, gain_verbs
 from catvar_v_alternates import v_alternates
 
 
@@ -528,7 +528,7 @@ def extractAskFromSrl(sentence, srl, base_word, t_ask_types):
 
 	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2)
 
-def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl, is_cop_dep, cop_ask_target, big_root_is_nn, is_wh_advmod, advmod_ask_target, is_det_or_nmod, det_ask_target, nmod_poss_ask_target):
+def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl, is_cop_dep, cop_ask_target, cop_gov_ask_target, big_root_is_nn, big_root_nn_ask_target, is_wh_advmod, advmod_ask_target, is_det_or_nmod, det_ask_target, nmod_poss_ask_target):
 	ask_negation_dep_based = False
 	is_past_tense = False
 	s_ask_types = [] 
@@ -678,7 +678,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	if is_cop_dep or big_root_is_nn or is_wh_advmod or is_det_or_nmod:
 		t_ask_types.append("GIVE")
 		if big_root_is_nn:
-			ask = word
+			ask = big_root_nn_ask_target + " " + word
 		elif is_wh_advmod or is_det_or_nmod:
 			if advmod_ask_target:
 				ask = word + " " + advmod_ask_target
@@ -686,8 +686,8 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 				ask = word + " " + det_ask_target
 			elif nmod_poss_ask_target:
 				ask = word + " " + nmod_poss_ask_target
-		elif cop_ask_target:
-			ask = cop_ask_target
+		elif is_cop_dep and cop_ask_target:
+			ask = cop_gov_ask_target + " " + cop_ask_target
 		else:
 			ask = "information"
 		ask_action = "give"
@@ -819,6 +819,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 		'''
 		
 		#print(srl)
+		root_dep_is_nn = False
 		small_root = ''
 		root_dependent_gloss = ''
 		aux_dependent = ''
@@ -830,6 +831,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 		cop_with_wp_index = '' #This value can not be initialized at 0 because 0 is a viable index
 		cop_gov_num = '' #This value can not be initialized at 0 because 0 is a viable governor number
 		cop_ask_target = ''
+		cop_gov_ask_target = ''
 		advmod_ask_target = ''
 		det_ask_target = ''
 		nmod_poss_ask_target = ''
@@ -853,6 +855,8 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 				base_word = dependency['dependentGloss']
 				base_words.append(dependency['dependentGloss'])
 				base_words_dependents.append(dependency['dependent'])
+				if tokens[dependency['dependent'] - 1]['pos'] == "NN":
+					root_dep_is_nn = True
 
 			if dependency['dep'] == 'root' and not small_root:
 				small_root = dependency['dependentGloss']
@@ -911,6 +915,17 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 					base_words_dependents.append(dependency['dependent'])
 					cop_gov_num = dependency['governor']
 					cop_with_wp_index = index
+					cop_gov_ask_target = dependency['governorGloss']
+
+					#Found the big root as NN rule can cause duplicates so we want the other WH word cases to take precedent
+					# so the big root nn word must be removed as well as it's dependent
+					if dependencies[0]['dependentGloss'] in base_words and root_dep_is_nn:
+						base_words.remove(dependencies[0]['dependentGloss'])
+
+						#Added this check because it was trying to remove the same dependent number and it didn't exist anymore
+						if dependencies[0]['dependent'] in base_words_dependents:
+							base_words_dependents.remove(dependencies[0]['dependent'])
+					
 
 			# This check is to provide a more detailed ask target than just "information" but only in the case
 			# that a copula situation occurs in the sentence. 
@@ -928,6 +943,15 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 					base_words_dependents.append(dependency['dependent'])
 					advmod_ask_target = dependency['governorGloss']
 
+					#Found the big root as NN rule can cause duplicates so we want the other WH word cases to take precedent
+					# so the big root nn word must be removed as well as it's dependent
+					if dependencies[0]['dependentGloss'] in base_words and root_dep_is_nn:
+						base_words.remove(dependencies[0]['dependentGloss'])
+
+						#Added this check because it was trying to remove the same dependent number and it didn't exist anymore
+						if dependencies[0]['dependent'] in base_words_dependents:
+							base_words_dependents.remove(dependencies[0]['dependent'])
+
 			if dependency['dep'] == 'det' or dependency['dep'] == 'nmod:poss':
 				if tokens[dependency['dependent'] - 1]['pos'] in ["WP", "WP$", "WDT"]:
 					base_words.append(dependency['dependentGloss'])
@@ -936,6 +960,15 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 						det_ask_target = dependency['governorGloss']
 					elif dependency['dep'] == 'nmod:poss':
 						nmod_poss_ask_target = dependency['governorGloss']
+
+					#Found the big root as NN rule can cause duplicates so we want the other WH word cases to take precedent
+					# so the big root nn word must be removed as well as it's dependent
+					if dependencies[0]['dependentGloss'] in base_words and root_dep_is_nn:
+						base_words.remove(dependencies[0]['dependentGloss'])
+
+						#Added this check because it was trying to remove the same dependent number and it didn't exist anymore
+						if dependencies[0]['dependent'] in base_words_dependents:
+							base_words_dependents.remove(dependencies[0]['dependent'])
 
 			# This chunk is for determining if the ask is a request or a directive
 			if dependency['dep'] == 'aux':
@@ -967,6 +1000,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			is_wh_advmod = True if dep_num and tokens[dep_num - 1]['pos'] in wh_word_pos and tokens[dep_num - 1]['originalText'] == verb else False
 			is_cop_dep = True if dep_num and cop_with_wp_index and dependencies[cop_with_wp_index]["dep"] == "cop" and dependencies[cop_with_wp_index]["dependentGloss"] == verb and  dependencies[cop_with_wp_index]["dependent"] == dep_num else False
 			big_root_is_nn  = True if dep_num and dependencies[0]["dependent"] == dep_num and verb == dependencies[0]["dependentGloss"] and tokens[dep_num - 1]["pos"] == "NN" else False
+			big_root_nn_ask_target = "what" if big_root_is_nn else ""
 			
 			# 8/13/19 Bonnie said for now we can ignore VBG and leave it out of asks, may change later
 			#if pos == 'VBG':
@@ -1009,7 +1043,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 									link_exists = True
 								break
 
-			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl, is_cop_dep, cop_ask_target, big_root_is_nn, is_wh_advmod, advmod_ask_target, is_det_or_nmod, det_ask_target, nmod_poss_ask_target)
+			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl, is_cop_dep, cop_ask_target, cop_gov_ask_target, big_root_is_nn, big_root_nn_ask_target, is_wh_advmod, advmod_ask_target, is_det_or_nmod, det_ask_target, nmod_poss_ask_target)
 			if ask_details:
 				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
 					#TODO Check and see if this line should be in the if condition below. As one of the conditions for advanced url

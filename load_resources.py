@@ -2,11 +2,17 @@ import os
 import re
 import csv
 
+from ask_mappings import panacea_ask_types
+
 project_path = os.path.abspath(os.path.dirname(__file__))
+
+ask_and_framing_types = ["PERFORM", "GIVE", "GAIN", "LOSE"]
 
 # Path for files needed for catvar processing
 catvar_file = '/catvar.txt'
-lcs_file = '/LCS-Bare-Verb-Classes-Final_27Aug19.txt'
+lcs_file = '/dev_LCS.txt'
+#lcs_file = '/ACL_Archna-Bonnie-Fixed-LCS-Bare-Verb-Classes-for-Panacea.txt'
+#lcs_file = '/LCS-Bare-Verb-Classes-Final_27Aug19.txt'
 
 # Rule directories
 # TODO This list will be thinned out as rule sets are chosen for superiority
@@ -33,8 +39,20 @@ with open('.' + lcs_file) as lcs:
 		word_list = match[2].split()
 		lcs_dict[lcs_key] = word_list	
 
-#print(lcs_dict)
 print('LCS dictionary created')
+
+verb_list_dict = {}
+for a_or_f_type in ask_and_framing_types:
+	lcs_categories = panacea_ask_types[a_or_f_type]
+	verb_list_dict[a_or_f_type] = set([])
+	for category in lcs_categories:
+		verb_list_dict[a_or_f_type].update(lcs_dict[category])
+
+#print(verb_list_dict)
+perform_verbs = sorted(verb_list_dict["PERFORM"])
+give_verbs = sorted(verb_list_dict["GIVE"])
+gain_verbs = sorted(verb_list_dict["GAIN"])
+lose_verbs = sorted(verb_list_dict["LOSE"])
 
 test_list = []
 

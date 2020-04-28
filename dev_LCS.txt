@@ -255,8 +255,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
 ) 
 (
- :NUMBER "10.5.p"
- :NAME "Panacea Lose related Verbs"
+ :NUMBER "10.5.pan"
+ :NAME "Lose related Verbs"
  :WORDS (ache anguish bully butcher cripple deny disown doubt forebode forfeit grieve hurt lose martyr mourn orphan outlaw relinquish sacrifice suffer surrender suspect)
  :NON_LEVIN_WORDS ()
  :COLLOCATIONS ()
@@ -469,8 +469,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
 ) 
 (
- :NUMBER "13.5.1.a.p"
- :NAME "Panacea Get - No Exchange"
+ :NUMBER "13.5.1.a.pan"
+ :NAME "Get - No Exchange"
  :WORDS (book call cash catch charter choose fetch get order phone reserve text vote)
  :NON_LEVIN_WORDS (accomplish achieve attain benefit conserve earmark find_out let prescribe profit self-perpetuate)
  :COLLOCATIONS ("for")
@@ -492,8 +492,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
 ) 
 (
- :NUMBER "13.5.1.b.ii.p"
- :NAME "Panacea Get - Exchange"
+ :NUMBER "13.5.1.b.ii.pan"
+ :NAME "Get - Exchange"
  :WORDS (buy claim subscribe)
  :NON_LEVIN_WORDS (lay_in)
  :COLLOCATIONS ("for")
@@ -508,8 +508,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OPT <<SPATIAL>>
 ) 
 (
- :NUMBER "13.5.2.a.p"
- :NAME "Panacea Obtain - No Exchange (CAUSE)"
+ :NUMBER "13.5.2.a.pan"
+ :NAME "Obtain - No Exchange (CAUSE)"
  :WORDS (borrow collect grab recover retreive seize select)
  :NON_LEVIN_WORDS (accrue ensnare incur stockpile)
  :COLLOCATIONS ("from")
@@ -1264,8 +1264,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 )
 (
- :NUMBER "29.2.c.p"
- :NAME "Panacea Characterize Verbs / -as"
+ :NUMBER "29.2.c.pan"
+ :NAME "Characterize Verbs / -as"
  :WORDS (verify)
  :NON_LEVIN_WORDS (constitute contest contradict corroborate decant defy depict detail dignify disavow disobey divulge educate embody enumerate envision exploit forswear found grade ignore ill-use institute interpret license list misrepresent mistreat number outline overpraise perjure personify rebuff rebuild rebut recast reconstruct redraw refute reify renounce resist retain see specify stipulate substantiate sustain utilize verify view)
  :COLLOCATIONS ("as")
@@ -1402,8 +1402,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "29.7.p"
- :NAME "Panacea Orphan Verbs"
+ :NUMBER "29.7.pan"
+ :NAME "Orphan Verbs"
  :WORDS (cripple martyr orphan outlaw pauper widow)
  :COLLOCATIONS ()
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
@@ -1417,8 +1417,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "29.8.a.p"
- :NAME "Panacea Captain Verbs / Beneficiary"
+ :NUMBER "29.8.a.pan"
+ :NAME "Captain Verbs / Beneficiary"
  :WORDS (boss bully butcher)
  :MISSING_WORDS (prostitute)
  :COLLOCATIONS ("for")
@@ -1491,8 +1491,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "30.2.a.i.p"
- :NAME "Panacea Sight Verbs / Bare NP"
+ :NUMBER "30.2.a.i.pan"
+ :NAME "Sight Verbs / Bare NP"
  :WORDS (cancel check click confirm connect consider contact contain contains copy copy-and-paste delete deliver download examine execute eye find glimpse help highlight inspect investigate look note notify observe open overhear paste pay perceive provide read receive refer register reply request reset respond review rsvp savor scan scent scrutinize see send share start study submit support survey take test try type unsubscribe update view visit watch witness)
  :NON_LEVIN_WORDS (cross-examine experience peruse spy)
  :COLLOCATIONS ()
@@ -1570,8 +1570,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 )
 (
- :NUMBER "31.1.a.p"
- :NAME "Panacea Amuse Verbs / -with"
+ :NUMBER "31.1.a.pan"
+ :NAME "Amuse Verbs / -with"
  :WORDS (abash afflict affront aggravate agitate agonize alarm alienate anger annoy antagonize appal assuage baffle beguile bewilder bewitch boggle bore bother bug confound confuse crush cut daunt deject demolish demoralize depress devastate disappoint disarm discombobulate discomfit discompose disconcert discourage disgrace disgruntle disgust dishearten disillusion dismay dispirit displease disquiet dissatisfy distract distress disturb embarass enrage exasperate exhaust flabbergast fluster frighten frustrate grieve harass haunt horrify humiliate hurt hypnotize infuriate insult intimidate intoxicate irk irritate madden mollify mortify muddle nauseate obsess offend outrage overawe overwhelm pain perplex perturb plague preoccupy provoke puzzle rankle repel repulse revolt ruffle sadden scandalize scare shake shame shock sicken spook stagger sting stir strike stump stun stupefy tantalize tease terrify terrorize threaten thrill throw tire torment trouble try unnerve unsettle uplift upset vex weary worry wound)
  :NON_LEVIN_WORDS (adulate aggrieve alleviate befuddle budge clinch debase disserve divert embarrass endanger enervate exhort fatigue foil fool harm impair imperil inconvenience infatuate inflame innervate instigate jade manipulate menace mitigate molest overpower overrule palpate pester pestle propitiate quench taunt torture transfix transgress violate)
  :COLLOCATIONS ("in" "with")
@@ -1678,8 +1678,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.3.c.p"
- :NAME "Panacea Marvel Verbs / -for"
+ :NUMBER "31.3.c.pan"
+ :NAME "Marvel Verbs / -for"
  :WORDS (bleed care cry fear grieve mourn weep)
  :NON_LEVIN_WORDS (repent)
  :COLLOCATIONS ("for")
@@ -1710,8 +1710,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.3.f.p"
- :NAME "Panacea Marvel Verbs / -of"
+ :NUMBER "31.3.f.pan"
+ :NAME "Marvel Verbs / -of"
  :WORDS (beware despair disapprove sicken tire weary)
  :MISSING_WORDS (repent)
  :COLLOCATIONS ("of")
@@ -1734,8 +1734,8 @@
  :COMPONENT_OF_MEANING () ;; FILL-OBLIG <NON-SPATIAL>
 ) 
 (
- :NUMBER "31.3.h.p"
- :NAME "Panacea Marvel Verbs / -over"
+ :NUMBER "31.3.h.pan"
+ :NAME "Marvel Verbs / -over"
  :WORDS (anger anguish exult fret fume gloat grieve gush hunger marvel mope mourn obsess puzzle rage rave rhapsodize salivate seethe sorrow wonder worry)
  :NON_LEVIN_WORDS (ruminate)
  :COLLOCATIONS ("over")
