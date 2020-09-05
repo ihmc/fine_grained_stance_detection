@@ -54,6 +54,7 @@ give_verbs = sorted(verb_list_dict["GIVE"])
 gain_verbs = sorted(verb_list_dict["GAIN"])
 lose_verbs = sorted(verb_list_dict["LOSE"])
 
+
 test_list = []
 
 catvar_dict = {}

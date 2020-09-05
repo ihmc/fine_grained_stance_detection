@@ -1,6 +1,7 @@
 from allennlp.predictors.predictor import Predictor
+#import allennlp_models.rc
 predictor = Predictor.from_path("./srl-model-2018.05.25.tar.gz")
-#predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/srl-model-2018.05.25.tar.gz")
+#predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/bidaf-elmo-model-2020.03.19.tar.gz")
 #predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/bert-base-srl-2019.06.17.tar.gz")
 
 import health
@@ -811,6 +812,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 			parse_verbs_pos.append(parse_verb_match[0])
 			
 
+		#srl = predictor.predict(passage=rebuilt_sentence, question="")
 		srl = predictor.predict(sentence=rebuilt_sentence)
 		'''
 		with open("/Users/brodieslab/antiscam_sashank/srloutput.txt", "a") as srloutput:

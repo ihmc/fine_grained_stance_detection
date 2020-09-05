@@ -1163,3 +1163,159 @@ panacea_ask_types = {
   ],
   "OTHER": []
 }
+
+medical_ask_types = {
+  "LOSE": [ #verbs may need to be used differently in their passive (victim in subject) vs active form (victim in DO) for this class but not focused on that for now
+    "10.5 Verbs of Possessional Deprivation : Steal Verbs", # <--- don't include this!!
+    "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
+    "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
+    "17.1 Throw Verbs",
+    "17.2.ii Pelt Verbs -- stone",
+    "18.1.a Hit Verbs - Change of State / -with",
+    "18.1.b Hit Verbs - Change of State",
+    "18.1.c Hit Verbs  - Locational / -at/with",
+    "18.1.d Hit Verbs  - Locational / against",
+    "18.1.e Hit Verbs  - Change of State / together",
+    "18.2.a Swat Verbs",
+    "18.2.b Swat Verbs  - Locational",
+    "18.3 Spank Verbs",
+    "18.4.a Nonagentive Verbs of Impact by Contact - Locational",
+    "18.4.b Nonagentive Verbs of Impact by Contact - Change of State",
+    "19.a.i Poke Verbs",
+    "19.a.ii Poke Verbs - Change of State",
+    "19.b Poke Verbs - Locational / -through",
+    "19.c.i Poke Verbs / -with",
+    "19.c.ii Poke Verbs - Change of State / -with",
+    "19.d Poke Verbs - Locational / -with",
+    "33.b Judgment Verbs - Negative / -for/as",
+    "37.8.a Complain Verbs / -that/to",
+    "42.1.a Murder Verbs - Kill",
+    "42.1.c Murder Verbs - General",
+    "42.2 Poison Verbs",
+    "44.a Destroy Verbs / -with",
+    "48.2 Verbs of Disappearance",
+    "51.2 Leave Verbs"
+    #10.5.p was constructed as follows: (1) Included some verbs from 29.5.b Conjecture ([doubt, suspect, forebode]); (2) Included some verbs from 29.7 Orphan (cripple martyr orphan outlaw); (3) Added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc; (4) Included some verbs from 10.5.
+    #added these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all! -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #added (cripple martyr orphan outlaw) from "29.7 Orphan Verbs" to "10.5 Verbs of Possessional Deprivation : Steal Verbs" -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #moved additionally added verbs in 10.5 to a new category called "10.5.1.a Panacea Lose related Verbs" -- Now the category is called 10.5.p Panacea Lose related Verbs (after further changes)
+  ],
+  "GAIN": [
+    "13.5.1.a Get - No Exchange",
+    "13.5.1.b.ii Get - Exchange",
+    "13.5.2.a Obtain - No Exchange (CAUSE)",
+    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
+    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)"
+  ],
+  "GIVE": [
+    "11.1 Send Verbs",
+    "13.1.a.i Give - No Exchange - Sort of Atelic",
+    "13.1.a.ii Give - No Exchange",
+    "13.2 Contribute Verbs",
+    "13.3 Verbs of Future Having",
+    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
+    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
+    "32.1 Want Verbs"
+  ],
+  "PERFORM": [
+    "9.1 Put Verbs",
+    "10.1 Remove Verbs",
+    "10.2.b Banish Verbs / -to",
+    "10.5 Verbs of Possessional Deprivation : Steal Verbs",
+    "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
+    "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
+    "11.3 Bring and Take Verbs",
+    "13.5.2.d Obtain - Exchange",
+    "22.1.a Mix Verbs - Change of State / -together",
+    "37.1.e Verbs of Transfer of a Message / -that/to",
+    "37.2.a Tell Verbs",
+    "37.2.b Tell Verbs / -of/about",
+    "37.2.d Tell Verbs / -that/to",
+    "37.4.a Verbs of Instrument of Communication",
+    "42.1.a Murder Verbs - Kill",
+    "42.1.b Murder Verbs - Kill / -with",
+    "42.1.c Murder Verbs - General",
+    "44.a Destroy Verbs / -with",
+    "44.b Destroy Verbs / Instrument Subject",
+    "54.4 Price Verbs"
+  ]
+}
+
+base_ask_types = {
+  "LOSE": [ #verbs may need to be used differently in their passive (victim in subject) vs active form (victim in DO) for this class but not focused on that for now
+    "10.5 Verbs of Possessional Deprivation : Steal Verbs", # <--- don't include this!!
+    "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
+    "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
+    "17.1 Throw Verbs",
+    "17.2.ii Pelt Verbs -- stone",
+    "18.1.a Hit Verbs - Change of State / -with",
+    "18.1.b Hit Verbs - Change of State",
+    "18.1.c Hit Verbs  - Locational / -at/with",
+    "18.1.d Hit Verbs  - Locational / against",
+    "18.1.e Hit Verbs  - Change of State / together",
+    "18.2.a Swat Verbs",
+    "18.2.b Swat Verbs  - Locational",
+    "18.3 Spank Verbs",
+    "18.4.a Nonagentive Verbs of Impact by Contact - Locational",
+    "18.4.b Nonagentive Verbs of Impact by Contact - Change of State",
+    "19.a.i Poke Verbs",
+    "19.a.ii Poke Verbs - Change of State",
+    "19.b Poke Verbs - Locational / -through",
+    "19.c.i Poke Verbs / -with",
+    "19.c.ii Poke Verbs - Change of State / -with",
+    "19.d Poke Verbs - Locational / -with",
+    "33.b Judgment Verbs - Negative / -for/as",
+    "37.8.a Complain Verbs / -that/to",
+    "42.1.a Murder Verbs - Kill",
+    "42.1.c Murder Verbs - General",
+    "42.2 Poison Verbs",
+    "44.a Destroy Verbs / -with",
+    "48.2 Verbs of Disappearance",
+    "51.2 Leave Verbs"
+    #10.5.p was constructed as follows: (1) Included some verbs from 29.5.b Conjecture ([doubt, suspect, forebode]); (2) Included some verbs from 29.7 Orphan (cripple martyr orphan outlaw); (3) Added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc; (4) Included some verbs from 10.5.
+    #added these to Steal verbs class for now: "29.5.b Conjecture Verbs / -that", #only some of these verbs ([doubt, suspect, forebode]) but not all! -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #added (cripple martyr orphan outlaw) from "29.7 Orphan Verbs" to "10.5 Verbs of Possessional Deprivation : Steal Verbs" -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #added (butcher bully), (lose disown deny forfeit relinquish sacrifice surrender ache hurt suffer grieve anguish mourn) from other categories, such as from "13.2", "31.3.d" etc -- Now these appear in 10.5.p Panacea Lose related Verbs (after further changes)
+    #moved additionally added verbs in 10.5 to a new category called "10.5.1.a Panacea Lose related Verbs" -- Now the category is called 10.5.p Panacea Lose related Verbs (after further changes)
+  ],
+  "GAIN": [
+    "13.5.1.a Get - No Exchange",
+    "13.5.1.b.ii Get - Exchange",
+    "13.5.2.a Obtain - No Exchange (CAUSE)",
+    "13.5.2.b Obtain - No Exchange (LET w/ benefactive)",
+    "13.5.2.c Obtain - No Exchange (LET w/out benefactive)"
+  ],
+  "GIVE": [
+    "11.1 Send Verbs",
+    "13.1.a.i Give - No Exchange - Sort of Atelic",
+    "13.1.a.ii Give - No Exchange",
+    "13.2 Contribute Verbs",
+    "13.3 Verbs of Future Having",
+    "13.4.1.a Verbs of Fulfilling - Possessional / -to",
+    "13.4.1.b Verbs of Fulfilling - Change of State / -with",
+    "32.1 Want Verbs"
+  ],
+  "PERFORM": [
+    "9.1 Put Verbs",
+    "10.1 Remove Verbs",
+    "10.2.b Banish Verbs / -to",
+    "10.5 Verbs of Possessional Deprivation : Steal Verbs",
+    "10.6.a Verbs of Possessional Deprivation : Cheat Verbs / -of",
+    "10.6.c Verbs of Possessional Deprivation : Cheat Verbs / -out of",
+    "11.3 Bring and Take Verbs",
+    "13.5.2.d Obtain - Exchange",
+    "22.1.a Mix Verbs - Change of State / -together",
+    "37.1.e Verbs of Transfer of a Message / -that/to",
+    "37.2.a Tell Verbs",
+    "37.2.b Tell Verbs / -of/about",
+    "37.2.d Tell Verbs / -that/to",
+    "37.4.a Verbs of Instrument of Communication",
+    "42.1.a Murder Verbs - Kill",
+    "42.1.b Murder Verbs - Kill / -with",
+    "42.1.c Murder Verbs - General",
+    "44.a Destroy Verbs / -with",
+    "44.b Destroy Verbs / Instrument Subject",
+    "54.4 Price Verbs"
+  ]
+}
