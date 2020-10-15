@@ -49,6 +49,8 @@ for a_or_f_type in ask_and_framing_types:
 		verb_list_dict[a_or_f_type].update(lcs_dict[category])
 
 #print(verb_list_dict)
+verb_list_dict["PERFORM"].add("wear")
+verb_list_dict["PERFORM"].add("vaccinate")
 perform_verbs = sorted(verb_list_dict["PERFORM"])
 give_verbs = sorted(verb_list_dict["GIVE"])
 gain_verbs = sorted(verb_list_dict["GAIN"])

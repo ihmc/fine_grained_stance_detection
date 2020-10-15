@@ -334,6 +334,7 @@ def getNLPParse(sentence):
 	annotators = '/?annotators=ssplit,tokenize,pos,parse,depparse&tokenize.english=true'
 	tregex = '/tregex'
 	coreNLP_ased = 'http://localhost:9000'
+	#coreNLP_ased = 'https://corenlp.run'
 	url = coreNLP_ased + annotators
 
 	return requests.post(url, data=sentence.encode(encoding='UTF-8',errors='ignore'))

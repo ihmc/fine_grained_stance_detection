@@ -842,6 +842,17 @@ give_verbs = [
 ]
 
 sashank_categories = {
+   "medical":[
+      "mask",
+      "masks",
+      "oxygen",
+      "surgery",
+      "vaccine",
+      "covid",
+      "corona",
+      "coronavirus",
+      "social-distance",
+   ],
    "finance":[
       "money",
       "cash",
