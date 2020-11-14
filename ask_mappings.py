@@ -1330,3 +1330,57 @@ base_ask_types = {
     "54.4 Price Verbs"
   ]
 }
+
+pitt_ask_types = {
+	"PROTECT": [
+		"10.4.1.a Manner Subclass of Wipe Verbs - Locational / Source",
+		"10.4.1.b.i Manner Subclass of Wipe Verbs  - Change of State",
+		"10.4.1.b.ii Manner Subclass of Wipe Verbs  - Change of State",
+		"41.3.1.c Simple Verbs of Dressing - Subject is Location",
+		"37.9.a Advise Verbs / -that/to",
+		"37.9.b Advise Verbs / -against",
+		"37.9.c Advise Verbs / -about",
+		"30.2.a.i.pan Sight Verbs / Bare NP",
+		"31.1.a Amuse Verbs / -with",
+		"31.1.b Amuse Verbs / -that",
+		"9.8.a Fill Verbs - Locational / No agent",
+		"9.8.b Fill Verbs - Change of State / Agent",
+		"9.8.d Fill Verbs - Change of State / -in",
+		"9.8.e Fill Verbs - Locational / -up",
+		"47.8.j Verbs of Contiguous Location / ON",
+		"13.5.1.a Get - No Exchange",
+		"54.5.b Bill Verbs",
+		"52.a Avoid Verbs / NP is being avoided",
+		"52.b Avoid Verbs / Event is being avoided",
+		"51.7.i Accompany Verbs",
+		"51.7.ii Accompany Verbs",
+		"30.2.a.i.pan Sight Verbs / Bare NP"
+	],
+	"REJECT": [
+		"10.1 Remove Verbs",
+		"10.2.b Banish Verbs / -to",
+		"33.b Judgment Verbs - Negative / -for/as",
+		"48.2 Verbs of Disappearance",
+		"36.3.a Meet Verbs - Locational / -with",
+		"36.3.b Meet Verbs - Change of State",
+		"29.2.a Characterize Verbs / -as",
+		"29.2.b Characterize Verbs / -S",
+		"29.2.c Characterize Verbs / -as",
+		"29.2.d Characterize Verbs / -S",
+		"31.3.a.ii Marvel Verbs / -about",
+		"31.3.b Marvel Verbs / -at",
+		"31.3.h Marvel Verbs / -over",
+		"31.3.h.pan Marvel Verbs / -over",
+		"37.3.a Verbs of Manner of Speaking / -to/that/about",
+		"37.3.b Verbs of Manner of Speaking / -at",
+		"37.3.c Verbs of Manner of Speaking / -for",
+		"47.2.a.i Verbs of Entity-Specific Modes of Being / Grow",
+		"47.2.c Verbs of Entity-Specific Modes of Being / -with",
+		"9.8.a Fill Verbs - Locational / No agent",
+		"9.8.b Fill Verbs - Change of State / Agent",
+		"10.5.pan Lose related Verbs",
+		"29.5.d Conjecture Verbs / -to be",
+		"29.5.e Conjecture Verbs / -that",
+		"10.1 Remove Verbs"
+	]
+}

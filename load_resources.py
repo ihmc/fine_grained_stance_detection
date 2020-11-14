@@ -1,12 +1,15 @@
 import os
 import re
 import csv
+import pandas as pd
 
-from ask_mappings import panacea_ask_types
+from ask_mappings import panacea_ask_types, pitt_ask_types
 
 project_path = os.path.abspath(os.path.dirname(__file__))
 
-ask_and_framing_types = ["PERFORM", "GIVE", "GAIN", "LOSE"]
+ask_and_framing_types = list(panacea_ask_types.keys())
+ask_and_framing_types.extend(list(pitt_ask_types.keys()))
+#ask_and_framing_types = ["PERFORM", "GIVE", "GAIN", "LOSE"]
 
 # Path for files needed for catvar processing
 catvar_file = '/catvar.txt'
@@ -43,18 +46,25 @@ print('LCS dictionary created')
 
 verb_list_dict = {}
 for a_or_f_type in ask_and_framing_types:
-	lcs_categories = panacea_ask_types[a_or_f_type]
+	if a_or_f_type in panacea_ask_types:
+		lcs_categories = panacea_ask_types[a_or_f_type]
+	else:
+		lcs_categories = pitt_ask_types[a_or_f_type]
 	verb_list_dict[a_or_f_type] = set([])
 	for category in lcs_categories:
 		verb_list_dict[a_or_f_type].update(lcs_dict[category])
 
 #print(verb_list_dict)
+#NOTE can definitely automate this better without having to specify a variable for each list type
 verb_list_dict["PERFORM"].add("wear")
 verb_list_dict["PERFORM"].add("vaccinate")
 perform_verbs = sorted(verb_list_dict["PERFORM"])
 give_verbs = sorted(verb_list_dict["GIVE"])
 gain_verbs = sorted(verb_list_dict["GAIN"])
 lose_verbs = sorted(verb_list_dict["LOSE"])
+protect_verbs = sorted(verb_list_dict["PROTECT"])
+reject_verbs = sorted(verb_list_dict["REJECT"])
+
 
 
 test_list = []
@@ -160,3 +170,7 @@ for rule in word_specific_rules:
 			
 '''
 #print(lexical_specific_rules)
+
+df = pd.read_excel("ModalityLexiconSubcatTags.xlsx")
+belief_strength_dict = pd.Series(df["Belief Value"].values,index=df["Lexical item"]).to_dict()
+	

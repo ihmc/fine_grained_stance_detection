@@ -1,8 +1,10 @@
 from allennlp.predictors.predictor import Predictor
-#import allennlp_models.rc
-predictor = Predictor.from_path("./srl-model-2018.05.25.tar.gz")
+import allennlp_models
+#predictor = Predictor.from_path("./srl-model-2018.05.25.tar.gz")
+#sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/basic_stanford_sentiment_treebank-2020.06.09.tar.gz")
+sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/sst-roberta-large-2020.06.08.tar.gz")
 #predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/bidaf-elmo-model-2020.03.19.tar.gz")
-#predictor = Predictor.from_path("https://s3-us-west-2.amazonaws.com/allennlp/models/bert-base-srl-2019.06.17.tar.gz")
+predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/bert-base-srl-2020.03.24.tar.gz")
 
 import health
 import unicodedata
@@ -13,6 +15,15 @@ import os
 import re
 import subprocess
 import health
+import stanza
+from bertopic import BERTopic
+from nltk import PorterStemmer
+stemmer = PorterStemmer()
+
+#model = BERTopic("distilbert-base-nli-mean-tokens", verbose=True)
+
+stanza.download("en")
+stanza_nlp = stanza.Pipeline('en')
 
 # This library allows python to make requests out.
 # NOTE: There is a difference between this and the built in request variable  
@@ -25,7 +36,7 @@ from nltk.corpus import wordnet as wn
 #nltk.download('punkt')
 #nltk.download('averaged_perceptron_tagger')
 
-from load_resources import catvar_dict, lcs_dict, perform_verbs, give_verbs, lose_verbs, gain_verbs
+from load_resources import catvar_dict, lcs_dict, belief_strength_dict, perform_verbs, give_verbs, lose_verbs, gain_verbs, protect_verbs, reject_verbs
 #TODO Fix the variables imported from this line once it's sorted out.
 #from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
 from ask_mappings import sashank_categories, panacea_ask_types#, perform_verbs, give_verbs, lose_verbs, gain_verbs
@@ -92,7 +103,9 @@ def getSrl(text, links):
 			line_text = line_text.replace(match.group(0), match.group(2))
 			match = re.search(pattern, line_text)
 
-		line_matches = parseSrl(line_text, link_offsets, link_ids, link_strings, links, last_ask, last_ask_index)
+		#line_matches = parseSrl(line_text, link_offsets, link_ids, link_strings, links, last_ask, last_ask_index)
+		line_matches = parseSrlStanza(line_text, link_offsets, link_ids, link_strings, links, last_ask, last_ask_index)
+		
 		if line_matches:
 			# NOTE The last_ask and last_ask_index are overidding the values initialized at the beginning 
 			# of this function. This on purpose so that each time parseSrl is called it will get the 
@@ -119,6 +132,15 @@ def getSrl(text, links):
 
 	return {'email': text, 'framing': sorted_framing, 'asks': sorted_asks}
 
+def stances(text_array):
+	stances = []
+
+	for text in text_array:
+		line_stances = get_stances(text)
+		if line_stances:
+			stances.extend(line_stances)
+
+	return {'stances': stances}
 
 def morphRoot(word):
 	wlem = WordNetLemmatizer()
@@ -289,6 +311,37 @@ def getAskTypes(ask, word_pos):
 			for alternate in catvar_word_alternates:
 				if alternate in gain_verbs:
 					return(['GAIN'])
+
+	return t_ask_types
+
+def getStanceType(ask, word_pos):
+	verb_types = []
+	t_ask_types = []
+	catvar_object = catvar_dict.get(ask)
+
+	if catvar_object != None:
+		catvar_word = catvar_object['catvar_value']
+	elif word_pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
+		catvar_word = ask	
+	else:
+		catvar_word = ''
+
+	if catvar_word in protect_verbs:
+		return(['PROTECT'])
+	else:
+		catvar_word_alternates = catvar_alternates_dict.get(ask)
+		if catvar_word_alternates:
+			for alternate in catvar_word_alternates:
+				if alternate in protect_verbs:
+					return(['PROTECT'])
+	if catvar_word in reject_verbs:
+		return(['REJECT'])
+	else:
+		catvar_word_alternates = catvar_alternates_dict.get(ask)
+		if catvar_word_alternates:
+			for alternate in catvar_word_alternates:
+				if alternate in reject_verbs:
+					return(['REJECT'])
 
 	return t_ask_types
 
@@ -464,6 +517,11 @@ def extractAskFromSrl(sentence, srl, base_word, t_ask_types):
 			elif 'ARGM-MNR' in tag:
 				arg_mnr.append(words[index])
 
+	#if not t_ask_types:
+	#	#NOTE loop through agr1 words to get potential ask type
+	#	arg1.split()
+	#	t_ask_types = getTAskTypes(arg1)
+
 	# Handling cases (seems like bugs in allennlp) where there is no arg1 but and arg2 and it seems like the arg2 should be arg1
 	if not arg1 and arg2:
 		arg1 = arg2
@@ -557,8 +615,6 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 
 	if arg2:
 		arg2 = ' '.join(arg2)
-	else:
-		arg2 = ''
 
 	for ask_type, keywords in sashank_categories.items():
 		for keyword in keywords:
@@ -782,6 +838,313 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 	'''
 
 	for nlp_sentence in core_nlp_sentences:
+		ask_procedure = ''
+		update_last_ask = False
+		link_in_sentence = False
+		link_exists = False
+		sentence_link_ids = []
+		parse_verbs_pos = []
+		parse_verbs = []
+		sentence_link_ids = []
+
+		#TODO Investigate if this is needed
+		#words = getLemmaWords(sentence)
+		parse_tree = nlp_sentence['parse']
+		dependencies = nlp_sentence['basicDependencies']
+		tokens = nlp_sentence['tokens']	
+		sentence_begin_char_offset = tokens[0]['characterOffsetBegin']
+		sentence_end_char_offset = tokens[len(tokens) - 1]['characterOffsetEnd']
+
+		# Extract all verbs and their parts of speech from the constituency parse to be used for fallback if all verbs are not found in the dependencies
+		parse_verb_matches = extractVerbs(parse_tree)
+		for parse_verb_match in parse_verb_matches:
+			parse_verbs.append(parse_verb_match[1])
+			parse_verbs_pos.append(parse_verb_match[0])
+			
+
+		#srl = predictor.predict(passage=rebuilt_sentence, question="")
+		srl = predictor.predict(sentence=sentence.text)
+		'''
+		with open("/Users/brodieslab/antiscam_sashank/srloutput.txt", "a") as srloutput:
+			srloutput.write(json.dumps(srl, indent=4, sort_keys=True))
+			srloutput.write("\n\n\n")
+		'''
+		
+		#print(srl)
+		root_dep_is_nn = False
+		small_root = ''
+		root_dependent_gloss = ''
+		aux_dependent = ''
+		aux_governor  = ''
+		advmod_governor_gloss = ''
+		advmod_dependent_gloss = ''
+		dep_governor_gloss = ''
+		dep_dep = ''
+		cop_with_wp_index = '' #This value can not be initialized at 0 because 0 is a viable index
+		cop_gov_num = '' #This value can not be initialized at 0 because 0 is a viable governor number
+		cop_ask_target = ''
+		cop_gov_ask_target = ''
+		advmod_ask_target = ''
+		det_ask_target = ''
+		nmod_poss_ask_target = ''
+		punct_dependent = 0
+		punctuation_to_match = [':', ';', '-']
+		wh_word_pos = ["WP", "WP$", "WDT", "WRB"]
+		nsubj_exists = False
+		base_words = []
+		base_words_pos = []
+		base_words_dependents = []
+
+		for index, dependency in enumerate(dependencies):
+			'''
+			if dependency['dep'] == 'punct' and dependency['dependentGloss'] in punctuation_to_match:
+				dependent = dependency['dependent'] + 1
+				for dependency2 in dependencies:
+					if dependency2['dependent'] == dependent:
+						root_dependent_gloss = dependency2['governorGloss']
+			'''
+			if dependency['dep'] == 'ROOT':
+				base_word = dependency['dependentGloss']
+				base_words.append(dependency['dependentGloss'])
+				base_words_dependents.append(dependency['dependent'])
+				if tokens[dependency['dependent'] - 1]['pos'] == "NN":
+					root_dep_is_nn = True
+
+			if dependency['dep'] == 'root' and not small_root:
+				small_root = dependency['dependentGloss']
+				base_words.append(dependency['dependentGloss'])
+				base_words_dependents.append(dependency['dependent'])
+
+			#TODO there is a way to simplify this whole operation here. Need to figure it out later.
+			'''
+			if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
+				if dependency['dep'] == 'conj':
+			'''
+				
+			if dependency['dep'] == 'conj':
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
+					conj_base_word = dependency['dependentGloss']
+					base_words.append(dependency['dependentGloss'])
+					base_words_dependents.append(dependency['dependent'])
+			if dependency['dep'] == 'dep':
+				dep_governor_gloss = dependency['governorGloss']
+				dep_dependent_gloss = dependency['dependentGloss']
+				dep_dep = dependency['dep']
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
+					dep_base_word = dependency['dependentGloss']
+					base_words.append(dependency['dependentGloss'])
+					base_words_dependents.append(dependency['dependent'])
+			if dependency['dep'] == 'ccomp':
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
+					ccomp_base_word = dependency['dependentGloss']
+					base_words.append(dependency['dependentGloss'])
+					base_words_dependents.append(dependency['dependent'])
+				elif dep_dep == 'dep' and dependency['governorGloss'] == dep_dependent_gloss:
+					if dep_governor_gloss == dependencies[0]['dependentGloss']:
+						ccomp_base_word = dependency['dependentGloss']
+						base_words.append(dependency['dependentGloss'])
+						base_words_dependents.append(dependency['dependent'])
+			if dependency['dep'] == 'xcomp':
+				check_t_ask_types = getTAskType(dependencies[0]['dependentGloss'])
+				if dependencies[0]['dependentGloss'] in base_words and 'PERFORM' not in check_t_ask_types:
+					base_words.remove(dependencies[0]['dependentGloss'])
+
+					#Added this check because it was trying to remove the same dependent number and it didn't exist anymore
+					if dependencies[0]['dependent'] in base_words_dependents:
+						base_words_dependents.remove(dependencies[0]['dependent'])
+				if dependencies[0]['dependentGloss'] in parse_verbs and 'PERFORM' not in check_t_ask_types:
+					parse_verbs_pos.pop(parse_verbs.index(dependencies[0]['dependentGloss']))
+					parse_verbs.remove(dependencies[0]['dependentGloss'])
+				if dependency['governorGloss'] == dependencies[0]['dependentGloss'] or dependency['governorGloss'] == small_root:
+					xcomp_base_word = dependency['dependentGloss']
+					base_words.append(dependency['dependentGloss'])
+					base_words_dependents.append(dependency['dependent'])
+
+			# We only want to add a cop dependency word if it's governor's POS os a WP
+			if dependency['dep'] == 'cop':
+				if tokens[dependency['governor'] - 1]["pos"] in wh_word_pos:
+					base_words.append(dependency['dependentGloss'])
+					base_words_dependents.append(dependency['dependent'])
+					cop_gov_num = dependency['governor']
+					cop_with_wp_index = index
+					cop_gov_ask_target = dependency['governorGloss']
+
+					#Found the big root as NN rule can cause duplicates so we want the other WH word cases to take precedent
+					# so the big root nn word must be removed as well as it's dependent
+					if dependencies[0]['dependentGloss'] in base_words and root_dep_is_nn:
+						base_words.remove(dependencies[0]['dependentGloss'])
+
+						#Added this check because it was trying to remove the same dependent number and it didn't exist anymore
+						if dependencies[0]['dependent'] in base_words_dependents:
+							base_words_dependents.remove(dependencies[0]['dependent'])
+					
+
+			# This check is to provide a more detailed ask target than just "information" but only in the case
+			# that a copula situation occurs in the sentence. 
+			# NOTE In the current state I believe this assumes that the cop must come before the nsubj in the 
+			# dependcy list. This may need to be addressed.
+			if dependency['dep'] == 'nsubj':
+				if cop_gov_num and cop_gov_num == dependency['governor']:
+					cop_ask_target = dependency['dependentGloss']
+
+			# In the three cases below (advmod, det, nmod:poss) we take the governor gloss as well because 
+			# thus far it seems combining it together with the wh word makes for a much better ask
+			if dependency['dep'] == 'advmod':
+				if tokens[dependency['dependent'] - 1]['pos'] in wh_word_pos:
+					base_words.append(dependency['dependentGloss'])
+					base_words_dependents.append(dependency['dependent'])
+					advmod_ask_target = dependency['governorGloss']
+
+					#Found the big root as NN rule can cause duplicates so we want the other WH word cases to take precedent
+					# so the big root nn word must be removed as well as it's dependent
+					if dependencies[0]['dependentGloss'] in base_words and root_dep_is_nn:
+						base_words.remove(dependencies[0]['dependentGloss'])
+
+						#Added this check because it was trying to remove the same dependent number and it didn't exist anymore
+						if dependencies[0]['dependent'] in base_words_dependents:
+							base_words_dependents.remove(dependencies[0]['dependent'])
+
+			if dependency['dep'] == 'det' or dependency['dep'] == 'nmod:poss':
+				if tokens[dependency['dependent'] - 1]['pos'] in ["WP", "WP$", "WDT"]:
+					base_words.append(dependency['dependentGloss'])
+					base_words_dependents.append(dependency['dependent'])
+					if dependency['dep'] == 'det':
+						det_ask_target = dependency['governorGloss']
+					elif dependency['dep'] == 'nmod:poss':
+						nmod_poss_ask_target = dependency['governorGloss']
+
+					#Found the big root as NN rule can cause duplicates so we want the other WH word cases to take precedent
+					# so the big root nn word must be removed as well as it's dependent
+					if dependencies[0]['dependentGloss'] in base_words and root_dep_is_nn:
+						base_words.remove(dependencies[0]['dependentGloss'])
+
+						#Added this check because it was trying to remove the same dependent number and it didn't exist anymore
+						if dependencies[0]['dependent'] in base_words_dependents:
+							base_words_dependents.remove(dependencies[0]['dependent'])
+
+			# This chunk is for determining if the ask is a request or a directive
+			if dependency['dep'] == 'aux':
+				aux_dependent = dependency['dependent']
+				aux_governor  = dependency['governor']
+			if dependency['dep'] == 'nsubj' and aux_dependent:
+				nsubj_exists = True
+				if dependency['dependent'] > aux_dependent and dependency['governor'] == aux_governor:
+					ask_procedure = 'request'
+
+			if dependency['dep'] == 'advmod':
+				advmod_governor_gloss = dependency['governorGloss']
+				advmod_dependent_gloss = dependency['dependentGloss']
+
+		# Put the verbs with their parts of speech into one list without duplicates
+		verbs_and_pos = combineVerbAndPosListsNoDups(base_words, base_words_dependents, parse_verbs, parse_verbs_pos, tokens)
+
+
+		if not nsubj_exists:
+			ask_procedure = 'directive'
+
+		for index, verb_and_pos in enumerate(verbs_and_pos):
+			verb = verb_and_pos[0]
+			pos = verb_and_pos[1]
+			dep_num = verb_and_pos[2]	
+
+			#if dep_num:
+			is_det_or_nmod = True if dep_num and tokens[dep_num - 1]['pos'] in  ["WP", "WP$", "WDT"] and tokens[dep_num - 1]['originalText'] == verb else False
+			is_wh_advmod = True if dep_num and tokens[dep_num - 1]['pos'] in wh_word_pos and tokens[dep_num - 1]['originalText'] == verb else False
+			is_cop_dep = True if dep_num and cop_with_wp_index and dependencies[cop_with_wp_index]["dep"] == "cop" and dependencies[cop_with_wp_index]["dependentGloss"] == verb and  dependencies[cop_with_wp_index]["dependent"] == dep_num else False
+			big_root_is_nn  = True if dep_num and dependencies[0]["dependent"] == dep_num and verb == dependencies[0]["dependentGloss"] and tokens[dep_num - 1]["pos"] == "NN" else False
+			big_root_nn_ask_target = "what" if big_root_is_nn else ""
+			
+			# 8/13/19 Bonnie said for now we can ignore VBG and leave it out of asks, may change later
+			#if pos == 'VBG':
+			#	continue
+			link_id = []
+			link_exists = False
+			ask_negation = False
+
+			ask_negation = isVerbNegated(verb, dependencies)
+
+			for index, link_offset in enumerate(link_offsets):
+
+				if link_offset[0] >= sentence_begin_char_offset and link_offset[1] <= sentence_end_char_offset and link_strings[index] in rebuilt_sentence:
+					#NOTE This check is needed because we are looping through each verb so this was sometimes adding the same link id more than once
+					if link_ids[index] not in sentence_link_ids:
+						sentence_link_ids.append(link_ids[index])
+					link_in_sentence = True
+
+					if verb == advmod_governor_gloss and advmod_dependent_gloss in link_strings[index]:
+						link_id.append(link_ids[index])
+						link_exists = True
+						break
+
+					child_dependent_nums = []
+					#TODO Need to figure out if breaking here is appropriate or if I should build a list of all the dependencies with the verb as the dependentGloss.
+					for dependency in dependencies:
+						if verb == dependency['dependentGloss']:
+							verb_dependent_num = dependency['dependent']
+							break
+					for dependency in dependencies:
+						if dependency['governor'] == verb_dependent_num:
+							child_dependent_nums.append(dependency['dependent'])
+					for child_dependent_num in child_dependent_nums:
+						for dependency in dependencies:
+							if child_dependent_num == dependency['governor'] and dependency['dependentGloss'] in link_strings[index]:
+								#NOTE Had to check if link id is already in list. Cases where the whole sentence is the link 
+								#causes this to easily overproduce link ids
+								if link_ids[index] not in link_id:
+									link_id.append(link_ids[index])
+									link_exists = True
+								break
+
+			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl, is_cop_dep, cop_ask_target, cop_gov_ask_target, big_root_is_nn, big_root_nn_ask_target, is_wh_advmod, advmod_ask_target, is_det_or_nmod, det_ask_target, nmod_poss_ask_target)
+			if ask_details:
+				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
+					#TODO Check and see if this line should be in the if condition below. As one of the conditions for advanced url
+					#processing is that line ask matches is empty.
+					line_ask_matches.append(ask_details)
+					if ask_details['is_ask_confidence'] != 0:
+						last_ask = ask_details
+						last_ask_index += 1
+				elif 'GAIN' in ask_details['t_ask_type'] or 'LOSE' in ask_details['t_ask_type']:
+					line_framing_matches.append(ask_details)
+
+		if not line_ask_matches and link_in_sentence and last_ask and last_ask['is_ask_confidence'] != 0:
+			#TODO IMPORTANT I am just joining all sentence_link_ids at the bottom look into sentence_link_ids to find out why it has duplicate numbers
+			for sentence_link_id in sentence_link_ids:
+				last_ask['link_id'].append(sentence_link_id)	
+				last_ask['url'].update({sentence_link_id: links.get(sentence_link_id)})
+			#last_ask['link_id'] = link_ids[0]
+			if last_ask['ask_negation']:
+				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"][0]}[NOT {last_ask["ask_action"]}[{last_ask["ask_target"]}({",".join(sentence_link_ids)}){last_ask["s_ask_type"]}]]>'
+			else:
+				last_ask['ask_rep'] = f'<{last_ask["t_ask_type"][0]}[{last_ask["ask_action"]}[{last_ask["ask_target"]}({",".join(sentence_link_ids)}){last_ask["s_ask_type"]}]]>'
+
+			asks_to_update.append((last_ask, last_ask_index))
+
+	if line_framing_matches or line_ask_matches or asks_to_update:
+		return (line_framing_matches, line_ask_matches, asks_to_update, last_ask, last_ask_index)
+
+def parseSrlStanza(line, link_offsets, link_ids, link_strings, links, last_ask, last_ask_index):
+	line_framing_matches = []
+	line_ask_matches = []
+	asks_to_update = []
+	link_id = []
+	ask_negation = False
+	base_word = ''
+	conj_base_word = ''
+	dep_base_word = ''
+	ccomp_base_word = ''
+	xcomp_base_word = ''
+	
+	
+	stanza_doc = stanza_nlp(line)
+
+	'''
+	with open("/Users/brodieslab/antiscam_sashank/corenlp.txt", "a") as corenlp_output:
+		corenlp_output.write(json.dumps(core_nlp_sentences, indent=4, sort_keys=True))
+		corenlp_output.write("\n\n\n")
+	'''
+
+	for sentence in stanza_doc.sentences:
 		ask_procedure = ''
 		update_last_ask = False
 		link_in_sentence = False
@@ -1046,7 +1409,7 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 									link_exists = True
 								break
 
-			ask_details = processWord(verb, pos, rebuilt_sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl, is_cop_dep, cop_ask_target, cop_gov_ask_target, big_root_is_nn, big_root_nn_ask_target, is_wh_advmod, advmod_ask_target, is_det_or_nmod, det_ask_target, nmod_poss_ask_target)
+			ask_details = processWord(verb, pos, sentence.text, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl, is_cop_dep, cop_ask_target, cop_gov_ask_target, big_root_is_nn, big_root_nn_ask_target, is_wh_advmod, advmod_ask_target, is_det_or_nmod, det_ask_target, nmod_poss_ask_target)
 			if ask_details:
 				if 'GIVE' in ask_details['t_ask_type'] or 'PERFORM' in ask_details['t_ask_type']:
 					#TODO Check and see if this line should be in the if condition below. As one of the conditions for advanced url
@@ -1073,3 +1436,158 @@ def parseSrl(line, link_offsets, link_ids, link_strings, links, last_ask, last_a
 
 	if line_framing_matches or line_ask_matches or asks_to_update:
 		return (line_framing_matches, line_ask_matches, asks_to_update, last_ask, last_ask_index)
+
+def get_stances(text):
+	#bert_docs = text
+	#bert_docs = fetch_20newsgroups(subset='all')['data']
+	#topics = model.fit_transform(bert_docs)	
+
+	#return model.get_topic(12)
+	stances = []
+
+	stanza_doc = stanza_nlp(text)
+
+	for sentence in stanza_doc.sentences:
+		srl = predictor.predict(sentence=sentence.text)
+		
+		(sentiment, sentiment_probs) = get_sentiment_score(sentence.text)
+		belief_valuation = get_valuation_score(sentiment)
+
+		belief_strength = 3
+		for token in sentence.tokens:
+			for word in token.words:
+				sentiment_target = ''
+				root_belief = ''
+				if word.deprel == "root" and word.xpos == "VB":
+					root_belief = word.text
+					root = word.text
+				if word.deprel == "xcomp" and word.xpos == "VB":
+					root_belief = word.text
+				if word.deprel == "nsubj":
+					sentiment_target = word.text
+				#head_word = sentence.words[word.head - 1]
+				#if head_word.deprel == "root":
+				#	if head_word.text in belief_strength_dict:
+				#		belief_strength = belief_strength_dict.get(head_word.text)	
+				if word.text.lower() in belief_strength_dict:
+					belief_strength = belief_strength_dict.get(word.text.lower())
+				stance_details = process_stance(word.text, word.xpos, sentence.text, srl)
+
+			if stance_details:
+				stances.append(build_stance_dict(stance_details[7], stance_details[4], stance_details[1], sentiment_target, root_belief, belief_strength, belief_valuation, sentiment_probs, sentence.text))
+
+	print(stances)
+	if stances:
+		return stances
+
+def get_sentiment_score(text):
+    probs = sentiment_predictor.predict(sentence=text)['probs']
+    if probs[0] > probs[1]:
+        sentiment = probs[0]
+    elif probs[1] > probs[0]:
+        sentiment = -1 * probs[1]
+    else:
+        sentiment = 0
+        
+    return (sentiment, probs)
+
+def get_valuation_score(sentiment_score):
+	if sentiment_score > 0:
+		if sentiment_score <= .33:
+			return 1
+		elif sentiment_score <= .66:
+			return 2
+		else:
+			return 3
+	elif sentiment_score < 0:
+		if sentiment_score >= -.33:
+			return -1
+		elif sentiment_score >= -.66:
+			return -2
+		else:
+			return -3
+	else:
+		return 0
+
+def build_stance_dict(stance_type, stance_action, stance, sentiment_target, root_belief, belief_strength, belief_valuation, sentiment_probs, sentence):
+	stance_dict = {}
+
+	stance_dict["evidence"] = sentence
+	stance_dict["stance_rep"] = f'<{stance_type[0]}[{stance_action}[{stance}]],{belief_strength},{belief_valuation}>'
+	stance_dict["stance_type"] = stance_type[0]
+	stance_dict["belief_target"] = stance
+	stance_dict["belief"] = stance_action
+	stance_dict["belief_strength"] = belief_strength
+	stance_dict["belief_valuation"] = belief_valuation
+	stance_dict["positive_sentiment"] = sentiment_probs[0]
+	stance_dict["negative_sentiment"] = sentiment_probs[1]
+	stance_dict["location"] = ""
+	
+
+	return stance_dict
+
+def process_stance(word, word_pos, sentence, srl):
+	word = word.lower()
+	lem_word = morphRoot(word)
+	t_ask_types = getStanceType(word, word_pos)
+	lem_t_ask_types = getStanceType(lem_word, word_pos)
+
+	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
+
+	return_tuple = (ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2) = extractAskFromSrl(sentence, srl, word, t_ask_types)
+
+	#if not ask_action:
+	#	return_tuple = (ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
+	if t_ask_types and ask:
+		return return_tuple
+
+def get_arg1s(files):
+	adam_data = []
+	arg1_dict = {}
+	
+	for text_file in files:
+		with open(text_file, 'r') as tweet_file:
+			for tweet_text in tweet_file:
+				tweet = json.loads(tweet_text)
+				doc = stanza_nlp(tweet['full_text'])
+				for sent in doc.sentences:
+					srl = predictor.predict(sentence=sent.text)
+					verbs = srl['verbs']
+					words = [word for word in srl['words']]
+					for verb in verbs:
+						arg1 = []
+						arg1_indices = []
+						left = []
+						right = []
+						for index, tag in enumerate(verb['tags']):
+							tag_label = tag.split('-')[1:2][0] if tag.split('-')[1:2] else ''
+
+							if tag_label == 'ARG1':
+								stemmed_word = morphRoot(words[index].lower())
+								if stemmed_word in arg1_dict:
+									arg1_dict[stemmed_word] += 1
+								else:
+									arg1_dict[stemmed_word] = 1
+								arg1.append(words[index])
+								#The placement of the word within the sentence
+								arg1_indices.append(index)
+
+						if arg1:
+							first_arg1_index = arg1_indices[0]
+							last_arg1_index  = arg1_indices[-1]
+
+							for index in range(0, first_arg1_index):
+								left.append(words[index])
+							for index in range(last_arg1_index + 1, len(words)):
+								right.append(words[index])
+
+							adam_data.append({
+								"left": ' '.join(left),
+								"target": ' '.join(arg1),
+								"right": ' '.join(right)
+							})
+
+
+	return (adam_data, arg1_dict)
+
+
