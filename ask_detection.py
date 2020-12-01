@@ -136,7 +136,7 @@ def stances(text_array):
 	stances = []
 
 	for text in text_array:
-		line_stances = get_stances(text[0], text[1], text[2], text[3], text[4])
+		line_stances = get_stances(text[0], text[1], text[2], text[3])
 		if line_stances:
 			stances.extend(line_stances)
 
@@ -1560,7 +1560,7 @@ def parseSrlStanza(line, link_offsets, link_ids, link_strings, links, last_ask, 
 	if line_framing_matches or line_ask_matches or asks_to_update:
 		return (line_framing_matches, line_ask_matches, asks_to_update, last_ask, last_ask_index)
 
-def get_stances(text, author = '', timestamp = '', doc_id = '', location = ''):
+def get_stances(text, author = '', timestamp = '', doc_id = ''):
 	#bert_docs = text
 	#bert_docs = fetch_20newsgroups(subset='all')['data']
 	#topics = model.fit_transform(bert_docs)	
@@ -1603,7 +1603,7 @@ def get_stances(text, author = '', timestamp = '', doc_id = '', location = ''):
 					(sentiment, sentiment_probs) = get_sentiment_score(stance_details[4] + " " + stance_details[1])
 					belief_valuation = get_valuation_score(sentiment)
 					#NOTE targeted sentiment is the quotes. Need to be filled in or removed at some point
-					stances.append(build_stance_dict(stance_details[7], stance_details[4], stance_details[1], strength, belief_valuation, stance_details[11], '', sentiment_probs, sentence.text, author, timestamp, doc_id, location))
+					stances.append(build_stance_dict(stance_details[7], stance_details[4], stance_details[1], strength, belief_valuation, stance_details[11], '', sentiment_probs, sentence.text, author, timestamp, doc_id))
 
 	if stances:
 		return stances
@@ -1649,7 +1649,7 @@ def get_valuation_score(sentiment_score):
 	else:
 		return 0
 
-def build_stance_dict(belief_type, belief_trigger, belief_target, belief_strength, belief_valuation, event_sentiment, target_sentiment, sentiment_probs, sentence, author, timestamp, doc_id, location):
+def build_stance_dict(belief_type, belief_trigger, belief_target, belief_strength, belief_valuation, event_sentiment, target_sentiment, sentiment_probs, sentence, author, timestamp, doc_id):
 	stance_dict = {}
 
 	
@@ -1662,7 +1662,6 @@ def build_stance_dict(belief_type, belief_trigger, belief_target, belief_strengt
 	stance_dict["event_sentiment"] = event_sentiment
 	stance_dict["attitude"] = belief_strength * belief_valuation #NOTE may change to strength times event senti
 	stance_dict["attribution"] = {
-		"location": location,
 		"author" : author,
 		"timestamp" : timestamp,
 		"document_id" : doc_id,
@@ -1694,8 +1693,8 @@ def process_stance(word, word_pos, sentence, srl):
 			(belief_types, event_sentiment) = getBeliefTypeFromTarget(word)
 			(lem_belief_types, lem_event_sentiment) = getBeliefTypeFromTarget(lem_word)
 
-		if not event_sentiment and lem_event_sentiment:
-			event_sentiment = lem_event_sentiment
+	if not event_sentiment and lem_event_sentiment:
+		event_sentiment = lem_event_sentiment
 
 		belief_types = appendListNoDuplicates(lem_belief_types, belief_types)
 		

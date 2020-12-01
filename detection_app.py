@@ -10,7 +10,6 @@ from spacy.lang.en import English # updated
 from spacy.matcher import Matcher
 from nltk import word_tokenize
 from nltk.stem import PorterStemmer
-
 import pandas as pd
 
 nlp = English()
@@ -177,7 +176,7 @@ def process_mask_tweets():
 		tweets = tweet_file.read().splitlines()
 		for tweet_text in tweets[:2500]:
 			tweet = json.loads(tweet_text)
-			tweet_full_texts.append([tweet["full_text"], tweet["user"]["id"], tweet["created_at"], tweet["id"], tweet['place']])
+			tweet_full_texts.append([tweet["full_text"], tweet["user"]["id"], tweet["created_at"], tweet["id"]])
 
 	output = ask_detection.stances(tweet_full_texts)
 	with open("./mask_lines_stances", "w+") as mask_stances:
@@ -192,7 +191,7 @@ def process_mask_chyrons():
 		chyrons = chyron_file.read().splitlines()
 		for chyron_text in chyrons[:1000]:
 			chyron = json.loads(chyron_text)
-			chyron_data.append([chyron["chyron_text"], chyron["author"], chyron["timestamp"], chyron["doc_id"], ''])
+			chyron_data.append([chyron["chyron_text"], chyron["author"], chyron["timestamp"], chyron["doc_id"]])
 
 	output = ask_detection.stances(chyron_data)
 	with open("./mask_chyron_stances.txt", "w+") as mask_chyron_stances:
