@@ -12,8 +12,12 @@ ask_and_framing_types.extend(list(pitt_ask_types.keys()))
 #ask_and_framing_types = ["PERFORM", "GIVE", "GAIN", "LOSE"]
 
 # Path for files needed for catvar processing
-catvar_file = '/catvar.txt'
-lcs_file = '/dev_LCS.txt'
+here = os.path.dirname(os.path.abspath(__file__))
+
+lcs_file = os.path.join(here, 'dev_LCS.txt')
+catvar_file = os.path.join(here, 'catvar.txt')
+#catvar_file = '/catvar.txt'
+#lcs_file = '/dev_LCS.txt'
 #lcs_file = '/ACL_Archna-Bonnie-Fixed-LCS-Bare-Verb-Classes-for-Panacea.txt'
 #lcs_file = '/LCS-Bare-Verb-Classes-Final_27Aug19.txt'
 
@@ -27,7 +31,7 @@ modality_lookup = {}
 word_specific_rules = []
 
 lcs_dict = {}
-with open('.' + lcs_file) as lcs:
+with open(lcs_file) as lcs:
 	backup_regex = '\(\s\s:NUMBER \"(.+)\"\s\s:NAME \"(.+)\"\s\s:WORD \((.*)\) \)'
 	unit_regex = ':NUMBER \"(.+)\"\s*:NAME \"(.+)\"\s*:WORDS \((.*)\)' 
 	lines = lcs.readlines() 
@@ -70,7 +74,7 @@ reject_verbs = sorted(verb_list_dict["REJECT"])
 test_list = []
 
 catvar_dict = {}
-with open('.' + catvar_file) as catvar:
+with open(catvar_file) as catvar:
 	for entry in catvar:
 		'''
 		v_entries = []
@@ -171,6 +175,6 @@ for rule in word_specific_rules:
 '''
 #print(lexical_specific_rules)
 
-df = pd.read_excel("ModalityLexiconSubcatTags.xlsx")
+df = pd.read_excel(os.path.join(here, "ModalityLexiconSubcatTags.xlsx"))
 belief_strength_dict = pd.Series(df["Belief Value"].values,index=df["Lexical item"]).to_dict()
 	

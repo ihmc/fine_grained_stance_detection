@@ -166,7 +166,7 @@ def extract_relevant_text():
 	return ask_detection.stances(relevant_text)
 
 def test(text):
-	return ask_detection.stances([[text, '', '', '']])
+	return ask_detection.stances([[text, '', '', '', '']])
 
 def process_mask_tweets():
 	tweet_full_texts = []
