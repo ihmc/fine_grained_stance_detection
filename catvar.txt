@@ -14042,7 +14042,7 @@ do-it-yourself_AJ%3
 do-nothing_N%1#do-nothing_AJ%1
 do-or-die_AJ%1
 do-si-do_N%1
-do_N%3#do_V%119#don_N%3#don_V%55#dos_N%3#doer_N%39#door_N%39#doing_N%71#done_AJ%67#donee_N%33#doable_AJ%69
+do_N%3#do_V%119#done_N%3#done_V%55#dos_N%3#doer_N%39#door_N%39#doing_N%71#done_AJ%67#donee_N%33#doable_AJ%69
 dobbin_N%1
 doberman_N%3
 dobra_N%1

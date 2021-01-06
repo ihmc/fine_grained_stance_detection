@@ -20,7 +20,8 @@ from bertopic import BERTopic
 
 #model = BERTopic("distilbert-base-nli-mean-tokens", verbose=True)
 
-spacy_nlp = spacy.load("en_core_web_lg")
+#spacy_nlp = spacy.load("en_core_web_lg")
+spacy_nlp = spacy.load("en_core_web_sm")
 
 # This library allows python to make requests out.
 # NOTE: There is a difference between this and the built in request variable  
@@ -36,9 +37,9 @@ from nltk.corpus import wordnet as wn
 from load_resources import catvar_dict, lcs_dict, belief_strength_dict, perform_verbs, give_verbs, lose_verbs, gain_verbs#, protect_verbs, reject_verbs
 #TODO Fix the variables imported from this line once it's sorted out.
 #from ask_mappings import sashank_categories_sensitive, alan_ask_types, sashanks_ask_types, tomeks_ask_types, perform_verbs, give_verbs, lose_verbs, gain_verbs
-from ask_mappings import sashank_categories, panacea_ask_types, stance_triggers_and_targets
-stance_triggers = stance_triggers_and_targets.get("triggers")
-stance_targets = stance_triggers_and_targets.get("targets")
+from ask_mappings import sashank_categories, panacea_ask_types, pitt_stance_triggers_and_targets
+pitt_stance_triggers = pitt_stance_triggers_and_targets.get("triggers")
+pitt_stance_targets = pitt_stance_triggers_and_targets.get("targets")
 
 from catvar_v_alternates import v_alternates
 
@@ -314,19 +315,19 @@ def getAskTypes(ask, word_pos):
 
 	return t_ask_types
 
-def getBeliefType(ask, word_pos):
+def getBeliefType(word, word_pos):
 	belief_type = ([], '')
-	catvar_object = catvar_dict.get(ask)
+	catvar_object = catvar_dict.get(word)
 
 	if catvar_object != None:
 		catvar_word = catvar_object['catvar_value']
 	elif word_pos in ['VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
-		catvar_word = ask	
+		catvar_word = word
 	else:
 		catvar_word = ''
 
-	for trigger_label, trigger_details in stance_triggers.items():
-		target_details = stance_targets.get(trigger_details["counterpart_label"])
+	for trigger_label, trigger_details in pitt_stance_triggers.items():
+		target_details = pitt_stance_targets.get(trigger_details["counterpart_label"])
 		if trigger_details["words"]:
 			if catvar_word in trigger_details["words"]:
 				return(([trigger_label], trigger_details["sentiment"]))
@@ -334,7 +335,7 @@ def getBeliefType(ask, word_pos):
 				if catvar_word in target_details["words"]:
 					return(([trigger_details["counterpart_label"]], target_details["sentiment"]))
 				else:
-					catvar_word_alternates = catvar_alternates_dict.get(ask)
+					catvar_word_alternates = catvar_alternates_dict.get(word)
 					if catvar_word_alternates:
 						for alternate in catvar_word_alternates:
 							if alternate in trigger_details["words"]:
@@ -428,8 +429,8 @@ def getBeliefType(ask, word_pos):
 def getBeliefTypeFromTarget(target_word):
 	belief_types = ([], '')
 
-	for target_label, target_details in stance_targets.items():
-		trigger_details = stance_triggers.get(target_details["counterpart_label"])
+	for target_label, target_details in pitt_stance_targets.items():
+		trigger_details = pitt_stance_triggers.get(target_details["counterpart_label"])
 		if target_details["words"]:
 			if target_word in target_details["words"]:
 				return(([target_label], target_details["sentiment"]))
@@ -608,9 +609,14 @@ def extractAskFromSrl(sentence, srl, base_word, t_ask_types):
 	arg0 = []
 	arg1 = []
 	arg2 = []
+	arg3 = []
 	arg_tmp = []
 	arg_mnr = []
 	word_number = []
+	arg0_with_indices = []
+	arg1_with_indices = []
+	arg2_with_indices = []
+	arg3_with_indices = []
 	verbs = srl['verbs']
 	words = [word.lower() for word in srl['words']]
 	descriptions = []
@@ -630,12 +636,18 @@ def extractAskFromSrl(sentence, srl, base_word, t_ask_types):
 
 			if tag_label == 'ARG0':
 				arg0.append(words[index])
+				arg0_with_indices.append((words[index], index))
 			elif tag_label == 'ARG1':
 				arg1.append(words[index])
+				arg1_with_indices.append((words[index], index))
 				#The placement of the word within the sentence
 				word_number.append(index)
 			elif tag_label == 'ARG2':
 				arg2.append(words[index])
+				arg2_with_indices.append((words[index], index))
+			elif tag_label == 'ARG3':
+				arg3.append(words[index])
+				arg3_with_indices.append((words[index], index))
 			elif 'ARGM-TMP' in tag:
 				arg_tmp.append(words[index])
 			elif 'ARGM-MNR' in tag:
@@ -710,7 +722,7 @@ def extractAskFromSrl(sentence, srl, base_word, t_ask_types):
 				t_ask_types = ["GAIN"]
 	'''
 
-	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2)
+	return(ask_who, ask, ask_recipient, ask_when, selected_verb, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2, arg0_with_indices, arg1_with_indices, arg2_with_indices, arg3_with_indices)
 
 def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependencies, link_in_sentence, link_exists, link_strings, link_ids, link_id, links, srl, is_cop_dep, cop_ask_target, cop_gov_ask_target, big_root_is_nn, big_root_nn_ask_target, is_wh_advmod, advmod_ask_target, is_det_or_nmod, det_ask_target, nmod_poss_ask_target):
 	ask_negation_dep_based = False
@@ -725,7 +737,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 
 	t_ask_types = appendListNoDuplicates(lem_t_ask_types, t_ask_types)
 
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2) = extractAskFromSrl(sentence, srl, word, t_ask_types)
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, t_ask_types, t_ask_confidence, word_number, arg2, arg0_with_indices, arg1_with_indices, arg2_with_indices, arg3_with_indices) = extractAskFromSrl(sentence, srl, word, t_ask_types)
 
 	if not ask_action:
 		(ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
@@ -1571,45 +1583,58 @@ def get_stances(text, author = '', timestamp = '', doc_id = ''):
 	#stanza_doc = stanza_nlp(text)
 	spacy_doc = spacy_nlp(text)
 
-	for sentence in spacy_doc.sents:
+	for sent in spacy_doc.sents:
 		possible_triggers = []
-		srl = predictor.predict(sentence=sentence.text)
+		srl = predictor.predict(sentence=sent.text)
 
-		for token in sentence:
+		for token in sent:
 			belief_strength = 3
 			strength_polarity = 1
 			strength_word_count = 1
+			strength_words_and_indices = []
 			
 			for child in token.children:
-				(belief_strength, strength_polarity, strength_word_count) = adjust_belief_strength(belief_strength, strength_polarity, strength_word_count, child.text)
+					(belief_strength, strength_polarity, strength_word_count, strength_adjusted) = adjust_belief_strength(belief_strength, strength_polarity, strength_word_count, child.text)
+					if strength_adjusted:
+						strength_words_and_indices.append((child.text, child.i - sent.start))
 
-			(belief_strength, strength_polarity, strength_word_count) = adjust_belief_strength(belief_strength, strength_polarity, strength_word_count, token.head.text)
+			(belief_strength, strength_polarity, strength_word_count, strength_adjusted) = adjust_belief_strength(belief_strength, strength_polarity, strength_word_count, token.head.text)
+			if strength_adjusted:
+				strength_words_and_indices.append((token.head.text, token.head.i - sent.start))
 
 			for child in token.head.children:
-				(belief_strength, strength_polarity, strength_word_count) = adjust_belief_strength(belief_strength, strength_polarity, strength_word_count, token.head.text)
+				(belief_strength, strength_polarity, strength_word_count, strength_adjusted) = adjust_belief_strength(belief_strength, strength_polarity, strength_word_count, child.text)
+				if strength_adjusted:
+					strength_words_and_indices.append((child.text, child.i - sent.start))
+
 
 			if token.dep_ == "ROOT":
-				possible_triggers.append((token.text, token.tag_, (belief_strength / strength_word_count) * strength_polarity))
+				possible_triggers.append((token.text, token.i - sent.start, token.tag_, (belief_strength / strength_word_count) * strength_polarity, strength_words_and_indices))
 			elif token.dep_ == "xcomp":
-				possible_triggers.append((token.text, token.tag_, (belief_strength / strength_word_count) * strength_polarity))
+				possible_triggers.append((token.text, token.i - sent.start, token.tag_, (belief_strength / strength_word_count) * strength_polarity, strength_words_and_indices))
 			elif token.pos_ == "VERB":
-				possible_triggers.append((token.text, token.tag_, (belief_strength / strength_word_count) * strength_polarity))
+				possible_triggers.append((token.text, token.i - sent.start, token.tag_, (belief_strength / strength_word_count) * strength_polarity, strength_words_and_indices))
 				
 
-		for trigger, pos, strength in possible_triggers:
-				stance_details = process_stance(trigger, pos, sentence.text, srl)
+		for trigger, trigger_index, pos, strength, strength_words_and_indices in possible_triggers:
+				stance_details = process_stance(trigger, pos, sent.text, srl)
 
 				if stance_details:
 					(sentiment, sentiment_probs) = get_sentiment_score(stance_details[4] + " " + stance_details[1])
-					belief_valuation = get_valuation_score(sentiment)
+					allen_sentiment = get_valuation_score(sentiment)
+					belief_valuation = stance_details[11]
+					target_with_indices = stance_details[12]
+
 					#NOTE targeted sentiment is the quotes. Need to be filled in or removed at some point
-					stances.append(build_stance_dict(stance_details[7], stance_details[4], stance_details[1], strength, belief_valuation, stance_details[11], '', sentiment_probs, sentence.text, author, timestamp, doc_id))
+					stances.append(build_stance_dict(stance_details[7], (trigger, trigger_index), target_with_indices, strength_words_and_indices, strength, belief_valuation, '', sentiment_probs, allen_sentiment, sent.text, author, timestamp, doc_id))
 
 	if stances:
 		return stances
 
 def adjust_belief_strength(belief_strength, polarity, word_count, word):
+	strength_adjusted = False
 	if word.lower() in belief_strength_dict:
+		strength_adjusted = True
 		temp_strength = belief_strength_dict.get(word.lower())
 		word_count += 1
 		if temp_strength < 0:
@@ -1618,7 +1643,7 @@ def adjust_belief_strength(belief_strength, polarity, word_count, word):
 		else:
 			belief_strength += temp_strength
 
-	return (belief_strength, polarity, word_count)
+	return (belief_strength, polarity, word_count, strength_adjusted)
 
 def get_sentiment_score(text):
     probs = sentiment_predictor.predict(sentence=text)['probs']
@@ -1649,28 +1674,49 @@ def get_valuation_score(sentiment_score):
 	else:
 		return 0
 
-def build_stance_dict(belief_type, belief_trigger, belief_target, belief_strength, belief_valuation, event_sentiment, target_sentiment, sentiment_probs, sentence, author, timestamp, doc_id):
+def build_stance_dict(belief_type, belief_trigger_with_index, belief_target_with_indices, strength_words_and_indices, belief_strength, belief_valuation, target_sentiment, sentiment_probs, allen_sentiment, sentence, author, timestamp, doc_id):
 	stance_dict = {}
+	trigger_and_content_with_indices = belief_target_with_indices
 
-	
-	stance_dict["stance_rep"] = f'<{belief_type[0]}[{belief_trigger}[{belief_target}]],{belief_strength},{belief_valuation}>'
-	stance_dict["belief"] = f'{belief_type[0]}[{belief_trigger}[{belief_target}]]'
-	stance_dict["belief_string"] = f'{belief_trigger} {belief_target}'
+	belief_trigger = morphRoot(belief_trigger_with_index[0])
+	belief_content = ' '.join([x[0] for x in belief_target_with_indices])
+
+	if belief_trigger_with_index not in belief_target_with_indices:
+		trigger_and_content_with_indices.append((morphRoot(belief_trigger_with_index[0]), belief_trigger_with_index[1]))
+
+	trigger_and_content_with_indices.sort(key=lambda x:x[1])
+	sentiment_string = ' '.join([x[0] for x in trigger_and_content_with_indices])
+
+	strength_trigger_and_content_with_indices = trigger_and_content_with_indices
+	for word_and_index in strength_words_and_indices:
+		if word_and_index not in trigger_and_content_with_indices:
+			strength_trigger_and_content_with_indices.append(word_and_index)
+
+	strength_trigger_and_content_with_indices.sort(key=lambda x:x[1])
+	belief_string = ' '.join([x[0] for x in strength_trigger_and_content_with_indices])
+
+	attitude = belief_strength * belief_valuation
+	belief_strength = f'{belief_strength:.2f}'
+			
+	stance_dict["stance_rep"] = f'<{belief_type[0]}[{belief_trigger}[{belief_content}]],{belief_strength},{belief_valuation}>'
+	stance_dict["belief"] = f'{belief_type[0]}[{belief_trigger}[{belief_content}]]'
+	stance_dict["belief_string"] = belief_string
+	stance_dict["sentiment_string"] = sentiment_string
 	stance_dict["evidence"] = sentence
 	stance_dict["belief_strength"] = belief_strength
 	stance_dict["belief_valuation"] = belief_valuation
-	stance_dict["event_sentiment"] = event_sentiment
-	stance_dict["attitude"] = belief_strength * belief_valuation #NOTE may change to strength times event senti
+	stance_dict["attitude"] = f'{attitude:.2f}' #NOTE may change to strength times event senti
 	stance_dict["attribution"] = {
 		"author" : author,
 		"timestamp" : timestamp,
 		"document_id" : doc_id,
 	}
-	stance_dict["belief_target"] = belief_target
+	stance_dict["belief_content"] = belief_content
 	stance_dict["belief_trigger"] = belief_trigger
 	stance_dict["belief_type"] = belief_type[0]
-	stance_dict["positive_sentiment"] = sentiment_probs[0]
-	stance_dict["negative_sentiment"] = sentiment_probs[1]
+	stance_dict["allen_sentiment"] = allen_sentiment
+	stance_dict["positive_sentiment"] = f'{sentiment_probs[0]:.2f}'
+	stance_dict["negative_sentiment"] = f'{sentiment_probs[1]:.2f}'
 	stance_dict["target_sentiment"] = target_sentiment
 
 	return stance_dict
@@ -1684,24 +1730,51 @@ def process_stance(word, word_pos, sentence, srl):
 	belief_types = appendListNoDuplicates(lem_belief_types, belief_types)
 
 	
-	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_types, t_ask_confidence, word_number, arg2) = extractAskFromSrl(sentence, srl, word, belief_types)
+	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_types, t_ask_confidence, word_number, arg2, arg0_with_indices, arg1_with_indices, arg2_with_indices, arg3_with_indices) = extractAskFromSrl(sentence, srl, word, belief_types)
 
 	if not belief_types:
-		for arg1_word in ask.split():
+		for arg1_word, word_index in arg1_with_indices:
 			word = arg1_word.lower()
 			lem_word = morphRoot(arg1_word)
 			(belief_types, event_sentiment) = getBeliefTypeFromTarget(word)
 			(lem_belief_types, lem_event_sentiment) = getBeliefTypeFromTarget(lem_word)
 
-	if not event_sentiment and lem_event_sentiment:
+
+	#NOTE This is back off to get details for a target from for an argument that are most appropriate to the specific domain
+	# in the current case (12/11/2020) that is PITT/Covid. Here we are checking, from SRL, arg1, then arg0, then arg3
+	content = build_content(arg1_with_indices)
+
+	if arg0_with_indices:
+		content.extend(build_content(arg0_with_indices))
+	if arg3_with_indices:
+		content.extend(build_content(arg3_with_indices))
+
+	if event_sentiment not in [-1, 0, 1] and lem_event_sentiment in [-1, 0, 1]:
 		event_sentiment = lem_event_sentiment
 
-		belief_types = appendListNoDuplicates(lem_belief_types, belief_types)
+	belief_types = appendListNoDuplicates(lem_belief_types, belief_types)
 		
-	return_tuple = 	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_types, t_ask_confidence, word_number, arg2, event_sentiment)
+	
+	return_tuple = 	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_types, t_ask_confidence, word_number, arg2, event_sentiment, content)
 		
 	#if not ask_action:
 	#	return_tuple = (ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
-	if belief_types and ask:
+	if belief_types and content:
 		return return_tuple
 
+def build_content(potential_target_with_indices): 
+	target_words_with_indices = []
+
+	for target_label, target_details in pitt_stance_targets.items():
+		trigger_details = pitt_stance_triggers.get(target_details["counterpart_label"])
+		if target_details["words"]:
+			for word, word_index in potential_target_with_indices:
+				if morphRoot(word) in target_details["words"]:
+					target_words_with_indices.append((word, word_index))
+				elif trigger_details["words"]:
+					if morphRoot(word) in trigger_details["words"]:
+						target_words_with_indices.append((word, word_index))
+
+
+	return target_words_with_indices
+	

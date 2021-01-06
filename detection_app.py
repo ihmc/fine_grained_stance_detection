@@ -183,18 +183,39 @@ def process_mask_tweets():
 		mask_stances.write(json.dumps(output))
 	return output
 
+def process_sf_tweets():
+	tweet_full_texts = []
+	tweets_file = "./sf_masks.json"
+	with open(tweets_file, 'r') as tweet_file:
+		progress_count = 0
+		tweets = tweet_file.read().splitlines()
+		for tweet_text in tweets:
+			tweet = json.loads(tweet_text)
+			tweet_full_texts.append([tweet["full_text"], tweet["user"]["id"], tweet["created_at"], tweet["id"]])
+
+	output = ask_detection.stances(tweet_full_texts)
+	with open("./sf_mask_lines.jsonl", "w+") as mask_stances:
+		for stance in output["stances"]:
+			mask_stances.write(json.dumps(stance))
+			mask_stances.write("\n")
+
+	return output
+
 def process_mask_chyrons():
 	chyron_data = []
 	chyrons_file = "./mask_dist_chyrons.txt"
 	with open(chyrons_file, 'r') as chyron_file:
 		progress_count = 0
 		chyrons = chyron_file.read().splitlines()
-		for chyron_text in chyrons[:1000]:
+		for chyron_text in chyrons:
 			chyron = json.loads(chyron_text)
 			chyron_data.append([chyron["chyron_text"], chyron["author"], chyron["timestamp"], chyron["doc_id"]])
 
 	output = ask_detection.stances(chyron_data)
-	with open("./mask_chyron_stances.txt", "w+") as mask_chyron_stances:
-		mask_chyron_stances.write(json.dumps(output, indent=4, sort_keys=False))
+	with open("./mask_chyron_stances.jsonl", "w+") as mask_chyron_stances:
+		for stance in output["stances"]:
+			mask_chyron_stances.write(json.dumps(stance))
+			mask_chyron_stances.write("\n")
+			
 	return output
 			

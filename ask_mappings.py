@@ -1385,7 +1385,7 @@ pitt_ask_types = {
 	]
 }
 
-stance_triggers_and_targets = {
+pitt_stance_triggers_and_targets = {
 	"targets": {
 		"PROTECTION" : {
 			"counterpart_label" : "PROTECT",
@@ -2333,7 +2333,7 @@ stance_triggers_and_targets = {
         "support",
         "understand",
       ],
-      "sentiment": 0
+      "sentiment" : 1
     },
     "ADAPT_LIFESTYLE" : {
       "counterpart_label" : "APAPTATION_LIFESTYLE",

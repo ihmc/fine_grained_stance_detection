@@ -2,6 +2,7 @@ import os
 import re
 import csv
 import pandas as pd
+import json
 
 from ask_mappings import panacea_ask_types, pitt_ask_types
 
@@ -74,6 +75,7 @@ reject_verbs = sorted(verb_list_dict["REJECT"])
 test_list = []
 
 catvar_dict = {}
+alternates_dict = {}
 with open(catvar_file) as catvar:
 	for entry in catvar:
 		'''
@@ -92,6 +94,7 @@ with open(catvar_file) as catvar:
 			for word in v_entries:
 				alternates_dict[word] = v_entries
 		'''
+
 		if '_V' in entry:
 			entry_pieces = entry.split('#')
 
@@ -117,6 +120,10 @@ with open(catvar_file) as catvar:
 			'''
 		
 #print(catvar_dict, 'catvar dicctionary')
+'''
+with open('./alternates_dict.txt', 'w+') as alt_file:
+	alt_file.write(json.dumps(alternates_dict, indent=4))
+'''
 print('catvar dictionary create')
 
 '''
@@ -175,6 +182,6 @@ for rule in word_specific_rules:
 '''
 #print(lexical_specific_rules)
 
-df = pd.read_excel(os.path.join(here, "ModalityLexiconSubcatTags.xlsx"))
+df = pd.read_excel(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx"))
 belief_strength_dict = pd.Series(df["Belief Value"].values,index=df["Lexical item"]).to_dict()
 	
