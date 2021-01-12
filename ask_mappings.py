@@ -1431,6 +1431,7 @@ pitt_stance_triggers_and_targets = {
 				"disinfected",
 				"disposable",
 				"disposablemasks",
+				"distancing",
 				"dontcoughonme",
 				"donttouchme",
 				"doyourpart",
@@ -1782,6 +1783,7 @@ pitt_stance_triggers_and_targets = {
 				"lockdownlooks",
 				"lockdownsa",
 				"londonlockdown",
+				"mask",
 				"pandemicshutdown",
 				"partialquarantine",
 				"quarantine",
@@ -2296,6 +2298,7 @@ pitt_stance_triggers_and_targets = {
         "limit",
         "mandate",
         "arrest",
+        "restrict",
       ],
       "sentiment" : -1
     },

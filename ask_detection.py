@@ -344,87 +344,6 @@ def getBeliefType(word, word_pos):
 								return(([trigger_details["counterpart_label"]], target_details["sentiment"]))
 
 	return belief_type
-		
-	'''
-	if catvar_word in protect_triggers:
-		return(['PROTECT'])
-	elif catvar_word in protect_targets:
-		return(['PROTECT'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in protect_triggers:
-					return(['PROTECT'])
-				elif alternate in protect_targets:
-					return(['PROTECT'])
-
-	if catvar_word in anti_mask_triggers:
-		return(['ANTI_MASK'])
-	elif catvar_word in anti_mask_targets:
-		return(['ANTI_MASK'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in anti_mask_triggers:
-					return(['ANTI_MASK'])
-				elif alternate in anti_mask_targets:
-					return(['ANTI_MASK'])
-
-	if catvar_word in ill_effect_triggers:
-		return(['ILL_EFFECT'])
-	elif catvar_word in ill_effect_targets:
-		return(['ILL_EFFECT'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in ill_effect_triggers:
-					return(['ILL_EFFECT'])
-				elif alternate in ill_effect_targets:
-					return(['ILL_EFFECT'])
-
-	if catvar_word in illness_triggers:
-		return(['ILLNESS'])
-	elif catvar_word in illness_targets:
-		return(['ILLNESS'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in illness_triggers:
-					return(['ILLNESS'])
-				elif alternate in illness_targets:
-					return(['ILLNESS'])	
-
-	if catvar_word in freedom_triggers:
-		return(['FREEDOM'])
-	elif catvar_word in freedom_targets:
-		return(['FREEDOM'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in freedom_triggers:
-					return(['FREEDOM'])
-				elif alternate in freedom_targets:
-					return(['FREEDOM'])
-
-	if catvar_word in restrictions_triggers:
-		return(['RESTRICTION'])
-	elif catvar_word in restrictions_targets:
-		return(['RESTRICTION'])
-	else:
-		catvar_word_alternates = catvar_alternates_dict.get(ask)
-		if catvar_word_alternates:
-			for alternate in catvar_word_alternates:
-				if alternate in restrictions_triggers:
-					return(['RESTRICTION'])
-				elif alternate in restrictions_targets:
-					return(['RESTRICTION'])
-	'''
-
 
 def getBeliefTypeFromTarget(target_word):
 	belief_types = ([], '')
@@ -437,37 +356,6 @@ def getBeliefTypeFromTarget(target_word):
 			elif trigger_details["words"]:
 				if target_word in trigger_details["words"]:
 					return(([target_details["counterpart_label"]], trigger_details["sentiment"]))
-	'''
-	if target_word in protect_targets:
-		return(['PROTECT'])
-	elif target_word in protect_triggers:
-		return(['PROTECT'])
-
-	if target_word in anti_mask_targets:
-		return(['ANTI_MASK'])
-	elif target_word in anti_mask_triggers:
-		return(['ANTI_MASK'])
-
-	if target_word in ill_effect_targets:
-		return(['ILL_EFFECT'])
-	elif target_word in ill_effect_triggers:
-		return(['ILL_EFFECT'])	
-
-	if target_word in illness_targets:
-		return(['ILLNESS'])
-	elif target_word in illness_triggers:
-		return(['ILLNESS'])
-
-	if target_word in freedom_targets:
-		return(['FREEDOM'])
-	elif target_word in freedom_triggers:
-		return(['FREEDOM'])
-
-	if target_word in restrictions_targets:
-		return(['RESTRICTION'])
-	elif target_word in restrictions_triggers:
-		return(['RESTRICTION'])
-	'''
 
 	return belief_types
 
@@ -1810,10 +1698,11 @@ def build_content(potential_target_with_indices, belief_types):
 			trigger_details = pitt_stance_triggers.get(target_details["counterpart_label"])
 			if target_details["words"]:
 				for word, word_index in potential_target_with_indices:
-					if morphRoot(word) in target_details["words"]:
+					#Need to check if the morph (lemma) of the word or the word itself is in the list
+					if morphRoot(word) in target_details["words"] or word in target_details["words"]:
 						target_words_with_indices.append((word, word_index))
 					elif trigger_details["words"]:
-						if morphRoot(word) in trigger_details["words"]:
+						if morphRoot(word) in trigger_details["words"] or word in trigger_details["words"]:
 							target_words_with_indices.append((word, word_index))
 
 
