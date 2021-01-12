@@ -1679,6 +1679,8 @@ def build_stance_dict(belief_type, belief_trigger_with_index, belief_target_with
 	trigger_and_content_with_indices = belief_target_with_indices
 
 	belief_trigger = morphRoot(belief_trigger_with_index[0])
+
+	belief_target_with_indices.sort(key=lambda x:x[1])
 	belief_content = ' '.join([x[0] for x in belief_target_with_indices])
 
 	if belief_trigger_with_index not in belief_target_with_indices:
@@ -1732,27 +1734,64 @@ def process_stance(word, word_pos, sentence, srl):
 	
 	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_types, t_ask_confidence, word_number, arg2, arg0_with_indices, arg1_with_indices, arg2_with_indices, arg3_with_indices) = extractAskFromSrl(sentence, srl, word, belief_types)
 
+	#If no belief types are found from the trigger than each one in the sentences arg1 (from SRL) is 
+	# checked to see if a belief type can be found from it. To prevent overwriting legitimate belief types
+	# with an empty value if the last word in arg1 did not return a belief type, the belief type that is 
+	# most frequently seen is taken. If all belief types have the same frequency from arg1 then the 
+	# first one is taken.
 	if not belief_types:
+		belief_type_freq = {}
 		for arg1_word, word_index in arg1_with_indices:
 			word = arg1_word.lower()
 			lem_word = morphRoot(arg1_word)
 			(belief_types, event_sentiment) = getBeliefTypeFromTarget(word)
 			(lem_belief_types, lem_event_sentiment) = getBeliefTypeFromTarget(lem_word)
 
+			belief_types = appendListNoDuplicates(lem_belief_types, belief_types)
+
+			if belief_types:
+				if belief_types[0] in belief_type_freq:
+					belief_type_freq[belief_types[0]]["count"] += 1
+				else:
+					belief_type_freq[belief_types[0]] = {
+						"count" : 1,
+						"sentiment": lem_event_sentiment if event_sentiment not in [-1, 0, 1] and lem_event_sentiment in [-1, 0, 1] else event_sentiment
+					}
+
+		highest_count = 0
+		types_with_same_count = 1
+		for belief_type, value_dict in belief_type_freq.items():
+			if value_dict["count"] == highest_count:
+				types_with_same_count += 1
+			if value_dict["count"] > highest_count:
+				highest_count = value_dict["count"]
+				belief_types = [belief_type]
+				event_sentiment = value_dict["sentiment"]
+
+		if types_with_same_count == len(belief_type_freq):
+			belief_types = [list(belief_type_freq)[0]]
+
+	#If there is no belief type at this point there is no point in building the content
+	# so the function is cut short in order to be more efficient
+	if not belief_types:
+		return
+
+	if belief_types[0] in pitt_stance_targets.keys(): 
+		belief_types = [pitt_stance_targets.get(belief_types[0]).get("counterpart_label")]
 
 	#NOTE This is back off to get details for a target from for an argument that are most appropriate to the specific domain
 	# in the current case (12/11/2020) that is PITT/Covid. Here we are checking, from SRL, arg1, then arg0, then arg3
-	content = build_content(arg1_with_indices)
+	content = build_content(arg1_with_indices, belief_types)
 
 	if arg0_with_indices:
-		content.extend(build_content(arg0_with_indices))
+		content.extend(build_content(arg0_with_indices, belief_types))
 	if arg3_with_indices:
-		content.extend(build_content(arg3_with_indices))
+		content.extend(build_content(arg3_with_indices, belief_types))
 
-	if event_sentiment not in [-1, 0, 1] and lem_event_sentiment in [-1, 0, 1]:
-		event_sentiment = lem_event_sentiment
+	#if event_sentiment not in [-1, 0, 1] and lem_event_sentiment in [-1, 0, 1]:
+	#	event_sentiment = lem_event_sentiment
 
-	belief_types = appendListNoDuplicates(lem_belief_types, belief_types)
+	
 		
 	
 	return_tuple = 	(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_types, t_ask_confidence, word_number, arg2, event_sentiment, content)
@@ -1762,18 +1801,20 @@ def process_stance(word, word_pos, sentence, srl):
 	if belief_types and content:
 		return return_tuple
 
-def build_content(potential_target_with_indices): 
+def build_content(potential_target_with_indices, belief_types): 
 	target_words_with_indices = []
 
+	
 	for target_label, target_details in pitt_stance_targets.items():
-		trigger_details = pitt_stance_triggers.get(target_details["counterpart_label"])
-		if target_details["words"]:
-			for word, word_index in potential_target_with_indices:
-				if morphRoot(word) in target_details["words"]:
-					target_words_with_indices.append((word, word_index))
-				elif trigger_details["words"]:
-					if morphRoot(word) in trigger_details["words"]:
+		if target_details["counterpart_label"] == belief_types[0]:
+			trigger_details = pitt_stance_triggers.get(target_details["counterpart_label"])
+			if target_details["words"]:
+				for word, word_index in potential_target_with_indices:
+					if morphRoot(word) in target_details["words"]:
 						target_words_with_indices.append((word, word_index))
+					elif trigger_details["words"]:
+						if morphRoot(word) in trigger_details["words"]:
+							target_words_with_indices.append((word, word_index))
 
 
 	return target_words_with_indices
