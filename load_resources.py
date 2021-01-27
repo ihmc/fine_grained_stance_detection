@@ -125,6 +125,9 @@ with open('./alternates_dict.txt', 'w+') as alt_file:
 	alt_file.write(json.dumps(alternates_dict, indent=4))
 '''
 print('catvar dictionary create')
+with open('./catvar_dict_example.txt', 'w+') as catvar_file:
+	catvar_file.write(json.dumps(catvar_dict))
+
 
 '''
 preprocess_rules_in_order = []
@@ -184,4 +187,13 @@ for rule in word_specific_rules:
 
 df = pd.read_excel(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx"))
 belief_strength_dict = pd.Series(df["Belief Value"].values,index=df["Lexical item"]).to_dict()
-	
+
+df = pd.read_excel(os.path.join(here, "SentimentLexiconPITT.xlsx"))
+belief_sentiment_dict = {}
+for row in df.iterrows():
+	row = row[1]
+	belief_sentiment_dict[row["Lexical item"]] = {
+		"sentiment": row["Sentiment Value"],
+		"belief_type": row["Belief Type"] 
+	}
+

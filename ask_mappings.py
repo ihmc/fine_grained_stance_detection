@@ -2345,5 +2345,16 @@ pitt_stance_triggers_and_targets = {
       ],
       "sentiment" : 0
     },
-	}
+	},
+	"light_verbs": [
+		"use",
+		"place",
+		"take",
+		"make",
+		"do",
+		"give",
+		"have",
+		"put",
+		"be",
+	]
 }

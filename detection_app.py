@@ -195,7 +195,7 @@ def process_mask_tweets(version_description = "", num_to_process = 0):
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
 	if version_description:
-		version_description = "_" + version_descrption
+		version_description = "_" + version_description
 
 	with open("./mask_stances_output/mask_lines_stances" + version_description + ".txt", "w+") as mask_stances:
 		for stance in output["stances"]:
@@ -225,7 +225,7 @@ def process_sf_tweets(version_description = "", num_to_process = 0):
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
 	if version_description:
-		version_description = "_" + version_descrption
+		version_description = "_" + version_description
 
 	with open("./san_fran_mask_stances_output/sf_mask_lines" + version_description + ".jsonl", "w+") as mask_stances:
 		for stance in output["stances"]:
@@ -256,7 +256,7 @@ def process_mask_chyrons(version_description = "", num_to_process = 0):
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
 	if version_description:
-		version_description = "_" + version_descrption
+		version_description = "_" + version_description
 
 	with open("./chyron_mask_stances_output/mask_chyron_stances" + version_description + ".jsonl", "w+") as mask_chyron_stances:
 		for stance in output["stances"]:
@@ -287,7 +287,7 @@ def text_to_stances(txt_file_path, version_description = "", num_to_process = 0)
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
 	if version_description:
-		version_description = "_" + version_descrption
+		version_description = "_" + version_description
 
 	with open("./user_provided_text_stances" + version_description + ".jsonl", "w+") as user_text_stances:
 		for stance in output["stances"]:
@@ -296,7 +296,7 @@ def text_to_stances(txt_file_path, version_description = "", num_to_process = 0)
 			
 	return output
 
-#User provides a path to a json file for stances. The extension does not have to be json, 
+#User provides a path to a json file for stance processing. The extension does not have to be json, 
 # but each line must be a single json structure that has an attribute for the text to process,
 # some kind of author identifier, a timestamp, and some kind of document identifier.
 # For example if the json represented a tweet there should be the author id, timestamp of the tweet,
@@ -305,15 +305,14 @@ def text_to_stances(txt_file_path, version_description = "", num_to_process = 0)
 def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestamp_attrb_name, 
 						doc_id_attrb_name, version_description = "", num_to_process = 0):
 	data = []
-	jsons_file =  json_file_path
-	with open(jsons_file, 'r') as json_file:
+	with open(json_file_path, 'r') as json_file:
 		progress_count = 0
 		jsons = json_file.read().splitlines()
 
 		#NOTE User passes in amount of chyrons to process, if the amount is 0 then it defaults 
 		# to processing the entirety of the file
 		if num_to_process == 0:
-			num_to_process = len(tweets)
+			num_to_process = len(jsons)
 
 		for line_json in jsons[:num_to_process]:
 			line = json.loads(line_json)
@@ -325,7 +324,48 @@ def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestam
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
 	if version_description:
-		version_description = "_" + version_descrption
+		version_description = "_" + version_description
+
+	with open("./user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
+		for stance in output["stances"]:
+			user_json_stances.write(json.dumps(stance))
+			user_json_stances.write("\n")
+			
+	return output
+
+'''
+User provides a path to a csv file for stance processing. The file must have a header row with a label for 
+for the text to process, some kind of author identifier, a timestamp, and some kind of document identifier.
+For example if each csv line represented a tweet the text of the tweet, the author id, timestamp of the tweet,
+and the id of the tweet. User must provide the name of each of these labels that is found in the csv file.
+'''
+def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label, 
+						doc_id_label, version_description = "", num_to_process = 0):
+	data = []
+	num_processed = 0
+	
+	#NOTE User passes in amount of chyrons to process, if the amount is 0 then it defaults 
+	# to processing the entirety of the file
+	if num_to_process == 0:
+		num_to_process = len(df.index)
+
+	df = pd.read_csv(csv_file_path)
+	for row in df.iterrows():
+		#This step is necessary cause each row of the dataframe is a tuple (index, row info)
+		row_info = row[1]
+		num_processed += 1
+		if num_processed > num_to_process:
+			break
+
+		data.append([line[text_label], line[author_label], 
+								line[timestamp_label], line[doc_id_label]])
+
+	output = ask_detection.stances(data)
+
+	#Add underscore to front of version description if one exist so that the 
+	# file name will be nicely underscore separated
+	if version_description:
+		version_description = "_" + version_description
 
 	with open("./user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
 		for stance in output["stances"]:
@@ -337,39 +377,11 @@ def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestam
 
 #NOTE Stance version should be a string (underscore separated) that will be append to the file name 
 # so it's obvious what version of stances was run (improved_belief_string, improved_belief_score, etc.) 
-def stances_to_csv(stance_version):
+def stances_to_csv(file_to_convert, stance_version):
 	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Evidence', 
 				'Adjudicated Type', 'Adjudicated Trigger', 'Adjudicated Content', 'Adjudicated Belief Stregnth', 'Adjudicated Belief Valuation']
 
 	with open('./mask_stances_' + stance_version + '.csv', 'w+') as csvfile:
-		csvwriter = csv.writer(csvfile)
-
-		csvwriter.writerow(columns)
-
-		line_number = 1
-		evidence = ''
-		with open('./mask_lines_stances.txt', 'r') as mask_stances:
-			for stance in mask_stances.readlines():
-				stance_dict = json.loads(stance)
-
-				# Keep the line number the same if the stance is on the same evidence as the previous stance
-				if not evidence:
-					evidence = stance_dict['evidence']
-				elif evidence != stance_dict['evidence']:
-					evidence = stance_dict['evidence']
-					line_number += 1
-
-				row = [line_number, stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
-						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['evidence']]
-				csvwriter.writerow(row)
-				
-def stances_to_csv_tp_and_fp(file_to_convert, stance_version = ""):
-	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Evidence', 
-				'TP', 'FP']
-
-	if stance_version:
-		stance_version = "_" + stance_version
-	with open('./mask_stances' + stance_version + '.csv', 'w+') as csvfile:
 		csvwriter = csv.writer(csvfile)
 
 		csvwriter.writerow(columns)
@@ -387,6 +399,34 @@ def stances_to_csv_tp_and_fp(file_to_convert, stance_version = ""):
 					evidence = stance_dict['evidence']
 					line_number += 1
 
-				row = [line_number, stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
+				row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
+						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['evidence']]
+				csvwriter.writerow(row)
+				
+def stances_to_csv_tp_and_fp(file_to_convert, stance_version = ""):
+	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Evidence', 
+				'TP', 'FP']
+
+	if stance_version:
+		stance_version = "_" + stance_version
+	with open('./mask_stances_output/csv_files/mask_stances' + stance_version + '.csv', 'w+') as csvfile:
+		csvwriter = csv.writer(csvfile)
+
+		csvwriter.writerow(columns)
+
+		line_number = 1
+		evidence = ''
+		with open(file_to_convert, 'r') as mask_stances:
+			for stance in mask_stances.readlines():
+				stance_dict = json.loads(stance)
+
+				# Keep the line number the same if the stance is on the same evidence as the previous stance
+				if not evidence:
+					evidence = stance_dict['evidence']
+				elif evidence != stance_dict['evidence']:
+					evidence = stance_dict['evidence']
+					line_number += 1
+
+				row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
 						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['evidence']]
 				csvwriter.writerow(row)
