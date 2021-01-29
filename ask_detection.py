@@ -1,10 +1,11 @@
 from allennlp.predictors.predictor import Predictor
-import allennlp_models
+import allennlp_models.tagging
 #predictor = Predictor.from_path("./srl-model-2018.05.25.tar.gz")
 #sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/basic_stanford_sentiment_treebank-2020.06.09.tar.gz")
 sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/sst-roberta-large-2020.06.08.tar.gz")
 #predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/bidaf-elmo-model-2020.03.19.tar.gz")
-predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/bert-base-srl-2020.03.24.tar.gz")
+#predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/bert-base-srl-2020.03.24.tar.gz")
+predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/structured-prediction-srl-bert.2020.12.15.tar.gz")
 
 import health
 import unicodedata
@@ -144,9 +145,13 @@ def stances(text_array):
 
 	return {'stances': stances}
 
-def morphRoot(word):
+def morphRootVerb(word):
 	wlem = WordNetLemmatizer()
 	return wlem.lemmatize(word.lower(),wn.VERB)
+
+def morphRootNoun(word):
+	wlem = WordNetLemmatizer()
+	return wlem.lemmatize(word.lower(),wn.NOUN)
 
 def extractVerbs(parse_tree):
 	parse_tree = parse_tree.replace('\\n', '')
@@ -165,7 +170,7 @@ def extractTriggerWordAndPos(trigger_string):
 	
 	
 def getTriggerModality(word_and_pos):
-	trigger_tuple = (morphRoot(word_and_pos[0].lower()), word_and_pos[1])
+	trigger_tuple = (morphRootVerb(word_and_pos[0].lower()), word_and_pos[1])
 	
 	if trigger_tuple in modality_lookup:
 		return modality_lookup[trigger_tuple]
@@ -409,7 +414,7 @@ def getNLPParse(sentence):
 def getLemmaWords(sentence):
 	sentence = sentence.lower()
 	words = nltk.word_tokenize(sentence)
-	return [(morphRoot(word.lower())) for word in words]
+	return [(morphRootVerb(word.lower())) for word in words]
 
 def extractAskInfoFromDependencies(base_word, dependencies, t_ask_types):
 	base_word = base_word.lower()
@@ -509,6 +514,8 @@ def extractAskFromSrl(sentence, srl, base_word, t_ask_types):
 	verbs = srl['verbs']
 	words = [word.lower() for word in srl['words']]
 	descriptions = []
+
+	print(srl)
 
 	#TODO if the same verb is in the sentence twice this will always take the second version of it 
 	# This needs to be fixed, maybe through deleting the verb once it is used
@@ -620,7 +627,7 @@ def processWord(word, word_pos, sentence, ask_procedure, ask_negation, dependenc
 	a_ask_types = []
 	arg2 = ''
 	word = word.lower()
-	lem_word = morphRoot(word)
+	lem_word = morphRootVerb(word)
 	t_ask_types = getAskTypes(word, word_pos)
 	lem_t_ask_types = getAskTypes(lem_word, word_pos)
 
@@ -1609,13 +1616,13 @@ def build_stance_dict(belief_type, belief_trigger_with_index, belief_target_with
 	stance_dict = {}
 	trigger_and_content_with_indices = belief_target_with_indices
 
-	belief_trigger = morphRoot(belief_trigger_with_index[0])
+	belief_trigger = morphRootVerb(belief_trigger_with_index[0])
 
 	belief_target_with_indices.sort(key=lambda x:x[1])
 	belief_content = ' '.join([x[0] for x in belief_target_with_indices])
 
 	if belief_trigger_with_index not in belief_target_with_indices:
-		trigger_and_content_with_indices.append((morphRoot(belief_trigger_with_index[0]), belief_trigger_with_index[1]))
+		trigger_and_content_with_indices.append((morphRootVerb(belief_trigger_with_index[0]), belief_trigger_with_index[1]))
 
 	trigger_and_content_with_indices.sort(key=lambda x:x[1])
 	sentiment_string = ' '.join([x[0] for x in trigger_and_content_with_indices])
@@ -1658,7 +1665,7 @@ def build_stance_dict(belief_type, belief_trigger_with_index, belief_target_with
 def process_stance(word, word_pos, sentence, srl):
 	is_sentiment_belief_type = False 
 	word = word.lower()
-	lem_word = morphRoot(word)
+	lem_word = morphRootVerb(word)
 	(belief_types, event_sentiment) = getBeliefType(word, word_pos)
 	(lem_belief_types, lem_event_sentiment) = getBeliefType(lem_word, word_pos)
 
@@ -1681,7 +1688,9 @@ def process_stance(word, word_pos, sentence, srl):
 			belief_type_freq = {}
 			for arg1_word, word_index in arg1_with_indices:
 				word = arg1_word.lower()
-				lem_word = morphRoot(arg1_word)
+				lem_word = morphRootNoun(arg1_word)
+				if not lem_word:
+					lem_word = morphRootVerb(arg1_word)
 				(belief_types, event_sentiment) = getBeliefTypeFromTarget(word)
 				(lem_belief_types, lem_event_sentiment) = getBeliefTypeFromTarget(lem_word)
 
@@ -1737,6 +1746,9 @@ def process_stance(word, word_pos, sentence, srl):
 	if event_sentiment not in [-1, 0, 1] and lem_event_sentiment in [-1, 0, 1]:
 		event_sentiment = lem_event_sentiment
 
+
+	print(is_sentiment_belief_type)
+	print(arg1_with_indices)
 	#NOTE This is back off to get details for a target from for an argument that are most appropriate to the specific domain
 	# in the current case (12/11/2020) that is PITT/Covid. Here we are checking, from SRL, arg1, then arg0, then arg3
 	content = build_content(arg1_with_indices, belief_types, is_sentiment_belief_type)
@@ -1771,7 +1783,7 @@ def build_content(potential_target_with_indices, belief_types, is_sentiment_beli
 				trigger_details = pitt_stance_triggers.get(target_details["counterpart_label"])
 				if target_details["words"]:
 					#Need to check if the morph (lemma) of the word or the word itself is in the list
-					if morphRoot(word) in target_details["words"] or word in target_details["words"]:
+					if morphRootVerb(word) in target_details["words"] or morphRootNoun(word) in target_details["words"] or word in target_details["words"]:
 						target_words_with_indices.append((word, word_index))
 						break
 
