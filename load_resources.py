@@ -185,15 +185,61 @@ for rule in word_specific_rules:
 '''
 #print(lexical_specific_rules)
 
-df = pd.read_excel(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx"))
-belief_strength_dict = pd.Series(df["Belief Value"].values,index=df["Lexical item"]).to_dict()
-
-df = pd.read_excel(os.path.join(here, "SentimentLexiconPITT.xlsx"))
-belief_sentiment_dict = {}
+#NOTE keep_default_na=False is important to avoid "nan" in the built dictionary when pandas encounters
+# an empty cell
+df = pd.read_excel(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx"), keep_default_na=False)
+strength_and_sentiment_dict = {}
 for row in df.iterrows():
 	row = row[1]
-	belief_sentiment_dict[row["Lexical item"]] = {
+	strength_and_sentiment_dict[row["Lexical item"]] = {
+		"strength": row["Belief Value"],
 		"sentiment": row["Sentiment Value"],
-		"belief_type": row["Belief Type"] 
+		"modality": row["Modality"]
 	}
 
+df = pd.read_excel(os.path.join(here, "TriggerBuckets.xlsx"))
+trigger_buckets = {}
+for row in df.iterrows():
+	row = row[1]
+
+	if row["Lexical item"] in trigger_buckets:
+		trigger_buckets.get(row["Lexical item"]).get("belief_types").append({
+			"belief_type": row["Belief"],
+			"strength": row["Default Belief Value"],
+			"sentiment": row["Default Sentiment Value"],
+		})
+	else:
+		trigger_buckets[row["Lexical item"]] = {
+			"belief_types": [{
+				"belief_type": row["Belief"],
+				"strength": row["Default Belief Value"],
+				"sentiment": row["Default Sentiment Value"],
+			}]
+		}
+
+df = pd.read_excel(os.path.join(here, "Content Buckets.xlsx"))
+content_buckets = {}
+for row in df.iterrows():
+	row = row[1]
+
+	if row["Lexical item"] in content_buckets:
+		content_buckets.get(row["Lexical item"]).get("belief_types").append({
+			"belief_type": row["Belief"],
+			"sentiment": row["Sentiment Value"]
+		})
+	else:
+		content_buckets[row["Lexical item"]] = {
+			"belief_types": [{
+					"belief_type": row["Belief"], 
+					"sentiment": row["Sentiment Value"]
+			}]
+		}
+
+
+overlap = []
+for word in trigger_buckets.keys():
+	if word in strength_and_sentiment_dict:
+		overlap.append(word)
+
+print(overlap)
+print(content_buckets)

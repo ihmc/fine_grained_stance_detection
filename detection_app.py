@@ -270,7 +270,7 @@ def process_mask_chyrons(version_description = "", num_to_process = 0):
 def text_to_stances(txt_file_path, version_description = "", num_to_process = 0):
 	data = []
 	texts_file = txt_file_path
-	with open(texts_file, 'r') as text_file:
+	with open(texts_file, 'r', encoding="utf-8") as text_file:
 		progress_count = 0
 		texts = text_file.read().splitlines()
 
@@ -283,13 +283,14 @@ def text_to_stances(txt_file_path, version_description = "", num_to_process = 0)
 			data.append([text, "", "", ""])
 
 	output = ask_detection.stances(data)
+	Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
 	if version_description:
 		version_description = "_" + version_description
 
-	with open("./user_provided_text_stances" + version_description + ".jsonl", "w+") as user_text_stances:
+	with open("./user_provided_stance_output/user_provided_text_stances" + version_description + ".jsonl", "w+") as user_text_stances:
 		for stance in output["stances"]:
 			user_text_stances.write(json.dumps(stance))
 			user_text_stances.write("\n")
@@ -320,13 +321,14 @@ def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestam
 								line[timestamp_attrb_name], line[doc_id_attrb_name]])
 
 	output = ask_detection.stances(data)
+	Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
 	if version_description:
 		version_description = "_" + version_description
 
-	with open("./user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
+	with open("./user_provided_stance_output/user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
 		for stance in output["stances"]:
 			user_json_stances.write(json.dumps(stance))
 			user_json_stances.write("\n")
@@ -361,6 +363,7 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 								line[timestamp_label], line[doc_id_label]])
 
 	output = ask_detection.stances(data)
+	Path("./user_provided_stance_output/user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
