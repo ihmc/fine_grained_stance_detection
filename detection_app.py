@@ -352,29 +352,39 @@ User provides a path to a csv file for stance processing. The file must have a h
 for the text to process, some kind of author identifier, a timestamp, and some kind of document identifier.
 For example if each csv line represented a tweet the text of the tweet, the author id, timestamp of the tweet,
 and the id of the tweet. User must provide the name of each of these labels that is found in the csv file.
+
+Some csv data might use 2 columns or more to specify the timestamp so when providing the labels for timestamp
+separate them with a pipe (|) character. Please note these must be in the correct order, date first then time.
 '''
 def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label, 
 						doc_id_label, version_description = "", num_to_process = 0):
 	data = []
 	num_processed = 0
 	
+	df = pd.read_csv(csv_file_path)
+
 	#NOTE User passes in amount of chyrons to process, if the amount is 0 then it defaults 
 	# to processing the entirety of the file
 	if num_to_process == 0:
 		num_to_process = len(df.index)
 
-	df = pd.read_csv(csv_file_path)
 	for row in df.iterrows():
+		timestamp_data = ''
 		#This step is necessary cause each row of the dataframe is a tuple (index, row info)
 		row_info = row[1]
 		num_processed += 1
 		if num_processed > num_to_process:
 			break
 
+		labels = timestamp_label.split("|")
+
+		for label in labels:
+			timestamp_data += row_info[label] + " "
+
 		#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
 		# up items like n't in the lexicons
-		data.append([line[text_label].replace("’", "'").replace("\u2019", "'"), line[author_label], 
-								line[timestamp_label], line[doc_id_label]])
+		data.append([row_info[text_label].replace("’", "'").replace("\u2019", "'"), row_info[author_label], 
+								timestamp_data, row_info[doc_id_label]])
 
 	output = ask_detection.stances(data)
 	Path("./user_provided_stance_output").mkdir(exist_ok=True)
@@ -384,7 +394,7 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 	if version_description:
 		version_description = "_" + version_description
 
-	with open("./user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
+	with open("./user_provided_stance_output/user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
 		for stance in output["stances"]:
 			user_json_stances.write(json.dumps(stance))
 			user_json_stances.write("\n")
