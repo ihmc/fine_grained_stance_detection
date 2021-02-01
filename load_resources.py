@@ -241,5 +241,3 @@ for word in trigger_buckets.keys():
 	if word in strength_and_sentiment_dict:
 		overlap.append(word)
 
-print(overlap)
-print(content_buckets)

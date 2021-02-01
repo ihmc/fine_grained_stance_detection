@@ -169,7 +169,7 @@ def extract_relevant_text():
 	return ask_detection.stances(relevant_text)
 
 def test(text):
-	return ask_detection.stances([[text, '', '', '', '']])
+	return ask_detection.stances([[text.replace("’", "'"), '', '', '', '']])
 
 def process_mask_tweets(version_description = "", num_to_process = 0):
 	tweet_full_texts = []
@@ -186,7 +186,10 @@ def process_mask_tweets(version_description = "", num_to_process = 0):
 
 		for tweet_text in tweets[:num_to_process]:
 			tweet = json.loads(tweet_text)
-			tweet_full_texts.append([tweet["full_text"], tweet["user"]["id"], tweet["created_at"], tweet["id"]])
+
+			#Json.loads seems to automatically convert unicode characters like \u2019 which is a right single 
+			# quote, which is not typical and will cause issues when looking up items like n't in the lexicons
+			tweet_full_texts.append([tweet["full_text"].replace("’", "'"), tweet["user"]["id"], tweet["created_at"], tweet["id"]])
 
 	output = ask_detection.stances(tweet_full_texts)
 
@@ -217,7 +220,9 @@ def process_sf_tweets(version_description = "", num_to_process = 0):
 
 		for tweet_text in tweets[:num_to_process]:
 			tweet = json.loads(tweet_text)
-			tweet_full_texts.append([tweet["full_text"], tweet["user"]["id"], tweet["created_at"], tweet["id"]])
+			#right single quote which is not typical and will cause issues when looking
+			# up items like n't in the lexicons
+			tweet_full_texts.append([tweet["full_text"].replace("’", "'"), tweet["user"]["id"], tweet["created_at"], tweet["id"]])
 
 	output = ask_detection.stances(tweet_full_texts)
 	Path("./san_fran_mask_stances_output").mkdir(exist_ok=True)
@@ -248,7 +253,9 @@ def process_mask_chyrons(version_description = "", num_to_process = 0):
 
 		for chyron_text in chyrons[:num_to_process]:
 			chyron = json.loads(chyron_text)
-			chyron_data.append([chyron["chyron_text"], chyron["author"], chyron["timestamp"], chyron["doc_id"]])
+			#right single quote which is not typical and will cause issues when looking
+			# up items like n't in the lexicons
+			chyron_data.append([chyron["chyron_text"].replace("’", "'"), chyron["author"], chyron["timestamp"], chyron["doc_id"]])
 
 	output = ask_detection.stances(chyron_data)
 	Path("./chyron_mask_stances_output").mkdir(exist_ok=True)
@@ -280,7 +287,9 @@ def text_to_stances(txt_file_path, version_description = "", num_to_process = 0)
 			num_to_process = len(texts)
 
 		for text in texts[:num_to_process]:
-			data.append([text, "", "", ""])
+			#right single quote which is not typical and will cause issues when looking
+			# up items like n't in the lexicons
+			data.append([text.replace("’", "'").replace("\u2019", "'"), "", "", ""])
 
 	output = ask_detection.stances(data)
 	Path("./user_provided_stance_output").mkdir(exist_ok=True)
@@ -317,7 +326,10 @@ def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestam
 
 		for line_json in jsons[:num_to_process]:
 			line = json.loads(line_json)
-			data.append([line[text_attrb_name], line[author_attrb_name], 
+
+			#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
+			# up items like n't in the lexicons
+			data.append([line[text_attrb_name].replace("’", "'"), line[author_attrb_name], 
 								line[timestamp_attrb_name], line[doc_id_attrb_name]])
 
 	output = ask_detection.stances(data)
@@ -359,11 +371,13 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 		if num_processed > num_to_process:
 			break
 
-		data.append([line[text_label], line[author_label], 
+		#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
+		# up items like n't in the lexicons
+		data.append([line[text_label].replace("’", "'").replace("\u2019", "'"), line[author_label], 
 								line[timestamp_label], line[doc_id_label]])
 
 	output = ask_detection.stances(data)
-	Path("./user_provided_stance_output/user_provided_stance_output").mkdir(exist_ok=True)
+	Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
 	# file name will be nicely underscore separated
@@ -384,6 +398,11 @@ def stances_to_csv(file_to_convert, stance_version):
 	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Evidence', 
 				'Adjudicated Type', 'Adjudicated Trigger', 'Adjudicated Content', 'Adjudicated Belief Stregnth', 'Adjudicated Belief Valuation']
 
+	Path("./stance_output_csvs").mkdir(exist_ok=True)
+
+	if stance_version:
+		stance_version = "_" + stance_version
+	
 	with open('./mask_stances_' + stance_version + '.csv', 'w+') as csvfile:
 		csvwriter = csv.writer(csvfile)
 
@@ -410,9 +429,11 @@ def stances_to_csv_tp_and_fp(file_to_convert, stance_version = ""):
 	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Evidence', 
 				'TP', 'FP']
 
+	Path("./stance_output_csvs").mkdir(exist_ok=True)
+
 	if stance_version:
 		stance_version = "_" + stance_version
-	with open('./mask_stances_output/csv_files/mask_stances' + stance_version + '.csv', 'w+') as csvfile:
+	with open('./stance_output_csvs/mask_stances' + stance_version + '.csv', 'w+') as csvfile:
 		csvwriter = csv.writer(csvfile)
 
 		csvwriter.writerow(columns)

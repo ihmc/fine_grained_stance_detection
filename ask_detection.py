@@ -19,6 +19,12 @@ import health
 import spacy
 from bertopic import BERTopic
 
+
+no_filter_version = False
+mutually_constrained_version = True
+light_verbs_version = True
+exist_case_version = True
+
 #model = BERTopic("distilbert-base-nli-mean-tokens", verbose=True)
 
 #spacy_nlp = spacy.load("en_core_web_lg")
@@ -549,7 +555,6 @@ def extractAskFromSrl(sentence, srl, base_word, t_ask_types):
 	words = [word.lower() for word in srl['words']]
 	descriptions = []
 
-	print(srl)
 
 	#TODO if the same verb is in the sentence twice this will always take the second version of it 
 	# This needs to be fixed, maybe through deleting the verb once it is used
@@ -1538,7 +1543,6 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 				belief_types = appendListNoDuplicates(lem_belief_types, belief_types)
 				if not belief_types:
 					belief_types = [('','','')]
-				print(belief_types)
 				##At sometime may be that belief strength could be 0 which is allowable. Since 0 can be falsy
 				## this line handles that. 
 				#if not strength and strength != 0 and (lem_strength or lem_strength == 0):
@@ -1553,6 +1557,7 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 				strength = belief_types[0][1]
 				event_sentiment = belief_types[0][2]
 
+				print("belief types: ", belief_types)
 				
 
 				belief_strength = 0
@@ -1613,7 +1618,6 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 							elif details.get("modality").lower() in negative_modalities:
 								is_negative_modality = True
 
-							print("Token text: ", token.text, "Head: ", token.head.text, "These are the head's children: ", [child.text for child in token.head.children])
 								
 							for child in token.head.children:
 								child_details = {}
@@ -1625,7 +1629,6 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 								elif morphRootVerb(lowered_child) in strength_and_sentiment_dict:
 									child_details = strength_and_sentiment_dict.get(morphRootVerb(lowered_child))
 
-								print(child_details, "These are the child details")
 								if child_details:
 									if child_details.get("modality").lower() == "negation":
 										root_negation_children_count += 1
@@ -1642,7 +1645,10 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 						if sentiment_adjusted:
 							sentiment_words_and_indices.append((token.head.text, token.head.i - sent.start))
 				
+				
 				for child in token.head.children:
+					if token.text == "use":
+						print(child.text, "child index", child.i, "token index: ", token.i)
 					#Need to ensure the token itself doesn't get considered more than once for adjusting strength or sentiment which occurs when the token is the ROOT
 					if child.i != token.i:
 						if (child.text, child.i - sent.start) not in strength_words_and_indices:
@@ -1655,9 +1661,10 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 							if sentiment_adjusted:
 								sentiment_words_and_indices.append((child.text, child.i - sent.start))
 
+				if token.text == "use":
+					print("calculated strength: ", (belief_strength / strength_word_count) * strength_polarity)
 				possible_triggers.append((token.text, token.i - sent.start, token.tag_, (belief_strength / strength_word_count) * strength_polarity, strength_words_and_indices, (sentiment / sentiment_word_count) * sentiment_polarity, sentiment_words_and_indices, belief_types, is_positive_modality, is_negative_modality, root_negation_children_count))
 
-		print(possible_triggers)
 		for trigger, trigger_index, pos, strength, strength_words_and_indices, sentiment, sentiment_words_and_indices, belief_types, is_positive_modality, is_negative_modality, root_negation_children_count in possible_triggers:
 				for belief_type, belief_type_strength, belief_type_event_sentiment in belief_types:
 					stance_details = process_stance(trigger, pos, sent.text, srl, belief_type, strength, belief_type_event_sentiment)
@@ -1679,7 +1686,6 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 							if sentiment < 0:
 								belief_valuation *= -1
 
-						print("Trigger: ", trigger, "strength: ", strength, "senti: ", belief_valuation, "pos_mod", is_positive_modality, "neg_mod", is_negative_modality, "neg_children: ", root_negation_children_count)
 						if strength * belief_valuation < 0:
 							if is_positive_modality or is_negative_modality:
 								is_odd = root_negation_children_count % 2
@@ -1687,6 +1693,10 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 									strength *= -1
 									belief_valuation *= -1
 								
+						print("trigger: ", trigger, "strength words: ", strength_words_and_indices)
+						#if strength == 0:
+							
+							#strength = 3.00
 
 						#NOTE targeted sentiment is the quotes. Need to be filled in or removed at some point
 						sent_stances.append(build_stance_dict(belief_type, (trigger, trigger_index), content_with_indices, strength_words_and_indices, strength, belief_valuation, '', sentiment_probs, allen_sentiment, sent.text, author, timestamp, doc_id, text_number))
@@ -1816,7 +1826,6 @@ def build_stance_dict(belief_type, belief_trigger_with_index, belief_content_wit
 	strength_trigger_and_content_with_indices.sort(key=lambda x:x[1])
 	belief_string = ' '.join([x[0] for x in strength_trigger_and_content_with_indices])
 
-	print("strength: ", belief_strength, "valuation: ", belief_valuation)
 	attitude = belief_strength * belief_valuation
 	belief_strength = f'{belief_strength:.2f}'
 
@@ -1862,7 +1871,6 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 
 	(arg0_with_indices, arg1_with_indices, arg2_with_indices, arg3_with_indices) = extractStanceFromSrl(sentence, srl, word)
 
-	print("Here is event sentiment before any backoff: ", event_sentiment)
 	'''
 	If no belief types are found from the trigger and the trigger is a light verb than each one 
 	in the sentences arg1 (from SRL) is checked to see if a belief type can be found from it.
@@ -1873,7 +1881,7 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 	if not belief_type:
 		#NOTE When testing output for just mutual constraint of predicate and content comment out all 
 		# of this belief type backoff
-		if  (word in pitt_light_verbs or lem_word in pitt_light_verbs): #(catvar_dict.get(word) or catvar_dict.get(lem_word)):
+		if  ((word in pitt_light_verbs or lem_word in pitt_light_verbs) and light_verbs_version) or no_filter_version: #(catvar_dict.get(word) or catvar_dict.get(lem_word)):
 			belief_type_freq = {}
 			for arg1_word, word_index in arg1_with_indices:
 				lowered_arg1_word = arg1_word.lower()
@@ -1892,7 +1900,6 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 
 				if content_belief_types:
 					for belief_type, sentiment in content_belief_types:
-						print("Belief type: ", belief_type, "sentiment: ", sentiment)
 						if belief_type:
 							if belief_type in belief_type_freq:
 								belief_type_freq[belief_type]["count"] += 1
@@ -1902,9 +1909,9 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 									"sentiment" : sentiment
 								}
 
+			print("freq types: ", belief_type_freq)
 			highest_count = 0
 			types_with_same_count = 1
-			print(belief_type_freq)
 			for content_belief_type, value_dict in belief_type_freq.items():
 				if value_dict["count"] == highest_count:
 					types_with_same_count += 1
@@ -1923,20 +1930,19 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 			#	if belief_types[0] in pitt_stance_targets.keys(): 
 			#		belief_types = [pitt_stance_targets.get(belief_types[0]).get("counterpart_label")]
 
-		elif word in strength_and_sentiment_dict:
+		elif word in strength_and_sentiment_dict and exist_case_version:
 			details = strength_and_sentiment_dict.get(word)
 			if details.get("sentiment"):
 				belief_type = default_belief_type
 				event_sentiment = details.get("sentiment")
 				is_sentiment_belief_type = True
-		elif lem_word in strength_and_sentiment_dict:
+		elif lem_word in strength_and_sentiment_dict and exist_case_version:
 			details = strength_and_sentiment_dict.get(lem_word)
 			if details.get("sentiment"):
 				belief_type = default_belief_type
 				event_sentiment = details.get("sentiment")
 				is_sentiment_belief_type = True
 
-	print("This is belief type right before the return", belief_type)
 
 	print(belief_type)
 	#If there is no belief type at this point there is no point in building the content
@@ -1944,8 +1950,6 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 	if not belief_type:
 		return
 
-	print(is_sentiment_belief_type)
-	print(arg1_with_indices)
 	#NOTE This is back off to get details for a target from for an argument that are most appropriate to the specific domain
 	# in the current case (12/11/2020) that is PITT/Covid. Here we are checking, from SRL, arg1, then arg0, then arg3
 	content = build_content(arg1_with_indices, belief_type, is_sentiment_belief_type)
@@ -1961,7 +1965,6 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 	#if not ask_action:
 	#	return_tuple = (ask_who, ask, ask_recipient, ask_when, ask_negation_dep_based, ask_action, confidence) = extractAskInfoFromDependencies(word, dependencies, t_ask_types)
 
-	print("type: ", belief_type, "senti: ", event_sentiment, "content: ", content)
 	if belief_type and content:
 		return return_tuple
 
@@ -1969,9 +1972,9 @@ def build_content(potential_content_with_indices, trigger_belief_type, is_sentim
 	content_words_with_indices = []
 
 	for word, word_index in potential_content_with_indices:
-		print("Word in content building: ", word)
 		content_belief_types = []
 
+		print("word in content Building: ", word)
 		if word in content_buckets:
 			content_belief_types = content_buckets.get(word).get("belief_types")
 		elif morphRootNoun(word) in content_buckets:
@@ -1979,14 +1982,15 @@ def build_content(potential_content_with_indices, trigger_belief_type, is_sentim
 		elif morphRootVerb(word) in content_buckets:
 			content_belief_types = content_buckets.get(morphRootVerb(word)).get("belief_types")
 
-		print("Belief types gotten for content word: ", content_belief_types)
+		print("types in content building: ", content_belief_types)
+		print("this is is sentiment belief type: ", is_sentiment_belief_type)
 
 		if content_belief_types:
 			for content_belief_type in content_belief_types:
 				#Constrain allowed content by only adding it if the word appears in a counterpart bucket.
 				#If the trigger bucket label is PROTECT the word must be in the PROTECT content bucket.
 				#Also if they belief type came from the sentiment the check words from any content bucket
-				if content_belief_type.get("belief_type") == trigger_belief_type or is_sentiment_belief_type: 
+				if content_belief_type.get("belief_type") == trigger_belief_type or is_sentiment_belief_type or not mutually_constrained_version: 
 					content_words_with_indices.append((word, word_index))
 					break
 
