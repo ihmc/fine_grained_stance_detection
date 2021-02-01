@@ -1529,7 +1529,7 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 
 		for token in sent:
 			if token.dep_ == "ROOT" or token.dep_ == "xcomp" or token.pos_ == "VERB":
-				print(token.text)
+				#print(token.text)
 				root_negation_children_count = 0
 				is_positive_modality = False
 				is_negative_modality = False
@@ -1557,7 +1557,7 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 				strength = belief_types[0][1]
 				event_sentiment = belief_types[0][2]
 
-				print("belief types: ", belief_types)
+				#print("belief types: ", belief_types)
 				
 
 				belief_strength = 0
@@ -1647,8 +1647,8 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 				
 				
 				for child in token.head.children:
-					if token.text == "use":
-						print(child.text, "child index", child.i, "token index: ", token.i)
+					#if token.text == "use":
+					#	#print(child.text, "child index", child.i, "token index: ", token.i)
 					#Need to ensure the token itself doesn't get considered more than once for adjusting strength or sentiment which occurs when the token is the ROOT
 					if child.i != token.i:
 						if (child.text, child.i - sent.start) not in strength_words_and_indices:
@@ -1661,8 +1661,8 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 							if sentiment_adjusted:
 								sentiment_words_and_indices.append((child.text, child.i - sent.start))
 
-				if token.text == "use":
-					print("calculated strength: ", (belief_strength / strength_word_count) * strength_polarity)
+				#if token.text == "use":
+				#	#print("calculated strength: ", (belief_strength / strength_word_count) * strength_polarity)
 				possible_triggers.append((token.text, token.i - sent.start, token.tag_, (belief_strength / strength_word_count) * strength_polarity, strength_words_and_indices, (sentiment / sentiment_word_count) * sentiment_polarity, sentiment_words_and_indices, belief_types, is_positive_modality, is_negative_modality, root_negation_children_count))
 
 		for trigger, trigger_index, pos, strength, strength_words_and_indices, sentiment, sentiment_words_and_indices, belief_types, is_positive_modality, is_negative_modality, root_negation_children_count in possible_triggers:
@@ -1693,7 +1693,7 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 									strength *= -1
 									belief_valuation *= -1
 								
-						print("trigger: ", trigger, "strength words: ", strength_words_and_indices)
+						#print("trigger: ", trigger, "strength words: ", strength_words_and_indices)
 						#if strength == 0:
 							
 							#strength = 3.00
@@ -1909,7 +1909,7 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 									"sentiment" : sentiment
 								}
 
-			print("freq types: ", belief_type_freq)
+			#print("freq types: ", belief_type_freq)
 			highest_count = 0
 			types_with_same_count = 1
 			for content_belief_type, value_dict in belief_type_freq.items():
@@ -1944,7 +1944,7 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 				is_sentiment_belief_type = True
 
 
-	print(belief_type)
+	#print(belief_type)
 	#If there is no belief type at this point there is no point in building the content
 	# so the function is cut short in order to be more efficient
 	if not belief_type:
@@ -1974,7 +1974,7 @@ def build_content(potential_content_with_indices, trigger_belief_type, is_sentim
 	for word, word_index in potential_content_with_indices:
 		content_belief_types = []
 
-		print("word in content Building: ", word)
+		#print("word in content Building: ", word)
 		if word in content_buckets:
 			content_belief_types = content_buckets.get(word).get("belief_types")
 		elif morphRootNoun(word) in content_buckets:
@@ -1982,8 +1982,8 @@ def build_content(potential_content_with_indices, trigger_belief_type, is_sentim
 		elif morphRootVerb(word) in content_buckets:
 			content_belief_types = content_buckets.get(morphRootVerb(word)).get("belief_types")
 
-		print("types in content building: ", content_belief_types)
-		print("this is is sentiment belief type: ", is_sentiment_belief_type)
+		#print("types in content building: ", content_belief_types)
+		#print("this is is sentiment belief type: ", is_sentiment_belief_type)
 
 		if content_belief_types:
 			for content_belief_type in content_belief_types:
