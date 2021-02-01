@@ -306,12 +306,16 @@ def text_to_stances(txt_file_path, version_description = "", num_to_process = 0)
 			
 	return output
 
-#User provides a path to a json file for stance processing. The extension does not have to be json, 
-# but each line must be a single json structure that has an attribute for the text to process,
-# some kind of author identifier, a timestamp, and some kind of document identifier.
-# For example if the json represented a tweet there should be the author id, timestamp of the tweet,
-# and the id of the tweet. User must provide the name of each of these attributes that is found in
-# each json structure.
+'''
+User provides a path to a json file for stance processing. The extension does not have to be json, 
+ but each line must be a single json structure that has an attribute for the text to process,
+ some kind of author identifier, a timestamp, and some kind of document identifier.
+ For example if the json represented a tweet there should be the author id, timestamp of the tweet,
+ and the id of the tweet. User must provide the name of each of these attributes that is found in
+ each json structure.
+
+In order to handle neseted json the user should put (in the appropriate order) the attributes comma separated.
+'''
 def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestamp_attrb_name, 
 						doc_id_attrb_name, version_description = "", num_to_process = 0):
 	data = []
@@ -327,10 +331,23 @@ def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestam
 		for line_json in jsons[:num_to_process]:
 			line = json.loads(line_json)
 
+			nested_text_attrbs = text_attrb_name.split(",")
+			nested_author_attrbs = author_attrb_name.split(",")
+			nested_timestamp_attrbs = timestamp_attrb_name.split(",")
+			nested_doc_id_attrbs = doc_id_attrb_name.split(",")
+
+			text = handle_nested_json(nested_text_attrbs, line)
+			author = handle_nested_json(nested_author_attrbs, line)
+			timestamp = handle_nested_json(nested_timestamp_attrbs, line)
+			doc_id = handle_nested_json(nested_doc_id_attrbs, line)
+			
+				
+
 			#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
 			# up items like n't in the lexicons
-			data.append([line[text_attrb_name].replace("’", "'"), line[author_attrb_name], 
-								line[timestamp_attrb_name], line[doc_id_attrb_name]])
+			#data.append([line[text_attrb_name].replace("’", "'"), line[author_attrb_name], 
+			#					line[timestamp_attrb_name], line[doc_id_attrb_name]])
+			data.append([text.replace("’", "'"), author, timestamp, doc_id])
 
 	output = ask_detection.stances(data)
 	Path("./user_provided_stance_output").mkdir(exist_ok=True)
@@ -464,3 +481,14 @@ def stances_to_csv_tp_and_fp(file_to_convert, stance_version = ""):
 				row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
 						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['evidence']]
 				csvwriter.writerow(row)
+
+
+def handle_nested_json(attributes, json_object):
+	value = json_object
+
+	for attrib in attributes:
+		value = value[attrib]
+
+	return(value)
+
+
