@@ -1712,7 +1712,7 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 					exist_stance_indices.append(index)
 
 			if len(exist_stance_indices) != len(sent_stances):
-				for index in exist_stance_indices:
+				for index in sorted(exist_stance_indices, reverse=True):
 					del sent_stances[index]
 
 			stances.extend(sent_stances)
