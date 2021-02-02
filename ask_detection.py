@@ -1647,8 +1647,6 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 				
 				
 				for child in token.head.children:
-					#if token.text == "use":
-					#	#print(child.text, "child index", child.i, "token index: ", token.i)
 					#Need to ensure the token itself doesn't get considered more than once for adjusting strength or sentiment which occurs when the token is the ROOT
 					if child.i != token.i:
 						if (child.text, child.i - sent.start) not in strength_words_and_indices:
@@ -1661,8 +1659,6 @@ def get_stances(text_number, text, author = '', timestamp = '', doc_id = ''):
 							if sentiment_adjusted:
 								sentiment_words_and_indices.append((child.text, child.i - sent.start))
 
-				#if token.text == "use":
-				#	#print("calculated strength: ", (belief_strength / strength_word_count) * strength_polarity)
 				possible_triggers.append((token.text, token.i - sent.start, token.tag_, (belief_strength / strength_word_count) * strength_polarity, strength_words_and_indices, (sentiment / sentiment_word_count) * sentiment_polarity, sentiment_words_and_indices, belief_types, is_positive_modality, is_negative_modality, root_negation_children_count))
 
 		for trigger, trigger_index, pos, strength, strength_words_and_indices, sentiment, sentiment_words_and_indices, belief_types, is_positive_modality, is_negative_modality, root_negation_children_count in possible_triggers:
@@ -1908,7 +1904,9 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 									"count" : 1,
 									"sentiment" : sentiment
 								}
+				
 
+			#print("arg1 words: ", arg1_with_indices)
 			#print("freq types: ", belief_type_freq)
 			highest_count = 0
 			types_with_same_count = 1
