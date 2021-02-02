@@ -5,6 +5,8 @@ import json
 import email
 import os
 import csv
+import math
+import numpy as np
 import lxml.html
 from pathlib import Path
 
@@ -375,7 +377,6 @@ separate them with a pipe (|) character. Please note these must be in the correc
 '''
 def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label, 
 						doc_id_label, version_description = "", num_to_process = 0):
-	data = []
 	num_processed = 0
 	
 	df = pd.read_csv(csv_file_path)
@@ -385,25 +386,12 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 	if num_to_process == 0:
 		num_to_process = len(df.index)
 
-	for row in df.iterrows():
-		timestamp_data = ''
-		#This step is necessary cause each row of the dataframe is a tuple (index, row info)
-		row_info = row[1]
-		num_processed += 1
-		if num_processed > num_to_process:
-			break
+	#This is to decide how many chunks to split the data into to process batches of the specified
+	# number. I will need to probably do the number as a variable that can be passed in by the uer
+	num_chunks = math.floor(num_to_process / 10000)
+	if num_chunks == 0:
+		num_chunks = 1
 
-		labels = timestamp_label.split("|")
-
-		for label in labels:
-			timestamp_data += row_info[label] + " "
-
-		#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
-		# up items like n't in the lexicons
-		data.append([row_info[text_label].replace("’", "'").replace("\u2019", "'"), row_info[author_label], 
-								timestamp_data, row_info[doc_id_label]])
-
-	output = ask_detection.stances(data)
 	Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
@@ -411,12 +399,69 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 	if version_description:
 		version_description = "_" + version_description
 
-	with open("./user_provided_stance_output/user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
-		for stance in output["stances"]:
-			user_json_stances.write(json.dumps(stance))
-			user_json_stances.write("\n")
+	total_output = []
+	with open("./user_provided_stance_output/user_provided_csv_stances" + version_description + ".jsonl", "w+") as user_json_stances:
+		for chunk in np.array_split(df, num_chunks):
+			data = []
+			chunk_output = {"stances": []}
+			for row in chunk.iterrows():
+				timestamp_data = ''
+				#This step is necessary cause each row of the dataframe is a tuple (index, row info)
+				row_info = row[1]
+				num_processed += 1
+
+				if num_processed > num_to_process:
+					break
+
+				labels = timestamp_label.split("|")
+
+				for label in labels:
+					timestamp_data += row_info[label] + " "
+
+				#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
+				# up items like n't in the lexicons
+				data.append([row_info[text_label].replace("’", "'").replace("\u2019", "'"), row_info[author_label], 
+								timestamp_data, row_info[doc_id_label]])
+
+			chunk_output = ask_detection.stances(data)
+			total_output.extend(chunk_output["stances"])
+
+			for stance in chunk_output["stances"]:
+				user_json_stances.write(json.dumps(stance))
+				user_json_stances.write("\n")
+
+	#for row in df.iterrows():
+	#	timestamp_data = ''
+	#	#This step is necessary cause each row of the dataframe is a tuple (index, row info)
+	#	row_info = row[1]
+	#	num_processed += 1
+	#	if num_processed > num_to_process:
+	#		break
+
+	#	labels = timestamp_label.split("|")
+
+	#	for label in labels:
+	#		timestamp_data += row_info[label] + " "
+
+	#	#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
+	#	# up items like n't in the lexicons
+	#	data.append([row_info[text_label].replace("’", "'").replace("\u2019", "'"), row_info[author_label], 
+	#							timestamp_data, row_info[doc_id_label]])
+
+	#output = ask_detection.stances(data)
+	#Path("./user_provided_stance_output").mkdir(exist_ok=True)
+
+	##Add underscore to front of version description if one exist so that the 
+	## file name will be nicely underscore separated
+	#if version_description:
+	#	version_description = "_" + version_description
+
+	#with open("./user_provided_stance_output/user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
+		#for stance in output["stances"]:
+		#	user_json_stances.write(json.dumps(stance))
+		#	user_json_stances.write("\n")
 			
-	return output
+	return total_output
 
 
 #NOTE Stance version should be a string (underscore separated) that will be append to the file name 
