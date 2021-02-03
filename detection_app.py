@@ -1,4 +1,4 @@
-# ask_detection.py must be in same directory as this file for import to work
+,# ask_detection.py must be in same directory as this file for import to work
 # This is IHMC ask detction code
 import ask_detection
 import json
@@ -388,7 +388,7 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 
 	#This is to decide how many chunks to split the data into to process batches of the specified
 	# number. I will need to probably do the number as a variable that can be passed in by the uer
-	num_chunks = math.floor(num_to_process / 10000)
+	num_chunks = math.floor(len(df.index) / 10)
 	if num_chunks == 0:
 		num_chunks = 1
 
@@ -399,7 +399,7 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 	if version_description:
 		version_description = "_" + version_description
 
-	total_output = []
+	#total_output = []
 	with open("./user_provided_stance_output/user_provided_csv_stances" + version_description + ".jsonl", "w+") as user_json_stances:
 		for chunk in np.array_split(df, num_chunks):
 			data = []
@@ -424,11 +424,13 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 								timestamp_data, row_info[doc_id_label]])
 
 			chunk_output = ask_detection.stances(data)
-			total_output.extend(chunk_output["stances"])
+			#total_output.extend(chunk_output["stances"])
 
 			for stance in chunk_output["stances"]:
 				user_json_stances.write(json.dumps(stance))
 				user_json_stances.write("\n")
+
+			print("Batch finished")
 
 	#for row in df.iterrows():
 	#	timestamp_data = ''
@@ -527,6 +529,41 @@ def stances_to_csv_tp_and_fp(file_to_convert, stance_version = ""):
 						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['evidence']]
 				csvwriter.writerow(row)
 
+def stances_to_csv_mask_attitudes(file_to_convert, stance_version = ""):
+	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Attitude', 'Evidence']
+
+	Path("./stance_output_csvs").mkdir(exist_ok=True)
+
+	if stance_version:
+		stance_version = "_" + stance_version
+	with open('./stance_output_csvs/mask_stances' + stance_version + '.csv', 'w+') as csvfile:
+		csvwriter = csv.writer(csvfile)
+
+		csvwriter.writerow(columns)
+
+		line_number = 1
+		evidence = ''
+		with open(file_to_convert, 'r') as mask_stances:
+			for stance in mask_stances.readlines():
+				stance_dict = json.loads(stance)
+
+				# Keep the line number the same if the stance is on the same evidence as the previous stance
+				if not evidence:
+					evidence = stance_dict['evidence']
+				elif evidence != stance_dict['evidence']:
+					evidence = stance_dict['evidence']
+					line_number += 1
+
+				is_mask_related = False
+				if stance_dict['belief_type'] == "PROTECT" or stance_dict['belief_type'] == "RESTRICT" or stance_dict['belief_type'] == "EXIST":
+					for word in stance_dict['belief_content'].split(" "):
+						if ask_detection.morphRootNoun(word).lower() == "mask" or word.lower() == "mask":
+							is_mask_related = True
+
+				if is_mask_related:
+					row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
+							stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['attitude'], stance_dict['evidence']]
+					csvwriter.writerow(row)
 
 def handle_nested_json(attributes, json_object):
 	value = json_object
