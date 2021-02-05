@@ -145,15 +145,16 @@ def getSrl(text, links):
 
 	return {'email': text, 'framing': sorted_framing, 'asks': sorted_asks}
 
-def stances(text_array):
+def stances(text_array, text_number):
 	stances = []
 
-	for index, text in enumerate(text_array):
-		line_stances = get_stances(index, text[0], text[1], text[2], text[3])
+	for text in text_array:
+		text_number += 1
+		line_stances = get_stances(text_number, text[0], text[1], text[2], text[3])
 		if line_stances:
 			stances.extend(line_stances)
 
-	return {'stances': stances}
+	return ({'stances': stances}, text_number)
 
 def morphRootVerb(word):
 	wlem = WordNetLemmatizer()

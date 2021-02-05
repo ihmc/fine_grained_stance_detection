@@ -168,15 +168,16 @@ def extract_relevant_text():
 	for text in df:
 		has_topic(text, ['mask'])
 
-	return ask_detection.stances(relevant_text)
+	return ask_detection.stances(relevant_text, 0)[0]
 
 def test(text):
-	return ask_detection.stances([[text.replace("’", "'"), '', '', '', '']])
+	return ask_detection.stances([[text.replace("’", "'"), '', '', '', '']], 0)[0]
 
 def process_mask_tweets(version_description = "", num_to_process = 0):
 	tweet_full_texts = []
 	tweets_file = "./mask_lines.txt"
 	
+	text_number = 0 
 	with open(tweets_file, 'r') as tweet_file:
 		progress_count = 0
 		tweets = tweet_file.read().splitlines()
@@ -193,7 +194,7 @@ def process_mask_tweets(version_description = "", num_to_process = 0):
 			# quote, which is not typical and will cause issues when looking up items like n't in the lexicons
 			tweet_full_texts.append([tweet["full_text"].replace("’", "'"), tweet["user"]["id"], tweet["created_at"], tweet["id"]])
 
-	output = ask_detection.stances(tweet_full_texts)
+	(output, text_number) = ask_detection.stances(tweet_full_texts, text_number)
 
 	Path("./mask_stances_output").mkdir(exist_ok=True)
 
@@ -211,6 +212,7 @@ def process_mask_tweets(version_description = "", num_to_process = 0):
 def process_sf_tweets(version_description = "", num_to_process = 0):
 	tweet_full_texts = []
 	tweets_file = "./sf_masks.json"
+	text_number = 0
 	with open(tweets_file, 'r') as tweet_file:
 		progress_count = 0
 		tweets = tweet_file.read().splitlines()
@@ -226,7 +228,7 @@ def process_sf_tweets(version_description = "", num_to_process = 0):
 			# up items like n't in the lexicons
 			tweet_full_texts.append([tweet["full_text"].replace("’", "'"), tweet["user"]["id"], tweet["created_at"], tweet["id"]])
 
-	output = ask_detection.stances(tweet_full_texts)
+	(output, text_number) = ask_detection.stances(tweet_full_texts, text_number)
 	Path("./san_fran_mask_stances_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
@@ -244,6 +246,7 @@ def process_sf_tweets(version_description = "", num_to_process = 0):
 def process_mask_chyrons(version_description = "", num_to_process = 0):
 	chyron_data = []
 	chyrons_file = "./mask_dist_chyrons.txt"
+	text_number = 0
 	with open(chyrons_file, 'r') as chyron_file:
 		progress_count = 0
 		chyrons = chyron_file.read().splitlines()
@@ -259,7 +262,8 @@ def process_mask_chyrons(version_description = "", num_to_process = 0):
 			# up items like n't in the lexicons
 			chyron_data.append([chyron["chyron_text"].replace("’", "'"), chyron["author"], chyron["timestamp"], chyron["doc_id"]])
 
-	output = ask_detection.stances(chyron_data)
+	(output, text_number) = ask_detection.stances(tweet_full_texts, text_number)
+
 	Path("./chyron_mask_stances_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
@@ -279,6 +283,7 @@ def process_mask_chyrons(version_description = "", num_to_process = 0):
 def text_to_stances(txt_file_path, version_description = "", num_to_process = 0):
 	data = []
 	texts_file = txt_file_path
+	text_number = 0
 	with open(texts_file, 'r', encoding="utf-8") as text_file:
 		progress_count = 0
 		texts = text_file.read().splitlines()
@@ -293,7 +298,7 @@ def text_to_stances(txt_file_path, version_description = "", num_to_process = 0)
 			# up items like n't in the lexicons
 			data.append([text.replace("’", "'").replace("\u2019", "'"), "", "", ""])
 
-	output = ask_detection.stances(data)
+	(output, text_number) = ask_detection.stances(data, text_number)
 	Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
@@ -321,6 +326,7 @@ In order to handle neseted json the user should put (in the appropriate order) t
 def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestamp_attrb_name, 
 						doc_id_attrb_name, version_description = "", num_to_process = 0):
 	data = []
+	text_number = 0
 	with open(json_file_path, 'r') as json_file:
 		progress_count = 0
 		jsons = json_file.read().splitlines()
@@ -351,7 +357,7 @@ def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestam
 			#					line[timestamp_attrb_name], line[doc_id_attrb_name]])
 			data.append([text.replace("’", "'"), author, timestamp, doc_id])
 
-	output = ask_detection.stances(data)
+	(output, text_number) = ask_detection.stances(data, text_number)
 	Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
@@ -399,7 +405,8 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 	if version_description:
 		version_description = "_" + version_description
 
-	#total_output = []
+	total_output = []
+	text_number = 0
 	with open("./user_provided_stance_output/user_provided_csv_stances" + version_description + ".jsonl", "w+") as user_json_stances:
 		for chunk in np.array_split(df, num_chunks):
 			data = []
@@ -423,8 +430,8 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 				data.append([row_info[text_label].replace("’", "'").replace("\u2019", "'"), row_info[author_label], 
 								timestamp_data, row_info[doc_id_label]])
 
-			chunk_output = ask_detection.stances(data)
-			#total_output.extend(chunk_output["stances"])
+			(chunk_output, text_number) = ask_detection.stances(data, text_number)
+			total_output.extend(chunk_output["stances"])
 
 			for stance in chunk_output["stances"]:
 				user_json_stances.write(json.dumps(stance))
