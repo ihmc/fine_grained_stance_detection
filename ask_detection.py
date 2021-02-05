@@ -17,7 +17,7 @@ import re
 import subprocess
 import health
 import spacy
-from bertopic import BERTopic
+#from bertopic import BERTopic
 
 
 no_filter_version = False

@@ -1,4 +1,4 @@
-,# ask_detection.py must be in same directory as this file for import to work
+# ask_detection.py must be in same directory as this file for import to work
 # This is IHMC ask detction code
 import ask_detection
 import json

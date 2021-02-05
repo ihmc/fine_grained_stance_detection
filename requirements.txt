@@ -6,10 +6,10 @@ requests
 lxml
 stanza
 pandas
-xlrd
+numpy
+xlrd==1.2.0
 spacy
-allennlp
-allennlp
-allennlp_models
+allennlp==2.0.0
+allennlp_models==2.0.0
 docutils<0.16,>=0.10
 #https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-2.1.0/en_core_web_sm-2.1.0.tar.gz
