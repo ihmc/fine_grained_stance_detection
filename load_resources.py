@@ -236,8 +236,15 @@ for row in df.iterrows():
 		}
 
 
-overlap = []
+modality_overlap = []
+content_overlap = []
 for word in trigger_buckets.keys():
 	if word in strength_and_sentiment_dict:
-		overlap.append(word)
+		modality_overlap.append(word)
 
+	if word in content_buckets.keys():
+		content_overlap.append(word)
+
+#print(content_buckets)
+#print(sorted(content_buckets.keys()))
+#print(content_overlap, " ", len(content_overlap))
