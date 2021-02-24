@@ -1,4 +1,0 @@
-VB=trigger !< /^Trig/ < ** [$.. (S !< NP < (VP < (VP < (VB=target !< AUX)))) | $.. (S < NP < (VP < (VP=target < (VB !< AUX)))) ]
-
-insert (TargLabel) >1 target
-insert (TrigLabel) >1 trigger

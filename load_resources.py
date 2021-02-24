@@ -245,6 +245,15 @@ for word in trigger_buckets.keys():
 	if word in content_buckets.keys():
 		content_overlap.append(word)
 
+
 #print(content_buckets)
 #print(sorted(content_buckets.keys()))
 #print(content_overlap, " ", len(content_overlap))
+
+#trig_and_mod = []
+#for btype, words in candidate_triggers.items():
+#	for word_dict in words:
+#		if word_dict["word"] in strength_and_sentiment_dict:
+#			trig_and_mod.append(word_dict["word"])
+#
+#print(trig_and_mod, " ", len(trig_and_mod))

@@ -1,4 +1,0 @@
-VP < (VB=trigger !< /^Trig/ < VoicePassive < ** $.. (S < (VP < (VP < VB=target)))) $,, (VB [ < is | < am | < are | < was | < were | < be | < being | < been | < get | < gets | < got | < gotten | < getting ]) 
-
-insert (TrigLabel) >1 trigger
-insert (TargLabel) >1 target

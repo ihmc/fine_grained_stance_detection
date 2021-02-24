@@ -1,6 +1,0 @@
-MD=modal !< /^Trig/ < ** $ (VB=verb !< AUX)
-
-insert  (TargLabel) >2 verb
-
-insert (TrigLabel) >1 modal
-

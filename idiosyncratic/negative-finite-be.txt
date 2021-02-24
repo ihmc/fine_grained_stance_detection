@@ -1,6 +1,0 @@
-RB=trigger !< TrigNegation & [ <  not | < n't  ]  $ (VB=target !< AUX  & [ < is | < am | < are | < were | < was ] ) 
-
-insert (TrigNegation) >1 trigger
-insert (TargNegation) >1 target
-
-
