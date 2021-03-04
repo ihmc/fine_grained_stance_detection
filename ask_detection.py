@@ -7,7 +7,7 @@ sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allenn
 #predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/bert-base-srl-2020.03.24.tar.gz")
 predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/structured-prediction-srl-bert.2020.12.15.tar.gz")
 
-import health
+#import health
 import unicodedata
 import json
 import nltk
@@ -15,7 +15,6 @@ import csv
 import os
 import re
 import subprocess
-import health
 import spacy
 #from bertopic import BERTopic
 
