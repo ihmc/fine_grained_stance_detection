@@ -2,16 +2,17 @@ from flask import Flask
 from flask import request
 from flask_basicauth import BasicAuth
 
-# ask_detection.py must be in same directory as this file for import to work
-# This is IHMC ask detction code
-import ask_detection
 import json
+import detection_app
+
+
+'''
 from spacy.lang.en import English # updated
 from spacy.matcher import Matcher
 
 nlp = English()
 nlp.add_pipe(nlp.create_pipe('sentencizer')) # updated
-
+'''
 
 app = Flask(__name__)
 app.config['BASIC_AUTH_USERNAME'] = 'panacea'
@@ -21,6 +22,7 @@ basic_auth = BasicAuth(app)
 
 print("My name is:\t%s" % __name__)
 
+'''
 @app.route("/health")
 def health():
     health = ask_detection.health.getHealth()
@@ -107,6 +109,14 @@ abbrev_mappings = {
 	"unsub": "unsubscribe",
 	"u": "you"
 }
+'''
+
+@app.route("/stance/sentence", methods = ['POST'])
+def get_sentence_stance():
+	payload = request.get_json();
+	health = detection_app.test(payload["text"])
+	return json.dumps(health)
+
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5000)
+	app.run(host='0.0.0.0', port=5000)
