@@ -292,7 +292,7 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 
 					if stance_details:
 						belief_type = stance_details[0]
-						belief_valuation = stance_details[1]
+						sentiment_strength = stance_details[1]
 						content_with_indices = stance_details[2]
 
 						content_with_indices.sort(key=lambda x:x[1])
@@ -304,16 +304,16 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 						# be 3.00
 						if stance_details[3]:
 							strength = 3.00
-							#belief_valuation = sentiment
+							#sentiment_strength = sentiment
 							if sentiment < 0:
-								belief_valuation *= -1
+								sentiment_strength *= -1
 
-						if strength * belief_valuation < 0:
+						if strength * sentiment_strength < 0:
 							if is_positive_modality or is_negative_modality:
 								is_odd = root_negation_children_count % 2
 								if (is_positive_modality and is_odd) or (is_negative_modality and not is_odd):
 									strength *= -1
-									belief_valuation *= -1
+									sentiment_strength *= -1
 								
 						#print("trigger: ", trigger, "strength words: ", strength_words_and_indices)
 						#if strength == 0:
@@ -321,7 +321,7 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 							#strength = 3.00
 
 						#NOTE targeted sentiment is the quotes. Need to be filled in or removed at some point
-						sent_stances.append(build_stance_dict(belief_type, (trigger, trigger_index), content_with_indices, strength_words_and_indices, strength, belief_valuation, '', sentiment_probs, allen_sentiment, sent.text, author, timestamp, doc_id, text_number))
+						sent_stances.append(build_stance_dict(belief_type, (trigger, trigger_index), content_with_indices, strength_words_and_indices, strength, sentiment_strength, '', sentiment_probs, allen_sentiment, sent.text, author, timestamp, doc_id, text_number))
 
 		
 		if sent_stances:
@@ -425,7 +425,7 @@ def get_valuation_score(sentiment_score):
 	else:
 		return 0
 
-def build_stance_dict(belief_type, belief_trigger_with_index, belief_content_with_indices, strength_words_and_indices, belief_strength, belief_valuation, target_sentiment, sentiment_probs, allen_sentiment, sentence, author, timestamp, doc_id, text_number):
+def build_stance_dict(belief_type, belief_trigger_with_index, belief_content_with_indices, strength_words_and_indices, belief_strength, sentiment_strength, target_sentiment, sentiment_probs, allen_sentiment, sentence, author, timestamp, doc_id, text_number):
 	stance_dict = {}
 	trigger_and_content_with_indices = belief_content_with_indices
 
@@ -448,7 +448,7 @@ def build_stance_dict(belief_type, belief_trigger_with_index, belief_content_wit
 	strength_trigger_and_content_with_indices.sort(key=lambda x:x[1])
 	belief_string = ' '.join([x[0] for x in strength_trigger_and_content_with_indices])
 
-	attitude = belief_strength * belief_valuation
+	attitude = belief_strength * sentiment_strength
 	belief_strength = f'{belief_strength:.2f}'
 
 	#In cases where the default belief type is used, meaning belief type was gotten from sentiment words,
@@ -456,13 +456,13 @@ def build_stance_dict(belief_type, belief_trigger_with_index, belief_content_wit
 	if belief_type == default_belief_type:
 		belief_trigger = ''
 			
-	stance_dict["stance_rep"] = f'<{belief_type}[{belief_trigger}[{belief_content}]],{belief_strength},{belief_valuation}>'
+	stance_dict["stance_rep"] = f'<{belief_type}[{belief_trigger}[{belief_content}]],{belief_strength},{sentiment_strength}>'
 	stance_dict["belief"] = f'{belief_type}[{belief_trigger}[{belief_content}]]'
 	stance_dict["belief_string"] = belief_string
 	stance_dict["sentiment_string"] = sentiment_string
 	stance_dict["evidence"] = sentence
 	stance_dict["belief_strength"] = belief_strength
-	stance_dict["belief_valuation"] = belief_valuation
+	stance_dict["sentiment_strength"] = sentiment_strength
 	stance_dict["attitude"] = f'{attitude:.2f}' #NOTE may change to strength times event senti
 	stance_dict["attribution"] = {
 		"author" : author,
