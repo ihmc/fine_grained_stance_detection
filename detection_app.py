@@ -1,6 +1,5 @@
 # ask_detection.py must be in same directory as this file for import to work
 # This is IHMC ask detction code
-import ask_detection
 import json
 import email
 import os
@@ -16,6 +15,14 @@ from spacy.matcher import Matcher
 from nltk import word_tokenize
 from nltk.stem import PorterStemmer
 import pandas as pd
+#import ask_detection
+import stance_detection
+#from load_resources import catvar_dict, lcs_dict, strength_and_sentiment_dict, trigger_buckets, content_buckets, perform_verbs, give_verbs, lose_verbs, gain_verbs#, protect_verbs, reject_verbs
+import load_resources
+
+stance_detection.init_nlp_tools(load_resources.spacy_nlp, load_resources.srl_predictor, load_resources.sentiment_predictor, load_resources.morphRootVerb, load_resources.morphRootNoun, load_resources.catvar_dict, load_resources.v_alternates)
+
+domain_configs = load_resources.domain_configs
 
 nlp = English()
 nlp.add_pipe(nlp.create_pipe('sentencizer')) # updated
@@ -170,8 +177,9 @@ def extract_relevant_text():
 
 	return ask_detection.stances(relevant_text, 0)[0]
 
-def test(text):
-	return ask_detection.stances([[text.replace("’", "'"), '', '', '', '']], 0)[0]
+def test(text, domain_name):
+	
+	return stance_detection.stances([[text.replace("’", "'"), '', '', '', '']], 0, domain_configs[domain_name])[0]
 
 def process_mask_tweets(version_description = "", num_to_process = 0):
 	tweet_full_texts = []

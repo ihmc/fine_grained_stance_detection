@@ -1,10 +1,31 @@
+#Native python modules
 import os
 import re
 import csv
-import pandas as pd
 import json
 
+#Third party modules
+import pandas as pd
+import spacy
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet as wn
+from allennlp.predictors.predictor import Predictor
+
+#Local modules
 from ask_mappings import panacea_ask_types, pitt_ask_types
+from catvar_v_alternates import v_alternates
+from ask_mappings import sashank_categories, panacea_ask_types
+
+#Init spacy
+#spacy_nlp = spacy.load("en_core_web_lg")
+spacy_nlp = spacy.load("en_core_web_sm")
+
+
+
+#Init allennlp predictors
+sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/sst-roberta-large-2020.06.08.tar.gz")
+srl_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/structured-prediction-srl-bert.2020.12.15.tar.gz")
 
 project_path = os.path.abspath(os.path.dirname(__file__))
 
@@ -185,65 +206,77 @@ for rule in word_specific_rules:
 '''
 #print(lexical_specific_rules)
 
-#NOTE keep_default_na=False is important to avoid "nan" in the built dictionary when pandas encounters
-# an empty cell
-df = pd.read_excel(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx"), keep_default_na=False)
-strength_and_sentiment_dict = {}
-for row in df.iterrows():
-	row = row[1]
-	strength_and_sentiment_dict[row["Lexical item"]] = {
-		"strength": row["Belief Value"],
-		"sentiment": row["Sentiment Value"],
-		"modality": row["Modality"]
-	}
 
-df = pd.read_excel(os.path.join(here, "TriggerBuckets.xlsx"))
-trigger_buckets = {}
-for row in df.iterrows():
-	row = row[1]
+def build_modality_lexicon(modality_file):
+	#NOTE keep_default_na=False is important to avoid "nan" in the built dictionary when pandas encounters
+	# an empty cell
+	df = pd.read_excel(modality_file, keep_default_na=False)
+	strength_and_sentiment_dict = {}
+	for row in df.iterrows():
+		row = row[1]
+		strength_and_sentiment_dict[row["Lexical item"]] = {
+			"strength": row["Belief Value"],
+			"sentiment": row["Sentiment Value"],
+			"modality": row["Modality"]
+		}
 
-	if row["Lexical item"] in trigger_buckets:
-		trigger_buckets.get(row["Lexical item"]).get("belief_types").append({
-			"belief_type": row["Belief"],
-			"strength": row["Default Belief Value"],
-			"sentiment": row["Default Sentiment Value"],
-		})
-	else:
-		trigger_buckets[row["Lexical item"]] = {
-			"belief_types": [{
+	return strength_and_sentiment_dict
+
+def build_trigger_buckets(triggers_file):
+	#df = pd.read_excel(os.path.join(here, "TriggerBuckets.xlsx"))
+	df = pd.read_excel(triggers_file)
+	trigger_buckets = {}
+	for row in df.iterrows():
+		row = row[1]
+
+		if row["Lexical item"] in trigger_buckets:
+			trigger_buckets.get(row["Lexical item"]).get("belief_types").append({
 				"belief_type": row["Belief"],
 				"strength": row["Default Belief Value"],
 				"sentiment": row["Default Sentiment Value"],
-			}]
-		}
+			})
+		else:
+			trigger_buckets[row["Lexical item"]] = {
+				"belief_types": [{
+					"belief_type": row["Belief"],
+					"strength": row["Default Belief Value"],
+					"sentiment": row["Default Sentiment Value"],
+				}]
+			}
 
-df = pd.read_excel(os.path.join(here, "Content Buckets.xlsx"))
-content_buckets = {}
-for row in df.iterrows():
-	row = row[1]
-
-	if row["Lexical item"] in content_buckets:
-		content_buckets.get(row["Lexical item"]).get("belief_types").append({
-			"belief_type": row["Belief"],
-			"sentiment": row["Sentiment Value"]
-		})
-	else:
-		content_buckets[row["Lexical item"]] = {
-			"belief_types": [{
-					"belief_type": row["Belief"], 
-					"sentiment": row["Sentiment Value"]
-			}]
-		}
+	return trigger_buckets
 
 
-modality_overlap = []
-content_overlap = []
-for word in trigger_buckets.keys():
-	if word in strength_and_sentiment_dict:
-		modality_overlap.append(word)
+def build_content_buckets(content_file):
+	df = pd.read_excel(content_file)
+	content_buckets = {}
+	for row in df.iterrows():
+		row = row[1]
 
-	if word in content_buckets.keys():
-		content_overlap.append(word)
+		if row["Lexical item"] in content_buckets:
+			content_buckets.get(row["Lexical item"]).get("belief_types").append({
+				"belief_type": row["Belief"],
+				"sentiment": row["Sentiment Value"]
+			})
+		else:
+			content_buckets[row["Lexical item"]] = {
+				"belief_types": [{
+						"belief_type": row["Belief"], 
+						"sentiment": row["Sentiment Value"]
+				}]
+			}
+
+	return content_buckets
+
+
+#modality_overlap = []
+#content_overlap = []
+#for word in trigger_buckets.keys():
+#	if word in strength_and_sentiment_dict:
+#		modality_overlap.append(word)
+#
+#	if word in content_buckets.keys():
+#		content_overlap.append(word)
 
 
 #print(content_buckets)
@@ -257,3 +290,49 @@ for word in trigger_buckets.keys():
 #			trig_and_mod.append(word_dict["word"])
 #
 #print(trig_and_mod, " ", len(trig_and_mod))
+
+
+def morphRootVerb(word):
+	wlem = WordNetLemmatizer()
+	return wlem.lemmatize(word.lower(),wn.VERB)
+
+def morphRootNoun(word):
+	wlem = WordNetLemmatizer()
+	return wlem.lemmatize(word.lower(),wn.NOUN)
+
+
+domain_configs = {
+	"covid": {
+		"trigger_buckets": build_trigger_buckets(os.path.join(here, "TriggerBuckets.xlsx")),
+		"content_buckets": build_content_buckets(os.path.join(here, "Content Buckets.xlsx")),
+		"modality_lexicon": build_modality_lexicon(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx")),
+		"light_verbs": [
+			"use",
+			"place",
+			"take",
+			"make",
+			"do",
+			"give",
+			"have",
+			"put",
+			"be",
+		]
+	},
+	"lvasc": {
+		"trigger_buckets": build_trigger_buckets(os.path.join(here, "ARLIS_triggers.xlsx")),
+		"content_buckets": build_content_buckets(os.path.join(here, "ARLIS_contents.xlsx")),
+		"modality_lexicon": build_modality_lexicon(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx")),
+		"light_verbs": [
+			"use",
+			"place",
+			"take",
+			"make",
+			"do",
+			"give",
+			"have",
+			"put",
+			"be",
+		]
+	}
+}
+
