@@ -121,7 +121,7 @@ def get_sentence_stance():
 def get_stance_domains():
 	#payload = request.get_json();
 	#output = detection_app.test(payload["text"], payload["domain"])
-	return json.dumps(detection_app.domain_configs.keys())
+	return json.dumps(list(detection_app.domain_configs.keys()))
 
 
 if __name__ == "__main__":
