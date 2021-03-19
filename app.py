@@ -124,7 +124,7 @@ app.route("/stance/domains", methods = ['GET'])
 def get_stance_domains():
 	#payload = request.get_json();
 	#output = detection_app.test(payload["text"], payload["domain"])
-	return json.dumps(detection_app.domain_configs)
+	return json.dumps(detection_app.domain_configs.keys())
 
 
 if __name__ == "__main__":
