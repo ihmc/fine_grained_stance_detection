@@ -110,17 +110,14 @@ abbrev_mappings = {
 	"u": "you"
 }
 '''
-glob_interface = ''
-def setAskInterface(Interface):
-	glob_interface = Interface
 
-app.route("/stance/sentence", methods = ['POST'])
+@app.route("/stance/sentence", methods = ['POST'])
 def get_sentence_stance():
 	payload = request.get_json();
 	output = detection_app.test(payload["text"], payload["domain"])
 	return json.dumps(output)
 
-app.route("/stance/domains", methods = ['GET'])
+@app.route("/stance/domains", methods = ['GET'])
 def get_stance_domains():
 	#payload = request.get_json();
 	#output = detection_app.test(payload["text"], payload["domain"])
