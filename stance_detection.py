@@ -69,7 +69,6 @@ def getBeliefType(word, word_pos, trigger_buckets):
 	else:
 		catvar_word = ''
 
-	print("catvar_word: ", catvar_word)
 	if catvar_word in trigger_buckets:
 		trigger_belief_types = trigger_buckets.get(catvar_word).get("belief_types")
 		for trigger_belief_type in trigger_belief_types:
@@ -80,7 +79,6 @@ def getBeliefType(word, word_pos, trigger_buckets):
 		if catvar_word_alternates:
 			for alternate in catvar_word_alternates:
 				if alternate in trigger_buckets:
-					print("alternate: ", alternate)
 					trigger_belief_types = trigger_buckets.get(alternate).get("belief_types")
 					for trigger_belief_type in trigger_belief_types:
 						belief_types.append((trigger_belief_type["belief_type"], trigger_belief_type["strength"], trigger_belief_type["sentiment"]))
@@ -193,7 +191,6 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 				strength_words_and_indices = []
 
 				
-				print("token: ", token.text, belief_strength, "belief Strength after initialization", strength, "just strength")
 
 				sentiment = 1
 				sentiment_polarity = 1
@@ -217,7 +214,6 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 					else:
 						belief_strength += strength
 
-				print("token: ", token.text, belief_strength, "belief Strength after initial adjustments", strength, "just strength")
 
 				if word not in domain_config.get("modality_lexicon") and lem_word not in domain_config.get("modality_lexicon"):
 					if event_sentiment or event_sentiment == 0:
@@ -586,7 +582,6 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 	#NOTE This is back off to get details for a target from for an argument that are most appropriate to the specific domain
 	# in the current case (12/11/2020) that is PITT/Covid. Here we are checking, from SRL, arg1, then arg0, then arg3
 	content = build_content(arg1_with_indices, belief_type, is_sentiment_belief_type, domain_config)
-	print("word: ", word, "belief type:", belief_type, "arg1: ", arg1_with_indices,"arg0: ", arg0_with_indices,"arg2: ", arg2_with_indices)
 
 	if arg0_with_indices:
 		content.extend(build_content(arg0_with_indices, belief_type, is_sentiment_belief_type, domain_config))
