@@ -318,7 +318,7 @@ domain_configs = {
 			"be",
 		]
 	},
-	"lvasc": {
+	"bri": {
 		"trigger_buckets": build_trigger_buckets(os.path.join(here, "ARLIS_triggers.xlsx")),
 		"content_buckets": build_content_buckets(os.path.join(here, "ARLIS_contents.xlsx")),
 		"modality_lexicon": build_modality_lexicon(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx")),

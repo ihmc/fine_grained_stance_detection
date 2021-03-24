@@ -69,6 +69,7 @@ def getBeliefType(word, word_pos, trigger_buckets):
 	else:
 		catvar_word = ''
 
+	print("catvar_word: ", catvar_word)
 	if catvar_word in trigger_buckets:
 		trigger_belief_types = trigger_buckets.get(catvar_word).get("belief_types")
 		for trigger_belief_type in trigger_belief_types:
@@ -79,6 +80,7 @@ def getBeliefType(word, word_pos, trigger_buckets):
 		if catvar_word_alternates:
 			for alternate in catvar_word_alternates:
 				if alternate in trigger_buckets:
+					print("alternate: ", alternate)
 					trigger_belief_types = trigger_buckets.get(alternate).get("belief_types")
 					for trigger_belief_type in trigger_belief_types:
 						belief_types.append((trigger_belief_type["belief_type"], trigger_belief_type["strength"], trigger_belief_type["sentiment"]))
@@ -190,6 +192,9 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 				strength_word_count = 1
 				strength_words_and_indices = []
 
+				
+				print("token: ", token.text, belief_strength, "belief Strength after initialization", strength, "just strength")
+
 				sentiment = 1
 				sentiment_polarity = 1
 				sentiment_word_count = 1
@@ -197,9 +202,11 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 
 				#In the case the trigger is the light verb the belief strength needs to be set at this point 
 				# in the code or it will come out as zero. 
-				#EXPERIMENTATION This needs to be commented out unless running experimentation with light verbs
-				if word in domain_config.get("light_verbs") or lem_word in domain_config.get("light_verbs"):
-					belief_strength = 3
+				#EXPERIMENTATION  This will not run unless running experimentation with light verbs
+				if light_verbs_version:
+					if not strength:
+						if word in domain_config.get("light_verbs") or lem_word in domain_config.get("light_verbs"):
+							belief_strength = 3
 
 				#TODO Check if I need to add 1 to strength word count to get correct score, not sure why but 
 				# doesn't seem so. Will need to investigate
@@ -209,6 +216,8 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 						strength_polarity *= -1
 					else:
 						belief_strength += strength
+
+				print("token: ", token.text, belief_strength, "belief Strength after initial adjustments", strength, "just strength")
 
 				if word not in domain_config.get("modality_lexicon") and lem_word not in domain_config.get("modality_lexicon"):
 					if event_sentiment or event_sentiment == 0:
