@@ -162,7 +162,7 @@ abbrev_mappings = {
 	"u": "you"
 }
 
-def extract_relevant_text():
+def extract_relevant_text(domain_name):
 	stemmer = PorterStemmer()
 	relevant_text = []
 	df = list(pd.read_csv('./2020-04-01-tweets.tsv', sep='\\t', engine='python', header=None)[4])
@@ -175,13 +175,13 @@ def extract_relevant_text():
 	for text in df:
 		has_topic(text, ['mask'])
 
-	return ask_detection.stances(relevant_text, 0)[0]
+	return stance_detection.stances(relevant_text, 0, domain_configs[domain_name])[0]
 
 def test(text, domain_name):
 	
 	return stance_detection.stances([[text.replace("’", "'"), '', '', '', '']], 0, domain_configs[domain_name])[0]
 
-def process_mask_tweets(version_description = "", num_to_process = 0):
+def process_mask_tweets(domain_name, version_description = "", num_to_process = 0):
 	tweet_full_texts = []
 	tweets_file = "./mask_lines.txt"
 	
@@ -202,7 +202,7 @@ def process_mask_tweets(version_description = "", num_to_process = 0):
 			# quote, which is not typical and will cause issues when looking up items like n't in the lexicons
 			tweet_full_texts.append([tweet["full_text"].replace("’", "'"), tweet["user"]["id"], tweet["created_at"], tweet["id"]])
 
-	(output, text_number) = ask_detection.stances(tweet_full_texts, text_number)
+	(output, text_number) = stance_detection.stances(tweet_full_texts, text_number, domain_configs[domain_name])
 
 	Path("./mask_stances_output").mkdir(exist_ok=True)
 
@@ -217,7 +217,7 @@ def process_mask_tweets(version_description = "", num_to_process = 0):
 			mask_stances.write("\n")
 	return output
 
-def process_sf_tweets(version_description = "", num_to_process = 0):
+def process_sf_tweets(domain_name, version_description = "", num_to_process = 0):
 	tweet_full_texts = []
 	tweets_file = "./sf_masks.json"
 	text_number = 0
@@ -236,7 +236,7 @@ def process_sf_tweets(version_description = "", num_to_process = 0):
 			# up items like n't in the lexicons
 			tweet_full_texts.append([tweet["full_text"].replace("’", "'"), tweet["user"]["id"], tweet["created_at"], tweet["id"]])
 
-	(output, text_number) = ask_detection.stances(tweet_full_texts, text_number)
+	(output, text_number) = stance_detection.stances(tweet_full_texts, text_number, domain_configs[domain_name])
 	Path("./san_fran_mask_stances_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
@@ -251,7 +251,7 @@ def process_sf_tweets(version_description = "", num_to_process = 0):
 
 	return output
 
-def process_mask_chyrons(version_description = "", num_to_process = 0):
+def process_mask_chyrons(domain_name, version_description = "", num_to_process = 0):
 	chyron_data = []
 	chyrons_file = "./mask_dist_chyrons.txt"
 	text_number = 0
@@ -270,7 +270,7 @@ def process_mask_chyrons(version_description = "", num_to_process = 0):
 			# up items like n't in the lexicons
 			chyron_data.append([chyron["chyron_text"].replace("’", "'"), chyron["author"], chyron["timestamp"], chyron["doc_id"]])
 
-	(output, text_number) = ask_detection.stances(tweet_full_texts, text_number)
+	(output, text_number) = stance_detection.stances(tweet_full_texts, text_number, domain_configs[domain_name])
 
 	Path("./chyron_mask_stances_output").mkdir(exist_ok=True)
 
@@ -288,7 +288,7 @@ def process_mask_chyrons(version_description = "", num_to_process = 0):
 
 #User provides a path to a text file for stances. Each line must be single text that the user
 # desires to process for stances
-def text_to_stances(txt_file_path, version_description = "", num_to_process = 0):
+def text_to_stances(domain_name, txt_file_path, version_description = "", num_to_process = 0):
 	data = []
 	texts_file = txt_file_path
 	text_number = 0
@@ -306,7 +306,7 @@ def text_to_stances(txt_file_path, version_description = "", num_to_process = 0)
 			# up items like n't in the lexicons
 			data.append([text.replace("’", "'").replace("\u2019", "'"), "", "", ""])
 
-	(output, text_number) = ask_detection.stances(data, text_number)
+	(output, text_number) = stance_detection.stances(data, text_number, domain_configs[domain_name])
 	Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
@@ -331,7 +331,7 @@ User provides a path to a json file for stance processing. The extension does no
 
 In order to handle neseted json the user should put (in the appropriate order) the attributes comma separated.
 '''
-def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestamp_attrb_name, 
+def json_to_stances(domain_name, json_file_path, text_attrb_name, author_attrb_name, timestamp_attrb_name, 
 						doc_id_attrb_name, version_description = "", num_to_process = 0):
 	data = []
 	text_number = 0
@@ -365,7 +365,7 @@ def json_to_stances(json_file_path, text_attrb_name, author_attrb_name, timestam
 			#					line[timestamp_attrb_name], line[doc_id_attrb_name]])
 			data.append([text.replace("’", "'"), author, timestamp, doc_id])
 
-	(output, text_number) = ask_detection.stances(data, text_number)
+	(output, text_number) = stance_detection.stances(data, text_number, domain_configs[domain_name])
 	Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	#Add underscore to front of version description if one exist so that the 
@@ -389,7 +389,7 @@ and the id of the tweet. User must provide the name of each of these labels that
 Some csv data might use 2 columns or more to specify the timestamp so when providing the labels for timestamp
 separate them with a pipe (|) character. Please note these must be in the correct order, date first then time.
 '''
-def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label, 
+def csv_to_stances(domain_name, csv_file_path, text_label, author_label, timestamp_label, 
 						doc_id_label, version_description = "", num_to_process = 0):
 	num_processed = 0
 	
@@ -438,7 +438,7 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 				data.append([row_info[text_label].replace("’", "'").replace("\u2019", "'"), row_info[author_label], 
 								timestamp_data, row_info[doc_id_label]])
 
-			(chunk_output, text_number) = ask_detection.stances(data, text_number)
+			(chunk_output, text_number) = stance_detection.stances(data, text_number, domain_configs[domain_name])
 			total_output.extend(chunk_output["stances"])
 
 			for stance in chunk_output["stances"]:
@@ -465,7 +465,7 @@ def csv_to_stances(csv_file_path, text_label, author_label, timestamp_label,
 	#	data.append([row_info[text_label].replace("’", "'").replace("\u2019", "'"), row_info[author_label], 
 	#							timestamp_data, row_info[doc_id_label]])
 
-	#output = ask_detection.stances(data)
+	#output = stance_detection.stances(data)
 	#Path("./user_provided_stance_output").mkdir(exist_ok=True)
 
 	##Add underscore to front of version description if one exist so that the 
@@ -511,12 +511,11 @@ def stances_to_csv(file_to_convert, stance_version):
 					line_number += 1
 
 				row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
-						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['evidence']]
+						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['sentiment_strength'], stance_dict['evidence']]
 				csvwriter.writerow(row)
 				
 def stances_to_csv_tp_and_fp(file_to_convert, stance_version = ""):
-	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Evidence', 
-				'TP', 'FP']
+	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Evidence', 'TP', 'FP', 'FN', 'TN', 'Comment']
 
 	Path("./stance_output_csvs").mkdir(exist_ok=True)
 
@@ -540,12 +539,16 @@ def stances_to_csv_tp_and_fp(file_to_convert, stance_version = ""):
 					evidence = stance_dict['evidence']
 					line_number += 1
 
-				row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
-						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['evidence']]
+				if stance_dict['belief_type'] == "NA" or stance_dict["belief_trigger"] == "NA" or stance_dict["belief_content"] == "NA":
+					row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
+						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['sentiment_strength'], stance_dict['evidence'], '', '', '', 1, '']
+				else:
+					row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
+						stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['sentiment_strength'], stance_dict['evidence'], '', '', '', '', '']
 				csvwriter.writerow(row)
 
 def stances_to_csv_mask_attitudes(file_to_convert, stance_version = ""):
-	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Belief Valuation', 'Attitude', 'Evidence']
+	columns = ['Number', 'Belief String', 'Sentiment String', 'Belief Type', 'Trigger', 'Content', 'Belief Strength', 'Sentiment Strength', 'Attitude', 'Evidence']
 
 	Path("./stance_output_csvs").mkdir(exist_ok=True)
 
@@ -572,12 +575,12 @@ def stances_to_csv_mask_attitudes(file_to_convert, stance_version = ""):
 				is_mask_related = False
 				if stance_dict['belief_type'] == "PROTECT" or stance_dict['belief_type'] == "RESTRICT" or stance_dict['belief_type'] == "EXIST":
 					for word in stance_dict['belief_content'].split(" "):
-						if ask_detection.morphRootNoun(word).lower() == "mask" or word.lower() == "mask":
+						if stance_detection.morphRootNoun(word).lower() == "mask" or word.lower() == "mask":
 							is_mask_related = True
 
 				if is_mask_related:
 					row = [stance_dict['text_number'], stance_dict['belief_string'], stance_dict['sentiment_string'], stance_dict['belief_type'], stance_dict['belief_trigger'], 
-							stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['belief_valuation'], stance_dict['attitude'], stance_dict['evidence']]
+							stance_dict['belief_content'], stance_dict['belief_strength'], stance_dict['sentiment_strength'], stance_dict['attitude'], stance_dict['evidence']]
 					csvwriter.writerow(row)
 
 def handle_nested_json(attributes, json_object):

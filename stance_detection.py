@@ -4,6 +4,10 @@
 
 #Local modules
 
+temp_predargs_all = []
+temp_predargs_from_possible_triggers = []
+
+all_predargs_version = False
 no_filter_version = False
 mutually_constrained_version = True
 light_verbs_version = True
@@ -56,6 +60,12 @@ def stances(text_array, text_number, domain_config):
 		if line_stances:
 			stances.extend(line_stances)
 
+	if all_predargs_version:
+		print(temp_predargs_all)
+		print(temp_predargs_from_possible_triggers)
+		print(len(temp_predargs_all))
+		print(len(temp_predargs_from_possible_triggers))
+
 	return ({'stances': stances}, text_number)
 
 def getBeliefType(word, word_pos, trigger_buckets):
@@ -101,7 +111,7 @@ def getBeliefTypeFromContent(content_word, content_buckets):
 	else:
 		return [('', '')]
 
-def extractStanceFromSrl(sentence, srl, base_word):
+def extractStanceFromSrl(sentence, srl, base_word, word_index, text_number):
 	tags_for_verb = ''
 	arg0_with_indices = []
 	arg1_with_indices = []
@@ -110,12 +120,37 @@ def extractStanceFromSrl(sentence, srl, base_word):
 	verbs = srl['verbs']
 	words = [word.lower() for word in srl['words']]
 
+
 	#TODO if the same verb is in the sentence twice this will always take the second version of it 
 	# This needs to be fixed, maybe through deleting the verb once it is used
 	for verb in verbs:
+		if verb['verb'].lower() == "washyourhands":
+			print(verb["description"])
 		if verb['verb'].lower() == base_word:
-			selected_verb = verb['verb']
-			tags_for_verb = verb['tags']
+			
+			if verb['tags'].index('B-V') == word_index :
+				selected_verb = verb['verb']
+				tags_for_verb = verb['tags']
+
+				if all_predargs_version:
+					if "ARG0" in verb["description"] or  "ARG1" in verb["description"] or  "ARG3" in verb["description"]:
+						temp_predargs_from_possible_triggers.append({"srl": verb["description"], "text_number": text_number - 1})
+			elif verb['tags'].index('B-V') == word_index - 1:
+				print(base_word, " verb index: ", verb['tags'].index('B-V'), " word index: ", word_index)
+				print(verb["description"])
+				print(sentence)
+				selected_verb = verb['verb']
+				tags_for_verb = verb['tags']
+
+				if all_predargs_version:
+					if "ARG0" in verb["description"] or  "ARG1" in verb["description"] or  "ARG3" in verb["description"]:
+						temp_predargs_from_possible_triggers.append({"srl": verb["description"], "text_number": text_number - 1})
+
+			elif all_predargs_version:
+				print(base_word, " verb index: ", verb['tags'].index('B-V'), " word index: ", word_index)
+				print(verb["description"])
+				print(sentence)
+				
 
 	if tags_for_verb:
 		for index, tag in enumerate(tags_for_verb):
@@ -151,6 +186,11 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 		sent_stances = []
 		possible_triggers = []
 		srl = srl_predictor.predict(sentence=sent.text)
+
+		if all_predargs_version:
+			for verb in srl['verbs']:
+				if "ARG0" in verb["description"] or  "ARG1" in verb["description"] or  "ARG3" in verb["description"]:
+					temp_predargs_all.append({"srl": verb["description"], "text_number": text_number - 1})
 
 		for token in sent:
 			if token.dep_ == "ROOT" or token.dep_ == "xcomp" or token.pos_ == "VERB":
@@ -292,8 +332,9 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 				possible_triggers.append((token.text, token.i - sent.start, token.tag_, (belief_strength / strength_word_count) * strength_polarity, strength_words_and_indices, (sentiment / sentiment_word_count) * sentiment_polarity, sentiment_words_and_indices, belief_types, is_positive_modality, is_negative_modality, root_negation_children_count))
 
 		for trigger, trigger_index, pos, strength, strength_words_and_indices, sentiment, sentiment_words_and_indices, belief_types, is_positive_modality, is_negative_modality, root_negation_children_count in possible_triggers:
+
 				for belief_type, belief_type_strength, belief_type_event_sentiment in belief_types:
-					stance_details = process_stance(trigger, pos, sent.text, srl, belief_type, strength, belief_type_event_sentiment, domain_config)
+					stance_details = process_stance(trigger, trigger_index, pos, sent.text, srl, belief_type, strength, belief_type_event_sentiment, domain_config, text_number) #TODO make sure to remove text_number from here 
 
 					if stance_details:
 						belief_type = stance_details[0]
@@ -313,6 +354,9 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 							if sentiment < 0:
 								sentiment_strength *= -1
 
+						if all_predargs_version:
+							if belief_type == "NA":
+								sentiment_strength = 0 
 						if strength * sentiment_strength < 0:
 							if is_positive_modality or is_negative_modality:
 								is_odd = root_negation_children_count % 2
@@ -340,7 +384,10 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 
 			if len(exist_stance_indices) != len(sent_stances):
 				for index in sorted(exist_stance_indices, reverse=True):
-					del sent_stances[index]
+					if all_predargs_version:
+						sent_stances[index]["belief_trigger"] = "NA"
+					else:
+						del sent_stances[index]
 
 			stances.extend(sent_stances)
 
@@ -481,11 +528,12 @@ def build_stance_dict(belief_type, belief_trigger_with_index, belief_content_wit
 	stance_dict["positive_sentiment"] = f'{sentiment_probs[0]:.2f}'
 	stance_dict["negative_sentiment"] = f'{sentiment_probs[1]:.2f}'
 	stance_dict["target_sentiment"] = target_sentiment
-	stance_dict["text_number"] = text_number
+	stance_dict["text_number"] = text_number - 1
 
 	return stance_dict
 
-def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_sentiment, domain_config):
+#TODO make sure to remove text_number as a parameter
+def process_stance(word, word_index, word_pos, sentence, srl, belief_type, strength, event_sentiment, domain_config, text_number):
 	is_sentiment_belief_type = False 
 	word = word.lower()
 	lem_word = morphRootVerb(word)
@@ -496,7 +544,7 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 	belief_types = appendListNoDuplicates(lem_belief_types, belief_types)
 	'''
 
-	(arg0_with_indices, arg1_with_indices, arg2_with_indices, arg3_with_indices) = extractStanceFromSrl(sentence, srl, word)
+	(arg0_with_indices, arg1_with_indices, arg2_with_indices, arg3_with_indices) = extractStanceFromSrl(sentence, srl, word, word_index, text_number) #TODO Make sure to remove text_number from here
 
 	'''
 	If no belief types are found from the trigger and the trigger is a light verb than each one 
@@ -573,11 +621,13 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 				is_sentiment_belief_type = True
 
 
-	#print(belief_type)
 	#If there is no belief type at this point there is no point in building the content
 	# so the function is cut short in order to be more efficient
 	if not belief_type:
-		return
+		if all_predargs_version:
+			belief_type = "NA"
+		else:
+			return
 
 	#NOTE This is back off to get details for a target from for an argument that are most appropriate to the specific domain
 	# in the current case (12/11/2020) that is PITT/Covid. Here we are checking, from SRL, arg1, then arg0, then arg3
@@ -587,6 +637,18 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 		content.extend(build_content(arg0_with_indices, belief_type, is_sentiment_belief_type, domain_config))
 	if arg3_with_indices:
 		content.extend(build_content(arg3_with_indices, belief_type, is_sentiment_belief_type, domain_config))
+
+	if all_predargs_version:
+		if not content:
+			content = all_predargs_build_content(arg1_with_indices)
+
+			if arg0_with_indices:
+				content.extend(all_predargs_build_content(arg0_with_indices))
+			if arg3_with_indices:
+				content.extend(all_predargs_build_content(arg3_with_indices))
+
+			if content:
+				content = [("NA", 0)]
 	
 	return_tuple = (belief_type, event_sentiment, content, is_sentiment_belief_type)
 	#(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_type, t_ask_confidence, word_number, arg2, event_sentiment, content, is_sentiment_belief_type)
@@ -596,6 +658,14 @@ def process_stance(word, word_pos, sentence, srl, belief_type, strength, event_s
 
 	if belief_type and content:
 		return return_tuple
+
+def all_predargs_build_content(potential_content_with_indices):
+	content_words_with_indices = []
+
+	for word, word_index in potential_content_with_indices:
+		content_words_with_indices.append((word, word_index))
+
+	return content_words_with_indices
 
 def build_content(potential_content_with_indices, trigger_belief_type, is_sentiment_belief_type, domain_config): 
 	content_buckets = domain_config.get("content_buckets")
@@ -615,14 +685,23 @@ def build_content(potential_content_with_indices, trigger_belief_type, is_sentim
 		#print("types in content building: ", content_belief_types)
 		#print("this is is sentiment belief type: ", is_sentiment_belief_type)
 
-		if content_belief_types:
-			for content_belief_type in content_belief_types:
-				#Constrain allowed content by only adding it if the word appears in a counterpart bucket.
-				#If the trigger bucket label is PROTECT the word must be in the PROTECT content bucket.
-				#Also if they belief type came from the sentiment the check words from any content bucket
-				if content_belief_type.get("belief_type") == trigger_belief_type or is_sentiment_belief_type or not mutually_constrained_version: 
-					content_words_with_indices.append((word, word_index))
-					break
+		#content_words_with_indices.append((word, word_index))
+
+		if trigger_belief_type == "NA" and all_predargs_version:
+			content_words_with_indices.append((word, word_index))
+		else:
+			if content_belief_types:
+				for content_belief_type in content_belief_types:
+					#Constrain allowed content by only adding it if the word appears in a counterpart bucket.
+					#If the trigger bucket label is PROTECT the word must be in the PROTECT content bucket.
+					#Also if they belief type came from the sentiment the check words from any content bucket
+					if content_belief_type.get("belief_type") == trigger_belief_type or is_sentiment_belief_type or not mutually_constrained_version: 
+						content_words_with_indices.append((word, word_index))
+						break
+			'''
+			else:
+				content_words_with_indices.append((word, word_index))
+			'''
 
 		'''
 		for target_label, target_details in pitt_stance_targets.items():
