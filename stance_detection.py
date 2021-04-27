@@ -124,32 +124,31 @@ def extractStanceFromSrl(sentence, srl, base_word, word_index, text_number):
 	#TODO if the same verb is in the sentence twice this will always take the second version of it 
 	# This needs to be fixed, maybe through deleting the verb once it is used
 	for verb in verbs:
-		if verb['verb'].lower() == "washyourhands":
-			print(verb["description"])
 		if verb['verb'].lower() == base_word:
-			
-			if verb['tags'].index('B-V') == word_index :
-				selected_verb = verb['verb']
-				tags_for_verb = verb['tags']
+			#TODO Investigate this becuase if there is a tags list it should have a verb
+			if 'B-V' in verb['tags']:
+				if verb['tags'].index('B-V') == word_index :
+					selected_verb = verb['verb']
+					tags_for_verb = verb['tags']
 
-				if all_predargs_version:
-					if "ARG0" in verb["description"] or  "ARG1" in verb["description"] or  "ARG3" in verb["description"]:
-						temp_predargs_from_possible_triggers.append({"srl": verb["description"], "text_number": text_number - 1})
-			elif verb['tags'].index('B-V') == word_index - 1:
-				print(base_word, " verb index: ", verb['tags'].index('B-V'), " word index: ", word_index)
-				print(verb["description"])
-				print(sentence)
-				selected_verb = verb['verb']
-				tags_for_verb = verb['tags']
+					if all_predargs_version:
+						if "ARG0" in verb["description"] or  "ARG1" in verb["description"] or  "ARG3" in verb["description"]:
+							temp_predargs_from_possible_triggers.append({"srl": verb["description"], "text_number": text_number - 1})
+				elif verb['tags'].index('B-V') == word_index - 1:
+					#print(base_word, " verb index: ", verb['tags'].index('B-V'), " word index: ", word_index)
+					#print(verb["description"])
+					#print(sentence)
+					selected_verb = verb['verb']
+					tags_for_verb = verb['tags']
 
-				if all_predargs_version:
-					if "ARG0" in verb["description"] or  "ARG1" in verb["description"] or  "ARG3" in verb["description"]:
-						temp_predargs_from_possible_triggers.append({"srl": verb["description"], "text_number": text_number - 1})
+					if all_predargs_version:
+						if "ARG0" in verb["description"] or  "ARG1" in verb["description"] or  "ARG3" in verb["description"]:
+							temp_predargs_from_possible_triggers.append({"srl": verb["description"], "text_number": text_number - 1})
 
-			elif all_predargs_version:
-				print(base_word, " verb index: ", verb['tags'].index('B-V'), " word index: ", word_index)
-				print(verb["description"])
-				print(sentence)
+				elif all_predargs_version:
+					print(base_word, " verb index: ", verb['tags'].index('B-V'), " word index: ", word_index)
+					print(verb["description"])
+					print(sentence)
 				
 
 	if tags_for_verb:
