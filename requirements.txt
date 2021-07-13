@@ -6,6 +6,7 @@ requests
 lxml
 stanza
 pandas
+pyenchant
 numpy
 xlrd==1.2.0
 spacy==2.2.4

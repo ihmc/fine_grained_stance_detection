@@ -24,7 +24,8 @@ spacy_nlp = spacy.load("en_core_web_sm")
 
 
 #Init allennlp predictors
-sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/sst-roberta-large-2020.06.08.tar.gz")
+#sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/sst-roberta-large-2020.06.08.tar.gz")
+sentiment_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/stanford-sentiment-treebank-roberta.2021-03-11.tar.gz")
 srl_predictor = Predictor.from_path("https://storage.googleapis.com/allennlp-public-models/structured-prediction-srl-bert.2020.12.15.tar.gz")
 
 project_path = os.path.abspath(os.path.dirname(__file__))
@@ -315,7 +316,7 @@ domain_configs = {
 			"give",
 			"have",
 			"put",
-			"be",
+			"get",
 		]
 	},
 	"bri": {
@@ -331,7 +332,23 @@ domain_configs = {
 			"give",
 			"have",
 			"put",
-			"be",
+			"get",
+		]
+	},
+	"isis": {
+		"trigger_buckets": build_trigger_buckets(os.path.join(here, "isis_triggers.xlsx")),
+		"content_buckets": build_content_buckets(os.path.join(here, "isis_content.xlsx")),
+		"modality_lexicon": build_modality_lexicon(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx")),
+		"light_verbs": [
+			"use",
+			"place",
+			"take",
+			"make",
+			"do",
+			"give",
+			"have",
+			"put",
+			"get",
 		]
 	}
 }
