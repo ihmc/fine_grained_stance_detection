@@ -333,52 +333,73 @@ In order to handle neseted json the user should put (in the appropriate order) t
 '''
 def json_to_stances(domain_name, json_file_path, text_attrb_name, author_attrb_name, timestamp_attrb_name, 
 						doc_id_attrb_name, version_description = "", num_to_process = 0):
-	data = []
-	text_number = 0
+	num_processed = 0
+
+	Path("./user_provided_stance_output").mkdir(exist_ok=True)
+	
+	
 	with open(json_file_path, 'r') as json_file:
-		progress_count = 0
 		jsons = json_file.read().splitlines()
+
+		items_per_chunk = 10
 
 		#NOTE User passes in amount of chyrons to process, if the amount is 0 then it defaults 
 		# to processing the entirety of the file
 		if num_to_process == 0:
 			num_to_process = len(jsons)
 
-		for line_json in jsons[:num_to_process]:
-			line = json.loads(line_json)
+		#Add underscore to front of version description if one exist so that the 
+		# file name will be nicely underscore separated
+		if version_description:
+			version_description = "_" + version_description
 
-			nested_text_attrbs = text_attrb_name.split(",")
-			nested_author_attrbs = author_attrb_name.split(",")
-			nested_timestamp_attrbs = timestamp_attrb_name.split(",")
-			nested_doc_id_attrbs = doc_id_attrb_name.split(",")
 
-			text = handle_nested_json(nested_text_attrbs, line)
-			author = handle_nested_json(nested_author_attrbs, line)
-			timestamp = handle_nested_json(nested_timestamp_attrbs, line)
-			doc_id = handle_nested_json(nested_doc_id_attrbs, line)
-			
-				
+		total_output = []
+		text_number = 0
+		with open("./user_provided_stance_output/user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
 
-			#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
-			# up items like n't in the lexicons
-			#data.append([line[text_attrb_name].replace("’", "'"), line[author_attrb_name], 
-			#					line[timestamp_attrb_name], line[doc_id_attrb_name]])
-			data.append([text.replace("’", "'"), author, timestamp, doc_id])
 
-	(output, text_number) = stance_detection.stances(data, text_number, domain_configs[domain_name])
-	Path("./user_provided_stance_output").mkdir(exist_ok=True)
+			#for line_json in jsons[:num_to_process]:
 
-	#Add underscore to front of version description if one exist so that the 
-	# file name will be nicely underscore separated
-	if version_description:
-		version_description = "_" + version_description
+			for i in range(0, len(jsons), items_per_chunk):
+				data = []
+				chunk_output = {"stances": []}
 
-	with open("./user_provided_stance_output/user_provided_json_stances" + version_description + ".jsonl", "w+") as user_json_stances:
-		for stance in output["stances"]:
-			user_json_stances.write(json.dumps(stance))
-			user_json_stances.write("\n")
-			
-	return output
+				for line_json in jsons[i:i + items_per_chunk]:
+					line = json.loads(line_json)
+
+					nested_text_attrbs = text_attrb_name.split(",")
+					nested_author_attrbs = author_attrb_name.split(",")
+					nested_timestamp_attrbs = timestamp_attrb_name.split(",")
+					nested_doc_id_attrbs = doc_id_attrb_name.split(",")
+
+					text = handle_nested_json(nested_text_attrbs, line)
+					author = handle_nested_json(nested_author_attrbs, line)
+					timestamp = handle_nested_json(nested_timestamp_attrbs, line)
+					doc_id = handle_nested_json(nested_doc_id_attrbs, line)
+
+					num_processed += 1
+
+					if num_processed > num_to_process:
+						break
+
+					#\u2019 is unicode for right single quote which is not typical, and will cause issues when looking
+					# up items like n't in the lexicons
+					#data.append([line[text_attrb_name].replace("’", "'"), line[author_attrb_name], 
+					#					line[timestamp_attrb_name], line[doc_id_attrb_name]])
+					data.append([text.replace("’", "'"), author, timestamp, doc_id])
+
+				(chunk_output, text_number) = stance_detection.stances(data, text_number, domain_configs[domain_name])
+				total_output.extend(chunk_output["stances"])
+
+				for stance in chunk_output["stances"]:
+					user_json_stances.write(json.dumps(stance))
+					user_json_stances.write("\n")
+
+
+				print("Batch finished")
+		
+	return total_output
 
 '''
 User provides a path to a csv file for stance processing. The file must have a header row with a label for 
