@@ -1,0 +1,32 @@
+#instructions {
+	border: 1px solid black;
+	background-color: lightgray;
+	padding: 5px 20px;
+	margin-bottom: 50px;
+}
+
+#container {
+	width: 1000px;
+	vertical-align: middle;
+	margin: 0px 300px;
+}
+
+#exampleSentences{
+	margin-top: 25px;
+}
+
+.sent {
+	margin-bottom: 5px;
+}
+
+#trigContPair {
+	margin-bottom: 10px;
+}
+
+#trigger, #content {
+	font-weight: bold;
+}
+
+.radioCategory {
+	margin-right: 15px;
+}
