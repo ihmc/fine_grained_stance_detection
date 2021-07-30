@@ -345,6 +345,7 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 						(allen_prob_sentiment, sentiment_probs) = get_sentiment_score(sent.text)
 						allen_sentiment = get_valuation_score(allen_prob_sentiment)
 
+
 						# Check if the belief type came from the sentiment lexicon if so the strength should 
 						# be 3.00
 						if stance_details[3]:
@@ -352,10 +353,14 @@ def get_stances(text_number, domain_config, text, author = '', timestamp = '', d
 							#sentiment_strength = sentiment
 							if sentiment < 0:
 								sentiment_strength *= -1
+						elif stance_details[4]:
+							strength = float(stance_details[5])
+							
 
 						if all_predargs_version:
 							if belief_type == "NA":
 								sentiment_strength = 0 
+						
 						if strength * sentiment_strength < 0:
 							if is_positive_modality or is_negative_modality:
 								is_odd = root_negation_children_count % 2
@@ -534,6 +539,8 @@ def build_stance_dict(belief_type, belief_trigger_with_index, belief_content_wit
 #TODO make sure to remove text_number as a parameter
 def process_stance(word, word_index, word_pos, sentence, srl, belief_type, strength, event_sentiment, domain_config, text_number):
 	is_sentiment_belief_type = False 
+	is_aspect_modality = False
+	modality_belief_strength = 3
 	word = word.lower()
 	lem_word = morphRootVerb(word)
 	'''
@@ -608,16 +615,29 @@ def process_stance(word, word_index, word_pos, sentence, srl, belief_type, stren
 
 		elif word in domain_config.get("modality_lexicon") and exist_case_version:
 			details = domain_config.get("modality_lexicon").get(word)
-			if details.get("sentiment"):
+			modality = details.get("modality")
+			if details.get("sentiment") and modality.lower() != "aspect":
 				belief_type = default_belief_type
 				event_sentiment = details.get("sentiment")
 				is_sentiment_belief_type = True
+			elif modality.lower() == "aspect":
+				belief_type = default_belief_type
+				modality_belief_strength = details.get("strength")
+				event_sentiment = 1
+				is_aspect_modality = True
 		elif lem_word in domain_config.get("modality_lexicon") and exist_case_version:
 			details = domain_config.get("modality_lexicon").get(lem_word)
-			if details.get("sentiment"):
+			modality = details.get("modality")
+			if details.get("sentiment") and modality.lower() != "aspect":
 				belief_type = default_belief_type
 				event_sentiment = details.get("sentiment")
 				is_sentiment_belief_type = True
+			elif modality.lower() == "aspect":
+				belief_type = default_belief_type
+				modality_belief_strength = details.get("strength")
+				event_sentiment = 1
+				is_aspect_modality = True
+				
 
 
 	#If there is no belief type at this point there is no point in building the content
@@ -630,12 +650,12 @@ def process_stance(word, word_index, word_pos, sentence, srl, belief_type, stren
 
 	#NOTE This is back off to get details for a target from for an argument that are most appropriate to the specific domain
 	# in the current case (12/11/2020) that is PITT/Covid. Here we are checking, from SRL, arg1, then arg0, then arg3
-	content = build_content(arg1_with_indices, belief_type, is_sentiment_belief_type, domain_config)
+	content = build_content(arg1_with_indices, belief_type, is_sentiment_belief_type, is_aspect_modality, domain_config)
 
 	if arg0_with_indices:
-		content.extend(build_content(arg0_with_indices, belief_type, is_sentiment_belief_type, domain_config))
+		content.extend(build_content(arg0_with_indices, belief_type, is_sentiment_belief_type, is_aspect_modality,  domain_config))
 	if arg3_with_indices:
-		content.extend(build_content(arg3_with_indices, belief_type, is_sentiment_belief_type, domain_config))
+		content.extend(build_content(arg3_with_indices, belief_type, is_sentiment_belief_type, is_aspect_modality, domain_config))
 
 	if all_predargs_version:
 		if not content:
@@ -649,7 +669,8 @@ def process_stance(word, word_index, word_pos, sentence, srl, belief_type, stren
 			if content:
 				content = [("NA", 0)]
 	
-	return_tuple = (belief_type, event_sentiment, content, is_sentiment_belief_type)
+	print(word, "content: ", content, "arg1: ", arg1_with_indices, "arg0: ", arg0_with_indices, "arg3: ", arg3_with_indices)
+	return_tuple = (belief_type, event_sentiment, content, is_sentiment_belief_type, is_aspect_modality, modality_belief_strength)
 	#(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_type, t_ask_confidence, word_number, arg2, event_sentiment, content, is_sentiment_belief_type)
 		
 	#if not ask_action:
@@ -666,7 +687,7 @@ def all_predargs_build_content(potential_content_with_indices):
 
 	return content_words_with_indices
 
-def build_content(potential_content_with_indices, trigger_belief_type, is_sentiment_belief_type, domain_config): 
+def build_content(potential_content_with_indices, trigger_belief_type, is_sentiment_belief_type, is_aspect_modality, domain_config): 
 	content_buckets = domain_config.get("content_buckets")
 	content_words_with_indices = []
 
@@ -694,7 +715,7 @@ def build_content(potential_content_with_indices, trigger_belief_type, is_sentim
 					#Constrain allowed content by only adding it if the word appears in a counterpart bucket.
 					#If the trigger bucket label is PROTECT the word must be in the PROTECT content bucket.
 					#Also if they belief type came from the sentiment the check words from any content bucket
-					if content_belief_type.get("belief_type") == trigger_belief_type or is_sentiment_belief_type or not mutually_constrained_version: 
+					if content_belief_type.get("belief_type") == trigger_belief_type or is_sentiment_belief_type or is_aspect_modality or not mutually_constrained_version: 
 						content_words_with_indices.append((word, word_index))
 						break
 			'''

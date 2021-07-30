@@ -350,6 +350,22 @@ domain_configs = {
 			"put",
 			"get",
 		]
+	},
+	"isis_brian": {
+		"trigger_buckets": build_trigger_buckets(os.path.join(here, "isis_brian_triggers.xlsx")),
+		"content_buckets": build_content_buckets(os.path.join(here, "isis_brian_contents.xlsx")),
+		"modality_lexicon": build_modality_lexicon(os.path.join(here, "ModalityLexiconSubcatTagsPITT.xlsx")),
+		"light_verbs": [
+			"use",
+			"place",
+			"take",
+			"make",
+			"do",
+			"give",
+			"have",
+			"put",
+			"get",
+		]
 	}
 }
 
