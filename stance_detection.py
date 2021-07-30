@@ -669,7 +669,6 @@ def process_stance(word, word_index, word_pos, sentence, srl, belief_type, stren
 			if content:
 				content = [("NA", 0)]
 	
-	print(word, "content: ", content, "arg1: ", arg1_with_indices, "arg0: ", arg0_with_indices, "arg3: ", arg3_with_indices)
 	return_tuple = (belief_type, event_sentiment, content, is_sentiment_belief_type, is_aspect_modality, modality_belief_strength)
 	#(ask_who, ask, ask_recipient, ask_when, ask_action, confidence, descriptions, belief_type, t_ask_confidence, word_number, arg2, event_sentiment, content, is_sentiment_belief_type)
 		
