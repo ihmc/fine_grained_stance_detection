@@ -46,24 +46,24 @@ with open("./user_provided_json_stances_20210730(20000 IEEE geo mask distance va
 					stances_by_user[user_id]["negative"][b_type] += 1
 
 
-#print(stances_by_user)
+##print(stances_by_user)
 
-print(len(stances_by_user.keys()))
+#print(len(stances_by_user.keys()))
 
 user_total_stances = {}
 
 for user, pos_or_neg in stances_by_user.items():
 	user_total_stances[user] = 0
 	for attitude_polarity, b_types in pos_or_neg.items():
-		print("this is b_types", b_types)
+		#print("this is b_types", b_types)
 		if len(b_types) > 0:
 			for b_type, count in b_types.items():
 				user_total_stances[user] += count		
-				print("user: ", user, "pos_or_neg: ", attitude_polarity, "type: ", b_type, "count: ", count)
+				#print("user: ", user, "pos_or_neg: ", attitude_polarity, "type: ", b_type, "count: ", count)
 
 	
 
-print(user_total_stances)
+#print(user_total_stances)
 
 user_percent_belief_w_attitude = {}
 for user, pos_or_neg in stances_by_user.items():
@@ -75,7 +75,7 @@ for user, pos_or_neg in stances_by_user.items():
 
 
 
-print(user_percent_belief_w_attitude)
+#print(user_percent_belief_w_attitude)
 
 for user, percent_by_type in user_percent_belief_w_attitude.items():
 	cluster = max(percent_by_type, key=percent_by_type.get)
@@ -83,18 +83,20 @@ for user, percent_by_type in user_percent_belief_w_attitude.items():
 	if user not in clusters[cluster]:
 		clusters[cluster].append(user)
 
-print(clusters)
+#print(clusters)
 
-print(clusters.keys())
+#print(clusters.keys())
 
 with open("./user_clusters.json", "w+") as cluster_file:
-	cluster_file.write(json.dumps(clusters))
+        cluster_file.write(json.dumps(clusters, indent=4))
 
 
 cluster_totals = {}
 for cluster, users in clusters.items():
 	cluster_totals[cluster] = len(users)
 
+with open("./user_clusters_totals.json", "w+") as totals_file:
+        totals_file.write(json.dumps(cluster_totals, indent=4))
 
-print(cluster_totals)
+#print(cluster_totals)
 
