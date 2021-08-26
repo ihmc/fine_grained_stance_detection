@@ -2,6 +2,8 @@ localStorage.removeItem("pairCount")
 localStorage.removeItem("pairsArray")
 localStorage.removeItem("pairsWithSents")
 
+
+
 let categorizedPairs = JSON.parse(localStorage.getItem("categorizedPairs"));
 
 let userCategories = []

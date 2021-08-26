@@ -3,7 +3,8 @@ let pairCount = 0
 let pairsArray = []
 
 if (localStorage.getItem("pairCount") === null) {
-	pairsWithSents = isis_trig_content_pairs
+	//pairsWithSents = isis_trig_content_pairs
+	pairsWithSents = afghanistan_withdrawal_trig_content_pairs["trig_content_top_pairs"]
 
 	for (let trigger in pairsWithSents){
 		contentWords = pairsWithSents[trigger]["content_words"]
@@ -223,6 +224,8 @@ function submitAndLoadNext(e){
 
 	if (pairCount == pairsArray.length) {
 		localStorage.setItem("categorizedPairs", JSON.stringify(pairsWithSents));
+		localStorage.removeItem("userCategories")
+		localStorage.removeItem("specificCategories")
 		window.location = "user_categories.html"
 		return
 	}

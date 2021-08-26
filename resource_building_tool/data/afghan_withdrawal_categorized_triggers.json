@@ -1,0 +1,102 @@
+{
+    "unassigned": [
+        "see",
+        "raise",
+        "evacuate",
+        "lose",
+        "come",
+        "kill",
+        "leave",
+        "include",
+        "board",
+        "fly",
+        "provide",
+        "abduct",
+        "process",
+        "confirm",
+        "die",
+        "shoot",
+        "look",
+        "saw",
+        "hear",
+        "find",
+        "add",
+        "save",
+        "remain",
+        "change",
+        "travel",
+        "hunt",
+        "send",
+        "run",
+        "conduct",
+        "create",
+        "wave",
+        "hand",
+        "describe",
+        "facilitate",
+        "land",
+        "seem",
+        "target"
+    ],
+    "resist": [
+        "raise",
+        "help",
+        "fly",
+        "wave"
+    ],
+    "change": [
+        "raise",
+        "provide",
+        "remain",
+        "change",
+        "run",
+        "create"
+    ],
+    "protect": [
+        "evacuate",
+        "leave",
+        "help",
+        "provide",
+        "process",
+        "find",
+        "save",
+        "travel",
+        "send",
+        "run",
+        "conduct",
+        "create",
+        "hand",
+        "facilitate",
+        "land"
+    ],
+    "harm": [
+        "lose",
+        "come",
+        "kill",
+        "abduct",
+        "beat",
+        "die",
+        "shoot",
+        "find",
+        "hunt",
+        "conduct",
+        "wave",
+        "target"
+    ],
+    "inform": [
+        "come",
+        "confirm",
+        "hear",
+        "send",
+        "describe"
+    ],
+    "abandon": [
+        "leave",
+        "create",
+        "hand"
+    ],
+    "escape": [
+        "board",
+        "fly"
+    ]
+}
