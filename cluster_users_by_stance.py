@@ -2,7 +2,8 @@ import json
 
 stances_by_user = {}
 clusters = {}
-with open("./user_provided_json_stances_20210730(20000 IEEE geo mask distance vaccine).v1.3.jsonl", "r") as stance_file:
+stance_file_path = "/home/user/pitt/stance_detection/user_provided_stance_output/user_provided_json_stances_20210802(All IEEE_geo_mask_distance_vaccine).v1.3.jsonl"
+with open(stance_file_path, "r") as stance_file:
 	stance_lines = stance_file.readlines()
 
 	for stance_json in stance_lines:
