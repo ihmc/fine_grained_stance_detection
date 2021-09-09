@@ -1,0 +1,103 @@
+{
+    "harm": [
+        "kill",
+        "offer",
+        "include",
+        "pay",
+        "hit",
+        "carry",
+        "target",
+        "wound"
+    ],
+    "unassigned": [
+        "kill",
+        "offer",
+        "include",
+        "condemn",
+        "pay",
+        "hit",
+        "leave",
+        "publish",
+        "thwart",
+        "thank",
+        "help",
+        "carry",
+        "target",
+        "confirm",
+        "support",
+        "cut",
+        "agree",
+        "stress",
+        "die",
+        "wound",
+        "find",
+        "break",
+        "call",
+        "surge",
+        "see",
+        "raise",
+        "pull",
+        "involve",
+        "return",
+        "lose",
+        "result",
+        "welcome",
+        "watch",
+        "share",
+        "express",
+        "add",
+        "produce",
+        "come",
+        "push",
+        "ignore"
+    ],
+    "support": [
+        "offer",
+        "help",
+        "support",
+        "agree",
+        "call",
+        "raise",
+        "welcome",
+        "express"
+    ],
+    "promote_peace": [
+        "include",
+        "condemn",
+        "thwart",
+        "thank",
+        "stress",
+        "raise",
+        "come"
+    ],
+    "share_info": [
+        "publish",
+        "share",
+        "come"
+    ],
+    "strengthen": [
+        "target",
+        "find",
+        "break",
+        "return",
+        "welcome",
+        "produce"
+    ],
+    "spread_illness": [
+        "confirm",
+        "find",
+        "surge",
+        "watch"
+    ],
+    "weaken": [
+        "cut",
+        "break",
+        "pull",
+        "lose",
+        "ignore"
+    ],
+    "lose_life": [
+        "die",
+        "lose"
+    ]
+}

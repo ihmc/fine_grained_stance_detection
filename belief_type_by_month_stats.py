@@ -2,16 +2,35 @@ import os
 import json
 import pandas as pd
 from datetime import datetime
+from pathlib import Path
+
+import nltk
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import wordnet as wn
+
+def morphRootNoun(word):
+    wlem = WordNetLemmatizer()
+    return wlem.lemmatize(word.lower(),wn.NOUN)
 
 stance_stats = {}
 stance_stats_rows = []
-state = "pennsylvania"
-state_abbrev = "PA"
-stance_folder = "/Users/brodieslab/Documents/carley_state_data/" + state + "/stances/"
+state = "california"
+state_abbrev = "CA"
+stance_folder = "/Users/brodieslab/Documents/carley_state_data/" + state + "/stances/stances_with_require/"
+
+content_lexicon = pd.read_excel("./Content Buckets_maskOnly.xlsx")
+mask_words = []
+
+for index, row in content_lexicon.iterrows():
+	if row["Mask Mentions"] == 1:
+		morphed_word = morphRootNoun(row["Lexical item"])
+		if morphed_word not in mask_words:
+			mask_words.append(morphed_word)
+
 
 for stance_file in os.listdir(stance_folder):
 	stance_file_path = stance_folder + stance_file
-	city = os.path.basename(stance_file_path).split("_")[5]
+	city = Path(stance_file_path).name.split("_")[5]
 
 	print(city)
 
@@ -24,6 +43,19 @@ for stance_file in os.listdir(stance_folder):
 
 		for stance_json in stance_lines:
 			stance = json.loads(stance_json)
+
+
+			content_words = stance["belief_content"].split(" ")
+
+
+			mask_word_exists = False
+			for word in content_words:
+				if morphRootNoun(word) in mask_words:
+					mask_word_exists = True
+					break
+
+			if not mask_word_exists:
+				continue
 
 			b_type = stance["belief_type"]
 			attitude = float(stance["attitude"])
@@ -83,5 +115,4 @@ for stance_file in os.listdir(stance_folder):
 stance_stats_column_names = ["Belief Type", "Attitude", "Count", "Month", "Year", "City"]
 
 stance_stats_df = pd.DataFrame(stance_stats_rows, columns=stance_stats_column_names)
-stance_stats_df.to_excel("./" + today + "_" + state_abbrev + "_stance_belief_w_attitude_stats.xlsx", index=False)
-
+stance_stats_df.to_excel("./stance_data_for_model/" + today + "_" + state_abbrev + "_stance_belief_w_attitude_stats (mask words only).xlsx", index=False)

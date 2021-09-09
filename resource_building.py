@@ -82,12 +82,12 @@ def load_json(file_path):
 	return dataset_as_list
 
 def load_csv(file_path):
-	dataset_as_list = pd.read_csv(file_path).to_dict(orient="records")
+	dataset_as_list = pd.read_csv(file_path, dtype=object).to_dict(orient="records")
 
 	return dataset_as_list
 
 def load_excel(file_path):
-	dataset_as_list = pd.read_excel(file_path).to_dict(orient="records")
+	dataset_as_list = pd.read_excel(file_path, dtype=object).astype(str).fillna('').to_dict(orient="records")
 
 	return dataset_as_list
 
@@ -171,19 +171,19 @@ def get_trig_content_pairs(data_filepath, file_type, text_identifier, domain_nam
 	with open("./trig_content_pairs/" + domain_name + "/" + topic_name + "/" + today + data_was_filtered + "_training_data.json", "w+") as training_output:
 		for line in data[:training_text_number]:
 			training_output.write(json.dumps(line) + "\n")
-			training_texts.append(line[text_identifier])
+			training_texts.append(html.unescape(line[text_identifier]))
 
 	with open("./trig_content_pairs/" + domain_name + "/" + topic_name + "/" + today + data_was_filtered  + "_held_out_data.json", "w+") as held_out_output:
 		for line in data[training_text_number:]:
 			held_out_output.write(json.dumps(line) + "\n")
-			held_out_texts.append(line[text_identifier])
+			held_out_texts.append(html.unescape(line[text_identifier]))
 
 	wordlist = []
 	wordfreq = {}
 
 
-	for tweet in training_texts:
-		doc = nlp(tweet)
+	for text in training_texts:
+		doc = nlp(text)
 		for sent in doc.sents:
 			for token in sent:
 				lowered_text = token.text.lower()
@@ -305,7 +305,7 @@ def get_trig_content_pairs(data_filepath, file_type, text_identifier, domain_nam
 				"sentences": trig_content_sentences[trigger + word]
 			}
 
-	with open("./trig_content_pairs/" + domain_name + "/" + topic_name + "/" + today + data_was_filtered + "_" + domain + "_" + topic_name + "_top_trig_content_pairs.json", "w+") as trig_content_output:
+	with open("./trig_content_pairs/" + domain_name + "/" + topic_name + "/" + today + data_was_filtered + "_" + domain_name + "_" + topic_name + "_top_trig_content_pairs.json", "w+") as trig_content_output:
 		trig_content_output.write(json.dumps({"domain": domain_name, "topic": topic_name, "trig_content_top_pairs": trig_content_top_pairs}))
 	return trig_content_top_pairs
 

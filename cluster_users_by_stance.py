@@ -1,8 +1,16 @@
 import json
+import sys
+import os
+from pathlib import Path
+
+command_line_args = sys.argv
+
+stance_file_path = command_line_args[1]
+file_name = Path(stance_file_path).stem
 
 stances_by_user = {}
 clusters = {}
-stance_file_path = "/home/user/pitt/stance_detection/user_provided_stance_output/user_provided_json_stances_20210802(All IEEE_geo_mask_distance_vaccine).v1.3.jsonl"
+#stance_file_path = "/home/user/pitt/stance_detection/user_provided_stance_output/user_provided_json_stances_20210802(All IEEE_geo_mask_distance_vaccine).v1.3.jsonl"
 with open(stance_file_path, "r") as stance_file:
 	stance_lines = stance_file.readlines()
 
@@ -88,7 +96,7 @@ for user, percent_by_type in user_percent_belief_w_attitude.items():
 
 #print(clusters.keys())
 
-with open("./user_clusters.json", "w+") as cluster_file:
+with open("./" + file_name + "_" + "user_clusters.json", "w+") as cluster_file:
         cluster_file.write(json.dumps(clusters, indent=4))
 
 
@@ -96,7 +104,7 @@ cluster_totals = {}
 for cluster, users in clusters.items():
 	cluster_totals[cluster] = len(users)
 
-with open("./user_clusters_totals.json", "w+") as totals_file:
+with open("./" + file_name + "_" + "user_clusters_totals.json", "w+") as totals_file:
         totals_file.write(json.dumps(cluster_totals, indent=4))
 
 #print(cluster_totals)

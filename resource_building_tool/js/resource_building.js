@@ -4,7 +4,8 @@ let pairsArray = []
 
 if (localStorage.getItem("pairCount") === null) {
 	//pairsWithSents = isis_trig_content_pairs
-	pairsWithSents = afghanistan_withdrawal_trig_content_pairs["trig_content_top_pairs"]
+	//pairsWithSents = afghanistan_withdrawal_trig_content_pairs["trig_content_top_pairs"]
+	pairsWithSents = afghanistan_withdrawal_negotiations["trig_content_top_pairs"]
 
 	for (let trigger in pairsWithSents){
 		contentWords = pairsWithSents[trigger]["content_words"]
